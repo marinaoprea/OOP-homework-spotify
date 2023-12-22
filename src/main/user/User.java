@@ -13,6 +13,7 @@ import lombok.Getter;
 import main.Album;
 import main.Database;
 import main.Playlist;
+import main.wrappers.Wrapper;
 import pages.*;
 
 public class User {
@@ -65,6 +66,9 @@ public class User {
     private ArrayList<Integer> shuffledIndexes;
     @Getter
     private int shuffleSeed;
+
+    @Getter
+    private final Wrapper wrapper = new Wrapper();
 
     /**
      * constructor
@@ -332,6 +336,7 @@ public class User {
                     this.timeRelativeToSong = 0;
                 } else if (this.repeat == 1) { //repeat once
                     remainedTime += song.getDuration();
+                    wrapper.updateSong(song, 1, database, this);
                     if (remainedTime > 0) {
                         timeRelativeToSong = song.getDuration() - remainedTime;
                         timeLoaded = timestamp;
@@ -346,6 +351,8 @@ public class User {
                 } else { //repeat infinite
                     timeRelativeToSong =
                             (timeRelativeToSong + timestamp - timeLoaded) % song.getDuration();
+                    wrapper.updateSong(song, 1 +
+                            (timeRelativeToSong + timestamp - timeLoaded) / song.getDuration(), database, this);
                     timeLoaded = timestamp;
                 }
             } else {
@@ -483,9 +490,10 @@ public class User {
                                 && remainedTimeInEpisode < 0) {
                             remainedTimeInEpisode +=
                                     playlist.getSongs().get(selectedIndexInList - 1).getDuration();
+                            wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
                             selectedIndexInList++;
                         }
-                        if (remainedTimeInEpisode < 0) { // playlist ended
+                        if (remainedTimeInEpisode <= 0) { // playlist ended
                             selectedIndex = 0;
                             selectedIndexInList = 0;
                             playing = false;
@@ -508,11 +516,12 @@ public class User {
                             this.getShuffledIndexes().indexOf(selectedIndexInList - 1) + 1;
                     shuffleIndex++;
                     while (shuffleIndex <= playlist.getSongs().size()
-                            && remainedTimeInEpisode < 0) {
+                            && remainedTimeInEpisode <= 0) {
                         selectedIndexInList =
                                 this.getShuffledIndexes().get(shuffleIndex - 1) + 1;
                         remainedTimeInEpisode +=
                                 playlist.getSongs().get(selectedIndexInList - 1).getDuration();
+                        wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -539,12 +548,13 @@ public class User {
                 if (repeat == 1) { //repeat all
                     if (!this.getShuffle()) { // no shuffle
                         selectedIndexInList++;
-                        while (remainedTimeInEpisode < 0) {
+                        while (remainedTimeInEpisode <= 0) {
                             if (selectedIndexInList > playlist.getSongs().size()) {
                                 selectedIndexInList = 1; // from the top
                             }
                             remainedTimeInEpisode +=
                                     playlist.getSongs().get(selectedIndexInList - 1).getDuration();
+                            wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
                             selectedIndexInList++;
                         }
 
@@ -560,7 +570,7 @@ public class User {
                     int shuffleIndex =
                             this.getShuffledIndexes().indexOf(selectedIndexInList - 1) + 1;
                     shuffleIndex++;
-                    while (remainedTimeInEpisode < 0) {
+                    while (remainedTimeInEpisode <= 0) {
                         if (shuffleIndex > playlist.getSongs().size()) {
                             shuffleIndex = 1;
                         }
@@ -568,6 +578,7 @@ public class User {
                                 this.getShuffledIndexes().get(shuffleIndex - 1) + 1;
                         remainedTimeInEpisode +=
                                 playlist.getSongs().get(selectedIndexInList - 1).getDuration();
+                        wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -582,6 +593,9 @@ public class User {
                 // playlist song infinitely
                 timeRelativeToSong = (timeRelativeToSong + timestamp - timeLoaded)
                         % playlist.getSongs().get(selectedIndexInList - 1).getDuration();
+                wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1),
+                        (timeRelativeToSong + timestamp - timeLoaded)
+                                / playlist.getSongs().get(selectedIndexInList - 1).getDuration(), database, this);
                 this.timeLoaded = timestamp;
             }
             // playlist is on pause; nothing changes
@@ -633,9 +647,10 @@ public class User {
                     if (!this.getShuffle()) {
                         selectedIndexInList++;
                         while (selectedIndexInList <= album.getSongs().size()
-                                && remainedTimeInEpisode < 0) {
+                                && remainedTimeInEpisode <= 0) {
                             remainedTimeInEpisode +=
                                     album.getSongs().get(selectedIndexInList - 1).getDuration();
+                            wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
                             selectedIndexInList++;
                         }
                         if (remainedTimeInEpisode < 0) { // playlist ended
@@ -661,11 +676,12 @@ public class User {
                             this.getShuffledIndexes().indexOf(selectedIndexInList - 1) + 1;
                     shuffleIndex++;
                     while (shuffleIndex <= album.getSongs().size()
-                            && remainedTimeInEpisode < 0) {
+                            && remainedTimeInEpisode <= 0) {
                         selectedIndexInList =
                                 this.getShuffledIndexes().get(shuffleIndex - 1) + 1;
                         remainedTimeInEpisode +=
                                 album.getSongs().get(selectedIndexInList - 1).getDuration();
+                        wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -692,12 +708,13 @@ public class User {
                 if (repeat == 1) { //repeat all
                     if (!this.getShuffle()) { // no shuffle
                         selectedIndexInList++;
-                        while (remainedTimeInEpisode < 0) {
+                        while (remainedTimeInEpisode <= 0) {
                             if (selectedIndexInList > album.getSongs().size()) {
                                 selectedIndexInList = 1; // from the top
                             }
                             remainedTimeInEpisode +=
                                     album.getSongs().get(selectedIndexInList - 1).getDuration();
+                            wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
                             selectedIndexInList++;
                         }
 
@@ -713,7 +730,7 @@ public class User {
                     int shuffleIndex =
                             this.getShuffledIndexes().indexOf(selectedIndexInList - 1) + 1;
                     shuffleIndex++;
-                    while (remainedTimeInEpisode < 0) {
+                    while (remainedTimeInEpisode <= 0) {
                         if (shuffleIndex > album.getSongs().size()) {
                             shuffleIndex = 1;
                         }
@@ -721,6 +738,7 @@ public class User {
                                 this.getShuffledIndexes().get(shuffleIndex - 1) + 1;
                         remainedTimeInEpisode +=
                                 album.getSongs().get(selectedIndexInList - 1).getDuration();
+                        wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -735,6 +753,9 @@ public class User {
                 // playlist song infinitely
                 timeRelativeToSong = (timeRelativeToSong + timestamp - timeLoaded)
                         % album.getSongs().get(selectedIndexInList - 1).getDuration();
+                wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1),
+                        (timeRelativeToSong + timestamp - timeLoaded)
+                        / album.getSongs().get(selectedIndexInList - 1).getDuration(), database, this);
                 this.timeLoaded = timestamp;
             }
             // album is on pause; nothing changes

@@ -1,16 +1,22 @@
 package fileio.input;
 
 import main.Database;
+import main.Wrappeable;
 import main.user.User;
 
 import java.util.ArrayList;
 
-public final class PodcastInput {
+public final class PodcastInput implements Wrappeable {
     private String name;
     private String owner;
     private ArrayList<EpisodeInput> episodes;
 
     public PodcastInput() {
+    }
+
+    @Override
+    public String extractName() {
+        return this.name;
     }
 
     public String getName() {

@@ -1,8 +1,10 @@
 package fileio.input;
 
+import main.Wrappeable;
+
 import java.util.ArrayList;
 
-public final class SongInput {
+public final class SongInput implements Wrappeable {
     private String name;
     private Integer duration;
     private String album;
@@ -12,6 +14,20 @@ public final class SongInput {
     private Integer releaseYear;
     private String artist;
     private int noLikes;
+    private int listens;
+
+    @Override
+    public String extractName() {
+        return this.name;
+    }
+
+    public int getListens() {
+        return listens;
+    }
+
+    public void setListens(final int listens) {
+        this.listens = listens;
+    }
 
     public int getNoLikes() {
         return noLikes;

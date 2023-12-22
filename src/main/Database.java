@@ -194,6 +194,12 @@ public final class Database {
         return false;
     }
 
+    public void simulateAllUsers(final int timestamp) {
+        for (User user : users) {
+            user.simulate(timestamp, this);
+        }
+    }
+
     public ArrayList<Album> getAlbums() {
         return albums;
     }

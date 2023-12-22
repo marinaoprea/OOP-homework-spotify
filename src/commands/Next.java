@@ -41,6 +41,7 @@ public final class Next extends Command {
             user.setPlaying(true);
             this.message = "Skipped to next track successfully. The current track is "
                     + song.getName() + ".";
+           // user.getWrapper().updateSong(song, 1, database);
             return;
         }
         if (user.getRepeat() == 2) { // repeat infinitely
@@ -49,6 +50,7 @@ public final class Next extends Command {
             user.setPlaying(true);
             this.message = "Skipped to next track successfully. The current track is "
                     + song.getName() + ".";
+           // user.getWrapper().updateSong(song, 1, database);
             return;
         }
         // no repeat; and stop

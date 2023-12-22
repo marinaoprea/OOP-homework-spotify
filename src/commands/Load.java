@@ -1,6 +1,8 @@
 package commands;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import fileio.input.SongInput;
+import main.Album;
 import main.CommandInput;
 import main.Database;
 import main.user.User;
@@ -43,6 +45,8 @@ public final class Load extends Command {
             user.setPlaying(true);
             user.setSelectedIndexInList(1);
             user.setTimeRelativeToSong(0);
+            SongInput song = database.findSong(user.getLoadedSourceName());
+            user.getWrapper().updateSong(song, 1, database, user);
             return;
         }
         if (user.getLastSearch().getType().equals("playlist")) {
@@ -52,6 +56,7 @@ public final class Load extends Command {
             user.setTimeRelativeToSong(0);
             user.setShuffle(false);
             user.setTimeLoaded(this.getTimestamp());
+            // wrapper
             return;
         }
         if (user.getLastSearch().getType().equals("podcast")) {
@@ -60,6 +65,7 @@ public final class Load extends Command {
             user.setTimeLoaded(this.getTimestamp());
             String podcastName = user.getLastSearch().getResults().get(user.getSelectedIndex() - 1);
             user.restorePodcast(podcastName);
+            // wrapper
             return;
         }
         if (user.getLastSearch().getType().equals("album")) {
@@ -69,6 +75,9 @@ public final class Load extends Command {
             user.setTimeLoaded(this.getTimestamp());
             user.setSelectedIndexInList(1);
             user.setTimeRelativeToSong(0);
+            Album album = database.findAlbum(user.getLoadedSourceName());
+            SongInput song = album.getSongs().get(0);
+            user.getWrapper().updateSong(song, 1, database, user);
             return;
         }
     }

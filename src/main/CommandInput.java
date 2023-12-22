@@ -29,8 +29,16 @@ public final class CommandInput {
     private int age;
     private String city;
     private String name;
-
     private int releaseYear;
+    private String recommendationType;
+
+    public String getRecommendationType() {
+        return recommendationType;
+    }
+
+    public void setRecommendationType(final String recommendationType) {
+        this.recommendationType = recommendationType;
+    }
 
     public int getReleaseYear() {
         return releaseYear;

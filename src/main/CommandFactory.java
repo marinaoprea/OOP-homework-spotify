@@ -50,6 +50,7 @@ public final class CommandFactory {
             case "removeEvent" -> new RemoveEvent(commandInput);
             case "getTop5Albums" -> new GetTop5Albums(commandInput);
             case "getTop5Artists" -> new GetTop5Artists(commandInput);
+            case "wrapped" -> new WrapperCommand(commandInput);
             default -> new Command(commandInput);
         };
     }

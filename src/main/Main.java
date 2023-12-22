@@ -72,6 +72,7 @@ public final class Main {
      */
     public static void action(final String filePathInput,
                               final String filePathOutput) throws IOException {
+        System.out.println(filePathInput + filePathOutput);
         ObjectMapper objectMapper = new ObjectMapper();
         LibraryInput library = objectMapper.readValue(new File(LIBRARY_PATH), LibraryInput.class);
         Database database = new Database(library);

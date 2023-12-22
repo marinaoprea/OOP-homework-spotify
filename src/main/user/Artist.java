@@ -5,6 +5,8 @@ import lombok.Getter;
 import main.Album;
 import main.Database;
 import main.Playlist;
+import main.Wrappeable;
+import main.wrappers.WrapperArtist;
 import pages.ArtistPage;
 
 import java.text.DateFormat;
@@ -13,12 +15,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Artist extends User {
+public class Artist extends User implements Wrappeable {
     @Getter
     private final ArtistPage artistPage = new ArtistPage(this);
 
     @Getter
     private final ArrayList<Album> albums = new ArrayList<Album>();
+
+    @Getter
+    private final WrapperArtist wrapperArtist = new WrapperArtist();
 
     /**
      * constructor
@@ -28,6 +33,11 @@ public class Artist extends User {
      */
     public Artist(final String username, final int age, final String city) {
         super(username, age, city);
+    }
+
+    @Override
+    public String extractName() {
+        return this.getUsername();
     }
 
     /**

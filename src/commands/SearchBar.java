@@ -407,6 +407,8 @@ public class SearchBar extends Command {
                 user.updatePodcast(savedHistory, user.getSelectedIndexInList(),
                         user.getTimeRelativeToSong());
             }
+        } else {
+            user.simulate(this.getTimestamp(), database);
         }
         user.setSelectedIndex(0);
         user.setIsSelected(false);

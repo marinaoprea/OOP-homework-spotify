@@ -7,7 +7,7 @@ import main.user.User;
 
 import java.util.ArrayList;
 
-public final class Album {
+public final class Album implements Wrappeable{
     @Getter
     private final String name;
     private final int releaseYear;
@@ -15,9 +15,11 @@ public final class Album {
     private final String description;
     @Getter
     private final Artist owner;
-
     @Getter
     private final ArrayList<SongInput> songs;
+
+    @Getter
+    private int listens;
 
     public Album(final String name, final int releaseYear, final String description,
                  final Artist owner, final ArrayList<SongInput> songs) {
@@ -26,6 +28,11 @@ public final class Album {
         this.releaseYear = releaseYear;
         this.description = description;
         this.owner = owner;
+    }
+
+    @Override
+    public String extractName() {
+        return this.name;
     }
 
     /**
@@ -120,4 +127,7 @@ public final class Album {
         return ans;
     }
 
+    public void setListens(int listens) {
+        this.listens = listens;
+    }
 }
