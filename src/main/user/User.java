@@ -15,8 +15,9 @@ import main.Database;
 import main.Playlist;
 import main.wrappers.Wrapper;
 import pages.*;
+import main.Notification;
 
-public class User {
+public class User implements ObserveContentCreators{
     @Getter
     private Page currentPage;
     @Getter
@@ -66,9 +67,12 @@ public class User {
     private ArrayList<Integer> shuffledIndexes;
     @Getter
     private int shuffleSeed;
-
     @Getter
     private final Wrapper wrapper = new Wrapper();
+    @Getter
+    private final ArrayList<ContentCreator> subscriptions = new ArrayList<>();
+    @Getter
+    private final ArrayList<Notification> notifications = new ArrayList<>();
 
     /**
      * constructor
@@ -100,6 +104,11 @@ public class User {
         this.age = age;
         this.city = city;
         this.currentPage = homePage;
+    }
+
+    @Override
+    public void update(Notification newNotification) {
+        this.notifications.add(newNotification);
     }
 
     /**

@@ -9,13 +9,14 @@ import main.Wrappeable;
 import main.wrappers.WrapperArtist;
 import pages.ArtistPage;
 
+import main.Notification;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Artist extends User implements Wrappeable {
+public class Artist extends User implements Wrappeable, ContentCreator, ObservableUser {
     @Getter
     private final ArtistPage artistPage = new ArtistPage(this);
 
@@ -25,6 +26,9 @@ public class Artist extends User implements Wrappeable {
     @Getter
     private final WrapperArtist wrapperArtist = new WrapperArtist();
 
+    @Getter
+    private final ArrayList<User> subscribers = new ArrayList<>();
+
     /**
      * constructor
      * @param username username of new artist
@@ -33,6 +37,30 @@ public class Artist extends User implements Wrappeable {
      */
     public Artist(final String username, final int age, final String city) {
         super(username, age, city);
+    }
+
+    @Override
+    public String getCreatorName() {
+        return this.getUsername();
+    }
+
+    @Override
+    public void subscribe(User user) {
+        this.subscribers.add(user);
+        user.getSubscriptions().add(this);
+    }
+
+    @Override
+    public void unsubscribe(User user) {
+        this.subscribers.remove(user);
+        user.getSubscriptions().remove(this);
+    }
+
+    @Override
+    public void notify(Notification newNotification) {
+        for (User user: this.subscribers) {
+            user.update(newNotification);
+        }
     }
 
     @Override

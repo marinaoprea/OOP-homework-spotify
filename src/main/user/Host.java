@@ -5,9 +5,10 @@ import lombok.Getter;
 import main.Database;
 import pages.HostPage;
 
+import main.Notification;
 import java.util.ArrayList;
 
-public class Host extends User {
+public class Host extends User implements ContentCreator, ObservableUser {
     /**
      * constructor
      * @param username username of new host
@@ -22,6 +23,33 @@ public class Host extends User {
     private final ArrayList<PodcastInput> podcasts = new ArrayList<PodcastInput>();
     @Getter
     private final HostPage hostPage = new HostPage(this);
+
+    @Getter
+    private final ArrayList<User> subscribers = new ArrayList<>();
+
+    @Override
+    public String getCreatorName() {
+        return this.getUsername();
+    }
+
+    @Override
+    public void subscribe(User user) {
+        this.subscribers.add(user);
+        user.getSubscriptions().add(this);
+    }
+
+    @Override
+    public void unsubscribe(User user) {
+        this.subscribers.remove(user);
+        user.getSubscriptions().remove(this);
+    }
+
+    @Override
+    public void notify(Notification newNotification) {
+        for (User user: this.subscribers) {
+            user.update(newNotification);
+        }
+    }
 
     /**
      * method checks if host contains specific podcast given by name in his podcast list

@@ -7,6 +7,7 @@ import main.Database;
 import main.Album;
 import main.user.User;
 import main.user.Artist;
+import main.Notification;
 
 import java.util.ArrayList;
 
@@ -58,6 +59,10 @@ public final class AddAlbum extends Command {
         }
         database.getAlbums().add(newAlbum);
         artist.getAlbums().add(newAlbum);
+
+        Notification notification = new Notification("album", artist);
+        artist.notify(notification);
+
         this.message = this.getUsername() + " has added new album successfully.";
     }
 

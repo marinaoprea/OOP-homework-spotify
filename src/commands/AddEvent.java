@@ -1,6 +1,7 @@
 package commands;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import main.Notification;
 import main.user.Artist;
 import main.CommandInput;
 import main.Database;
@@ -47,6 +48,9 @@ public final class AddEvent extends Command {
         }
         this.message = this.getUsername() + " has added new event successfully.";
         artist.getEvents().add(event);
+
+        main.Notification notification = new Notification("event", artist);
+        artist.notify(notification);
     }
 
     @Override

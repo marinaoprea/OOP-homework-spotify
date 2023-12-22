@@ -5,6 +5,7 @@ import fileio.input.EpisodeInput;
 import fileio.input.PodcastInput;
 import main.CommandInput;
 import main.Database;
+import main.Notification;
 import main.user.Host;
 import main.user.User;
 
@@ -56,6 +57,9 @@ public final class AddPodcast extends Command {
         database.getPodcasts().add(podcastInput);
         host.getPodcasts().add(podcastInput);
         this.message = this.getUsername() + " has added new podcast successfully.";
+
+        main.Notification notification = new Notification("podcast", host);
+        host.notify(notification);
     }
 
     @Override

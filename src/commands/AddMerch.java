@@ -1,6 +1,7 @@
 package commands;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import main.Notification;
 import main.user.Artist;
 import main.CommandInput;
 import main.Database;
@@ -45,6 +46,9 @@ public final class AddMerch extends Command {
         }
         this.message = this.getUsername() + " has added new merchandise successfully.";
         artist.getArtistMerchList().add(new Artist.Merch(this.name, this.description, this.price));
+
+        main.Notification notification = new Notification("Merchandise", artist);
+        artist.notify(notification);
     }
 
     @Override

@@ -47,6 +47,7 @@ public final class Select extends Command {
                 return;
             }
             user.setCurrentPage(artist.getArtistPage());
+            user.setSelectedType("artist");
             return;
         }
         if (user.getLastSearch().getType().equals("host")) {
@@ -56,6 +57,7 @@ public final class Select extends Command {
             if (host == null) {
                 return;
             }
+            user.setSelectedType("host");
             user.setCurrentPage(host.getHostPage());
             return;
         }

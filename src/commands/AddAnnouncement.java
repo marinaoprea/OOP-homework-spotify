@@ -3,6 +3,7 @@ package commands;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import main.CommandInput;
 import main.Database;
+import main.Notification;
 import main.user.Host;
 import main.user.User;
 
@@ -40,6 +41,10 @@ public final class AddAnnouncement extends Command {
         }
         Host.Announcement newAnnouncement = new Host.Announcement(this.name, this.description);
         host.getAnnouncements().add(newAnnouncement);
+
+        main.Notification notification = new Notification("announcement", host);
+        host.notify(notification);
+
         this.message = this.getUsername() + " has successfully added new announcement.";
     }
 
