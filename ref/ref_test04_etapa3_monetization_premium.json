@@ -1682,8 +1682,7 @@
       "Out Of Sight - Single Version" : 4
     },
     "topFans" : [ "carol19", "grace25", "jack29", "henry26" ],
-    "listeners" : 4,
-    "cities" : 4
+    "listeners" : 4
   }
 }, {
   "command" : "search",
@@ -2544,8 +2543,7 @@
       "Cluster One" : 3
     },
     "topFans" : [ "henry26", "grace25", "jack29", "carol19" ],
-    "listeners" : 4,
-    "cities" : 4
+    "listeners" : 4
   }
 }, {
   "command" : "search",
@@ -2803,8 +2801,7 @@
       "Night Life" : 3
     },
     "topFans" : [ "grace25", "henry26", "jack29", "carol19" ],
-    "listeners" : 4,
-    "cities" : 4
+    "listeners" : 4
   }
 }, {
   "command" : "wrapped",

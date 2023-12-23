@@ -574,8 +574,7 @@
       "Weird Fishes/Arpeggi" : 2
     },
     "topFans" : [ "alice22", "jack29", "david27", "henry26", "emily30" ],
-    "listeners" : 7,
-    "cities" : 7
+    "listeners" : 7
   }
 }, {
   "command" : "wrapped",

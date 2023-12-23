@@ -29,6 +29,9 @@ public class Artist extends User implements Wrappeable, ContentCreator, Observab
     @Getter
     private final ArrayList<User> subscribers = new ArrayList<>();
 
+    @Getter
+    private final Revenue revenue = new Revenue();
+
     /**
      * constructor
      * @param username username of new artist
@@ -208,6 +211,15 @@ public class Artist extends User implements Wrappeable, ContentCreator, Observab
             }
         }
         return false;
+    }
+
+    public Artist.Merch findMerch(final String merchName) {
+        for (Merch merch : artistMerchList) {
+            if (merch.name.equals(merchName)) {
+                return merch;
+            }
+        }
+        return null;
     }
 
     /**

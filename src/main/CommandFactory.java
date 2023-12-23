@@ -53,6 +53,9 @@ public final class CommandFactory {
             case "wrapped" -> new WrapperCommand(commandInput);
             case "subscribe" -> new Subscribe(commandInput);
             case "getNotifications" -> new GetNotifications(commandInput);
+            case "endProgram" -> new EndProgram(commandInput);
+            case "buyMerch" -> new BuyMerch(commandInput);
+            case "seeMerch" -> new SeeMerch(commandInput);
             default -> new Command(commandInput);
         };
     }

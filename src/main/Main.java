@@ -90,6 +90,11 @@ public final class Main {
             outputs.addAll(Arrays.asList(commandResult));
         }
 
+        CommandInput endProgram = new CommandInput("endProgram");
+        Command newCommand = commandFactory.getCommand(endProgram);
+        ObjectNode commandResult = CommandInvoker.invokeCommand(database, newCommand);
+        outputs.addAll(Arrays.asList(commandResult));
+
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePathOutput), outputs);
     }

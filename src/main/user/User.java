@@ -17,7 +17,7 @@ import main.wrappers.Wrapper;
 import pages.*;
 import main.Notification;
 
-public class User implements ObserveContentCreators{
+public class User implements ObserveContentCreators {
     @Getter
     private Page currentPage;
     @Getter
@@ -73,6 +73,8 @@ public class User implements ObserveContentCreators{
     private final ArrayList<ContentCreator> subscriptions = new ArrayList<>();
     @Getter
     private final ArrayList<Notification> notifications = new ArrayList<>();
+    @Getter
+    private final ArrayList<Artist.Merch> boughtMerch = new ArrayList<>();
 
     /**
      * constructor

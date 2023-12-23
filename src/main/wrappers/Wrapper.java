@@ -36,6 +36,7 @@ public class Wrapper implements ObserverWrapper {
         if (artist != null) {
             updateArtists(artist, listens);
             artist.getWrapperArtist().updateFans(user, listens);
+            artist.getRevenue().setWasListened(true);
         }
 
         Album album = database.findAlbum(song.getAlbum());

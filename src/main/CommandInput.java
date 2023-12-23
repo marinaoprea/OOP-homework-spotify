@@ -32,6 +32,13 @@ public final class CommandInput {
     private int releaseYear;
     private String recommendationType;
 
+    public CommandInput() {
+
+    }
+    public CommandInput(final String commandType) {
+        this.command = commandType;
+    }
+
     public String getRecommendationType() {
         return recommendationType;
     }

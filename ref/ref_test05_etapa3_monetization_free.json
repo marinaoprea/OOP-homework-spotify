@@ -1039,8 +1039,7 @@
       "Maybe Your Baby" : 3
     },
     "topFans" : [ "grace25", "david27", "irene33" ],
-    "listeners" : 3,
-    "cities" : 3
+    "listeners" : 3
   }
 }, {
   "command" : "search",
@@ -1756,8 +1755,7 @@
       "Purple Rain" : 4
     },
     "topFans" : [ "irene33", "david27", "grace25" ],
-    "listeners" : 3,
-    "cities" : 3
+    "listeners" : 3
   }
 }, {
   "command" : "search",
@@ -2811,8 +2809,7 @@
       "Live With Me" : 3
     },
     "topFans" : [ "grace25", "david27", "irene33" ],
-    "listeners" : 3,
-    "cities" : 3
+    "listeners" : 3
   }
 }, {
   "command" : "search",
@@ -3166,8 +3163,7 @@
       "Ladies of the Canyon" : 4
     },
     "topFans" : [ "david27", "grace25", "irene33" ],
-    "listeners" : 3,
-    "cities" : 3
+    "listeners" : 3
   }
 }, {
   "command" : "wrapped",

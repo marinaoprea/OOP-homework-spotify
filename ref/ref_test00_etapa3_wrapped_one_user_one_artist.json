@@ -449,8 +449,7 @@
       "Take It Back" : 2
     },
     "topFans" : [ "alice22" ],
-    "listeners" : 1,
-    "cities" : 1
+    "listeners" : 1
   }
 }, {
   "command" : "wrapped",
