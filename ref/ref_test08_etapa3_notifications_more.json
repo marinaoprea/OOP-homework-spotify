@@ -329,7 +329,7 @@
   "command" : "subscribe",
   "user" : "alice22",
   "timestamp" : 357,
-  "message" : "alice22 subscribed to Michael Jackson successfully."
+  "message" : "alice22 unsubscribed from Michael Jackson successfully."
 }, {
   "command" : "search",
   "user" : "alice22",

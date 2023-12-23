@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import main.CommandInput;
 import main.Database;
 import main.user.User;
+import pages.pageNavigation.ChangePageFactory;
+import pages.pageNavigation.NavigationInvoker;
 
 public final class ChangePage extends Command {
     private String message;
@@ -30,7 +32,7 @@ public final class ChangePage extends Command {
             this.message = this.getUsername() + " is not a normal user.";
             return;
         }
-        if (this.nextPage.equals("Home")) {
+        /*if (this.nextPage.equals("Home")) {
             user.setCurrentPage(user.getHomePage());
             this.message = this.getUsername() + " accessed Home successfully.";
             return;
@@ -40,7 +42,9 @@ public final class ChangePage extends Command {
             this.message = this.getUsername() + " accessed LikedContent successfully.";
             return;
         }
-        this.message = this.getUsername() + " is trying to access a non-existent page.";
+        this.message = this.getUsername() + " is trying to access a non-existent page.";*/
+        pages.pageNavigation.ChangePage changePage = ChangePageFactory.getChangePage(this.nextPage);
+        this.message = user.getNavigation().execute(changePage, database, user);
     }
 
     @Override

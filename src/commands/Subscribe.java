@@ -34,10 +34,11 @@ public class Subscribe extends Command {
         ContentCreator contentCreator = (ContentCreator) user.getCurrentPage().getOwner();
         if (user.getSubscriptions().contains(contentCreator)) {
             contentCreator.unsubscribe(user);
+            this.message = this.getUsername() + " unsubscribed from " + contentCreator.getCreatorName() + " successfully.";
         } else {
             contentCreator.subscribe(user);
+            this.message = this.getUsername() + " subscribed to " + contentCreator.getCreatorName() + " successfully.";
         }
-        this.message = this.getUsername() + " subscribed to " + contentCreator.getCreatorName() + " successfully.";
     }
 
     @Override

@@ -13,15 +13,15 @@ import java.util.HashMap;
 
 public class Wrapper implements ObserverWrapper {
     @Getter
-    private final HashMap<Wrappeable, Integer> wrapArtists = new HashMap<Wrappeable, Integer>();
+    private final HashMap<Wrappeable, Integer> wrapArtists = new HashMap<>();
     @Getter
-    private final HashMap<String, Integer> wrapGenre = new HashMap<String, Integer>();
+    private final HashMap<String, Integer> wrapGenre = new HashMap<>();
     @Getter
-    private final HashMap<Wrappeable, Integer> wrapSong = new HashMap<Wrappeable, Integer>();
+    private final HashMap<Wrappeable, Integer> wrapSong = new HashMap<>();
     @Getter
-    private final HashMap<Wrappeable, Integer> wrapAlbum = new HashMap<Wrappeable, Integer>();
+    private final HashMap<Wrappeable, Integer> wrapAlbum = new HashMap<>();
     @Getter
-    private final HashMap<Wrappeable, Integer> wrapPodcast = new HashMap<Wrappeable, Integer>();
+    private final HashMap<Wrappeable, Integer> wrapPodcast = new HashMap<>();
     public Wrapper() {
 
     }

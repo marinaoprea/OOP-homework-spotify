@@ -17,6 +17,7 @@ import main.Playlist;
 import main.wrappers.Wrapper;
 import pages.*;
 import main.Notification;
+import pages.pageNavigation.NavigationInvoker;
 
 public class User implements ObserveContentCreators {
     @Getter
@@ -80,6 +81,8 @@ public class User implements ObserveContentCreators {
     private final HashSet<SongInput> songHistory = new HashSet<>();
     @Getter
     private boolean premium;
+    @Getter
+    private final NavigationInvoker navigation = new NavigationInvoker();
 
     /**
      * constructor

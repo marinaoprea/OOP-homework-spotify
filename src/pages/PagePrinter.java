@@ -179,10 +179,12 @@ public final class PagePrinter implements PageVisitor {
             ans.append(announcements.get(i).getDescription());
             ans.append(", ");
         }
-        ans.append(announcements.get(i).getName());
-        ans.append(":\n\t");
-        ans.append(announcements.get(i).getDescription());
-        ans.append("\n]");
+        if (!announcements.isEmpty()) {
+            ans.append(announcements.get(i).getName());
+            ans.append(":\n\t");
+            ans.append(announcements.get(i).getDescription());
+            ans.append("\n]");
+        }
 
         return ans.toString();
     }
