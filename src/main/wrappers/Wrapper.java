@@ -28,7 +28,7 @@ public class Wrapper implements ObserverWrapper {
 
     @Override
     public void updateSong(final SongInput song, final int listens, final Database database, final User user) {
-        song.setListens(song.getListens() + listens);
+        //song.setListens(song.getListens() + listens);
 
         updateGenre(song.getGenre(), listens);
 
@@ -36,12 +36,16 @@ public class Wrapper implements ObserverWrapper {
         if (artist != null) {
             updateArtists(artist, listens);
             artist.getWrapperArtist().updateFans(user, listens);
+            artist.getWrapperArtist().updateSong(song, listens, database, user);
             artist.getRevenue().setWasListened(true);
         }
 
         Album album = database.findAlbum(song.getAlbum());
         if (album != null) {
             updateAlbums(album, listens);
+            if (artist != null) {
+                artist.getWrapperArtist().updateAlbums(album, listens);
+            }
         }
         if (!wrapSong.containsKey(song)) {
             wrapSong.put(song, listens);
@@ -73,7 +77,7 @@ public class Wrapper implements ObserverWrapper {
 
     @Override
     public void updateAlbums(Album album, int listens) {
-        album.setListens(album.getListens() + listens);
+        //album.setListens(album.getListens() + listens);
 
         if (!wrapAlbum.containsKey(album)) {
             wrapAlbum.put(album, listens);

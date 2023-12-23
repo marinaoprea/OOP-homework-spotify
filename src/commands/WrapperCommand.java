@@ -11,6 +11,7 @@ import main.Wrappeable;
 import main.user.Artist;
 import main.user.User;
 import main.wrappers.Wrapper;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 
@@ -108,7 +109,7 @@ public class WrapperCommand extends Command{
             type = "artist";
             database.simulateAllUsers(this.getTimestamp());
 
-            HashMap<Wrappeable, Integer> albums = new HashMap<>();
+            /*HashMap<Wrappeable, Integer> albums = new HashMap<>();
             HashMap<Wrappeable, Integer> songs = new HashMap<>();
             Artist artist = (Artist) user;
             for (Album album: artist.getAlbums()) {
@@ -117,9 +118,11 @@ public class WrapperCommand extends Command{
                 for (SongInput song: album.getSongs()) {
                     songs.put(song, song.getListens());
                 }
-            }
-            topAlbums = this.extractResults(albums);
-            topSongs = this.extractResults(songs);
+            }*/
+
+            Artist artist = (Artist) user;
+            topAlbums = this.extractResults(artist.getWrapperArtist().getWrapAlbums());
+            topSongs = this.extractResults(artist.getWrapperArtist().getWrapSongs());
             topFans = this.extractResultsFans(artist.getWrapperArtist().getTopFans());
             listeners = artist.getWrapperArtist().getTopFans().size();
         }
