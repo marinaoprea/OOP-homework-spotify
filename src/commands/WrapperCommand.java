@@ -179,6 +179,12 @@ public class WrapperCommand extends Command{
         }
 
         if (type.equals("artist")) {
+            if (topAlbums.isEmpty() && topSongs.isEmpty() && topFans.isEmpty()) {
+                this.message = "No data to show for artist " + this.getUsername() + ".";
+                objectNode.put("message", this.message);
+                return;
+            }
+
             ObjectNode songs = mapper.createObjectNode();
             for (Map.Entry<Wrappeable, Integer> entry : topSongs) {
                 songs.put(entry.getKey().extractName(), entry.getValue());

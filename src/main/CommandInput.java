@@ -35,8 +35,9 @@ public final class CommandInput {
     public CommandInput() {
 
     }
-    public CommandInput(final String commandType) {
+    public CommandInput(final String commandType, final int timestamp) {
         this.command = commandType;
+        this.timestamp = timestamp;
     }
 
     public String getRecommendationType() {

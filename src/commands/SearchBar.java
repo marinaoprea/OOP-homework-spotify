@@ -43,7 +43,7 @@ public class SearchBar extends Command {
      */
     private boolean validateSongbyName(final SongInput song) {
         return (this.filters.getName() == null
-                || song.getName().indexOf(this.filters.getName()) == 0);
+                || song.getName().toLowerCase().indexOf(this.filters.getName().toLowerCase()) == 0);
     }
 
     /**
@@ -167,7 +167,7 @@ public class SearchBar extends Command {
      */
     private boolean validatePodcastByName(final PodcastInput podcast) {
         return (this.filters.getName() == null
-                || podcast.getName().indexOf(this.filters.getName()) == 0);
+                || podcast.getName().toLowerCase().indexOf(this.filters.getName().toLowerCase()) == 0);
     }
 
     /**
@@ -238,7 +238,7 @@ public class SearchBar extends Command {
         if (this.filters.getName() == null) {
             return true;
         }
-        if (playlist.getName().contains(this.filters.getName())) {
+        if (playlist.getName().toLowerCase().contains(this.filters.getName().toLowerCase())) {
             if (playlist.getUser().getUsername().equals(this.getUsername())) {
                 // if the playlist belongs to the user
                 return true;
@@ -304,7 +304,7 @@ public class SearchBar extends Command {
      */
     private boolean validateAlbumByName(final Album album) {
         return (this.filters.getName() == null
-                || album.getName().startsWith(this.filters.getName()));
+                || album.getName().toLowerCase().startsWith(this.filters.getName().toLowerCase()));
     }
 
     /**
@@ -345,11 +345,21 @@ public class SearchBar extends Command {
      * @param database extension of input library
      */
     private void searchAlbum(final Database database) {
-        for (Album album: database.getAlbums()) {
+        /*for (Album album: database.getAlbums()) {
             if (validateAlbum(album)) {
                 this.results.add(album.getName());
                 if (this.results.size() == Constants.NO_SEARCH_RESULTS) {
                     break;
+                }
+            }
+        }*/
+        for (Artist artist : database.getArtists()) {
+            for (Album album : artist.getAlbums()) {
+                if (validateAlbum(album)) {
+                    this.results.add(album.getName());
+                    if (this.results.size() == Constants.NO_SEARCH_RESULTS) {
+                        break;
+                    }
                 }
             }
         }

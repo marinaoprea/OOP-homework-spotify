@@ -56,6 +56,8 @@ public final class CommandFactory {
             case "endProgram" -> new EndProgram(commandInput);
             case "buyMerch" -> new BuyMerch(commandInput);
             case "seeMerch" -> new SeeMerch(commandInput);
+            case "buyPremium" -> new BuyPremium(commandInput);
+            case "cancelPremium" -> new CancelPremium(commandInput);
             default -> new Command(commandInput);
         };
     }

@@ -6,6 +6,7 @@ import fileio.input.UserInput;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Random;
 
 import commands.SearchBar;
@@ -75,6 +76,10 @@ public class User implements ObserveContentCreators {
     private final ArrayList<Notification> notifications = new ArrayList<>();
     @Getter
     private final ArrayList<Artist.Merch> boughtMerch = new ArrayList<>();
+    @Getter
+    private final HashSet<SongInput> songHistory = new HashSet<>();
+    @Getter
+    private boolean premium;
 
     /**
      * constructor
@@ -222,6 +227,19 @@ public class User implements ObserveContentCreators {
         return null;
     }
 
+    public SongInput getSongFromUserInPlaylist(final Database database) {
+        String playlistName = this.getLoadedSourceName();
+        if (playlistName.isEmpty()) {
+            return null;
+        }
+        Playlist playlist = database.findPlaylistInDatabase(playlistName);
+        if (this.getSelectedIndexInList() >= 1
+                && this.selectedIndexInList <= playlist.getSongs().size()) {
+            return playlist.getSongs().get(this.selectedIndexInList - 1);
+        }
+        return null;
+    }
+
     /**
      * method searches playlist in user's created playlists;
      * @param playlistName name of the searched playlist
@@ -360,10 +378,11 @@ public class User implements ObserveContentCreators {
                         repeat = 0;
                     }
                 } else { //repeat infinite
+                    int aux = timeRelativeToSong;
                     timeRelativeToSong =
                             (timeRelativeToSong + timestamp - timeLoaded) % song.getDuration();
                     wrapper.updateSong(song, 1 +
-                            (timeRelativeToSong + timestamp - timeLoaded) / song.getDuration(), database, this);
+                            (aux + timestamp - timeLoaded) / song.getDuration(), database, this);
                     timeLoaded = timestamp;
                 }
             } else {
@@ -498,10 +517,11 @@ public class User implements ObserveContentCreators {
                     if (!this.getShuffle()) {
                         selectedIndexInList++;
                         while (selectedIndexInList <= playlist.getSongs().size()
-                                && remainedTimeInEpisode < 0) {
+                                && remainedTimeInEpisode <= 0) {
                             remainedTimeInEpisode +=
                                     playlist.getSongs().get(selectedIndexInList - 1).getDuration();
                             wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
+                            this.songHistory.add(playlist.getSongs().get(selectedIndexInList - 1));
                             selectedIndexInList++;
                         }
                         if (remainedTimeInEpisode <= 0) { // playlist ended
@@ -533,6 +553,7 @@ public class User implements ObserveContentCreators {
                         remainedTimeInEpisode +=
                                 playlist.getSongs().get(selectedIndexInList - 1).getDuration();
                         wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
+                        this.songHistory.add(playlist.getSongs().get(selectedIndexInList - 1));
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -566,6 +587,7 @@ public class User implements ObserveContentCreators {
                             remainedTimeInEpisode +=
                                     playlist.getSongs().get(selectedIndexInList - 1).getDuration();
                             wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
+                            this.songHistory.add(playlist.getSongs().get(selectedIndexInList - 1));
                             selectedIndexInList++;
                         }
 
@@ -590,6 +612,7 @@ public class User implements ObserveContentCreators {
                         remainedTimeInEpisode +=
                                 playlist.getSongs().get(selectedIndexInList - 1).getDuration();
                         wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
+                        this.songHistory.add(playlist.getSongs().get(selectedIndexInList - 1));
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -602,10 +625,11 @@ public class User implements ObserveContentCreators {
                     return;
                 }
                 // playlist song infinitely
+                int aux = timeRelativeToSong;
                 timeRelativeToSong = (timeRelativeToSong + timestamp - timeLoaded)
                         % playlist.getSongs().get(selectedIndexInList - 1).getDuration();
                 wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1),
-                        (timeRelativeToSong + timestamp - timeLoaded)
+                        (aux + timestamp - timeLoaded)
                                 / playlist.getSongs().get(selectedIndexInList - 1).getDuration(), database, this);
                 this.timeLoaded = timestamp;
             }
@@ -662,6 +686,7 @@ public class User implements ObserveContentCreators {
                             remainedTimeInEpisode +=
                                     album.getSongs().get(selectedIndexInList - 1).getDuration();
                             wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
+                            this.songHistory.add(album.getSongs().get(selectedIndexInList - 1));
                             selectedIndexInList++;
                         }
                         if (remainedTimeInEpisode < 0) { // playlist ended
@@ -693,6 +718,7 @@ public class User implements ObserveContentCreators {
                         remainedTimeInEpisode +=
                                 album.getSongs().get(selectedIndexInList - 1).getDuration();
                         wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
+                        this.songHistory.add(album.getSongs().get(selectedIndexInList - 1));
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -726,6 +752,7 @@ public class User implements ObserveContentCreators {
                             remainedTimeInEpisode +=
                                     album.getSongs().get(selectedIndexInList - 1).getDuration();
                             wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
+                            this.songHistory.add(album.getSongs().get(selectedIndexInList - 1));
                             selectedIndexInList++;
                         }
 
@@ -750,6 +777,7 @@ public class User implements ObserveContentCreators {
                         remainedTimeInEpisode +=
                                 album.getSongs().get(selectedIndexInList - 1).getDuration();
                         wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
+                        this.songHistory.add(album.getSongs().get(selectedIndexInList - 1));
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -762,10 +790,11 @@ public class User implements ObserveContentCreators {
                     return;
                 }
                 // playlist song infinitely
+                int aux = timeRelativeToSong;
                 timeRelativeToSong = (timeRelativeToSong + timestamp - timeLoaded)
                         % album.getSongs().get(selectedIndexInList - 1).getDuration();
                 wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1),
-                        (timeRelativeToSong + timestamp - timeLoaded)
+                        (aux + timestamp - timeLoaded)
                         / album.getSongs().get(selectedIndexInList - 1).getDuration(), database, this);
                 this.timeLoaded = timestamp;
             }
@@ -1040,5 +1069,9 @@ public class User implements ObserveContentCreators {
      */
     public void setConnectionStatus(final boolean connectionStatus) {
         this.connectionStatus = connectionStatus;
+    }
+
+    public void setPremium(final boolean premium) {
+        this.premium = premium;
     }
 }

@@ -9,7 +9,7 @@ import main.user.User;
 
 import java.util.HashMap;
 
-public class WrapperArtist implements ObserverWrapper{
+public class WrapperArtist implements ObserverWrapper {
     @Getter
     private final HashMap<User, Integer> topFans = new HashMap<>();
 

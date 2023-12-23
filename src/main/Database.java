@@ -8,6 +8,7 @@ import lombok.Getter;
 import main.user.Artist;
 import main.user.Host;
 import main.user.User;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,13 @@ public final class Database {
         this.podcasts.addAll(library.getPodcasts());
         for (int i = 0; i < songs.size(); i++) {
             noLikesPerSong.add(0);
+        }
+
+        for (SongInput songInput : library.getSongs()) {
+            if (!this.findArtistByName(songInput.getArtist())) {
+                Artist artist = new Artist(songInput.getArtist());
+                this.artists.add(artist);
+            }
         }
     }
 

@@ -6,6 +6,8 @@ import fileio.input.SongInput;
 import main.CommandInput;
 import main.Database;
 import main.user.Artist;
+import main.user.Monetization;
+import main.user.User;
 
 import java.util.Comparator;
 import java.util.List;
@@ -20,6 +22,10 @@ public class EndProgram extends Command {
 
     @Override
     public void execute(Database database) {
+        for (User user : database.getUsers()) {
+            user.simulate(this.getTimestamp(), database);
+            Monetization.calculateMonetization(user, database);
+        }
         List<Artist> sorted =
                 database.getArtists().stream().filter(artist -> artist.getRevenue().isWasListened()).
                         sorted(new Comparator<Artist>() {

@@ -16,7 +16,7 @@ public class Revenue {
     @Getter
     private int ranking;
     @Getter
-    private final HashMap<SongInput, Integer> songProfits = new HashMap<>();
+    private final HashMap<SongInput, Double> songProfits = new HashMap<>();
     @Getter
     private boolean wasListened = false;
 
@@ -34,10 +34,10 @@ public class Revenue {
             return null;
         }
 
-        List<Map.Entry<SongInput, Integer>> sorted =
-                songProfits.entrySet().stream().sorted(new Comparator<Map.Entry<SongInput, Integer>>() {
+        List<Map.Entry<SongInput, Double>> sorted =
+                songProfits.entrySet().stream().sorted(new Comparator<Map.Entry<SongInput, Double>>() {
             @Override
-            public int compare(Map.Entry<SongInput, Integer> o1, Map.Entry<SongInput, Integer> o2) {
+            public int compare(Map.Entry<SongInput, Double> o1, Map.Entry<SongInput, Double> o2) {
                 if (o1.getValue() > o2.getValue()) {
                     return -1;
                 }
@@ -48,6 +48,15 @@ public class Revenue {
             }
         }).toList();
         return sorted.get(0).getKey();
+    }
+
+    public void updateSongRevenue(final SongInput songInput, final Double revenue) {
+        if (this.songProfits.containsKey(songInput)) {
+            Double previousRevenue = songProfits.remove(songInput);
+            songProfits.put(songInput, previousRevenue + revenue);
+        } else {
+            songProfits.put(songInput, revenue);
+        }
     }
 
     public void setSongRevenue(final Double songRevenue) {

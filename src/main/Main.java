@@ -90,7 +90,7 @@ public final class Main {
             outputs.addAll(Arrays.asList(commandResult));
         }
 
-        CommandInput endProgram = new CommandInput("endProgram");
+        CommandInput endProgram = new CommandInput("endProgram", totalCommands[totalCommands.length - 1].getTimestamp());
         Command newCommand = commandFactory.getCommand(endProgram);
         ObjectNode commandResult = CommandInvoker.invokeCommand(database, newCommand);
         outputs.addAll(Arrays.asList(commandResult));

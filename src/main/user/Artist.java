@@ -42,6 +42,11 @@ public class Artist extends User implements Wrappeable, ContentCreator, Observab
         super(username, age, city);
     }
 
+    public Artist(final String username) {
+        super();
+        this.setUsername(username);
+    }
+
     @Override
     public String getCreatorName() {
         return this.getUsername();

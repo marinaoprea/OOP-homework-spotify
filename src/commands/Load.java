@@ -5,6 +5,7 @@ import fileio.input.SongInput;
 import main.Album;
 import main.CommandInput;
 import main.Database;
+import main.Playlist;
 import main.user.User;
 
 public final class Load extends Command {
@@ -47,6 +48,7 @@ public final class Load extends Command {
             user.setTimeRelativeToSong(0);
             SongInput song = database.findSong(user.getLoadedSourceName());
             user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().add(song);
             return;
         }
         if (user.getLastSearch().getType().equals("playlist")) {
@@ -56,7 +58,11 @@ public final class Load extends Command {
             user.setTimeRelativeToSong(0);
             user.setShuffle(false);
             user.setTimeLoaded(this.getTimestamp());
-            // wrapper
+
+            Playlist playlist = database.findPlaylistInDatabase(user.getLoadedSourceName());
+            SongInput song = playlist.getSongs().get(0);
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().add(song);
             return;
         }
         if (user.getLastSearch().getType().equals("podcast")) {
@@ -78,6 +84,7 @@ public final class Load extends Command {
             Album album = database.findAlbum(user.getLoadedSourceName());
             SongInput song = album.getSongs().get(0);
             user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().add(song);
             return;
         }
     }
