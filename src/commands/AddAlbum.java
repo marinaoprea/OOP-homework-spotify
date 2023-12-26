@@ -43,7 +43,8 @@ public final class AddAlbum extends Command {
             this.message = this.getUsername() + " is not an artist.";
             return;
         }
-        Artist artist = (Artist) user;
+        //Artist artist = (Artist) user;
+        Artist artist = database.findArtist(this.getUsername());
         if (artist.checkAlbumByName(this.name)) {
             this.message = this.getUsername() + " has another album with the same name.";
             return;
@@ -55,12 +56,17 @@ public final class AddAlbum extends Command {
         Album newAlbum = new Album(name, releaseYear, description, artist, songs);
         for (SongInput song : songs) {
             database.getSongs().add(song);
+
+            int oldId = database.getSongId();
+            song.setId(oldId + 1);
+            database.setSongId(oldId + 1);
+
             database.getNoLikesPerSong().add(0);
         }
         database.getAlbums().add(newAlbum);
         artist.getAlbums().add(newAlbum);
 
-        Notification notification = new Notification("album", artist);
+        Notification notification = new Notification("Album", artist);
         artist.notify(notification);
 
         this.message = this.getUsername() + " has added new album successfully.";

@@ -20,10 +20,8 @@ public class Artist extends User implements Wrappeable, ContentCreator, Observab
     @Getter
     private final ArtistPage artistPage = new ArtistPage(this);
 
-    @Getter
     private final ArrayList<Album> albums = new ArrayList<Album>();
 
-    @Getter
     private final WrapperArtist wrapperArtist = new WrapperArtist();
 
     @Getter
@@ -45,6 +43,34 @@ public class Artist extends User implements Wrappeable, ContentCreator, Observab
     public Artist(final String username) {
         super();
         this.setUsername(username);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Artist artist = (Artist) o;
+
+        if (!artistPage.equals(artist.artistPage)) return false;
+        if (!albums.equals(artist.albums)) return false;
+        if (!wrapperArtist.equals(artist.wrapperArtist)) return false;
+        if (!subscribers.equals(artist.subscribers)) return false;
+        if (!revenue.equals(artist.revenue)) return false;
+        if (!events.equals(artist.events)) return false;
+        return artistMerchList.equals(artist.artistMerchList);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = artistPage.hashCode();
+       // result = 31 * result + albums.hashCode();
+        result = 31 * result + wrapperArtist.hashCode();
+        result = 31 * result + subscribers.hashCode();
+        result = 31 * result + revenue.hashCode();
+        result = 31 * result + events.hashCode();
+        result = 31 * result + artistMerchList.hashCode();
+        return result;
     }
 
     @Override
@@ -304,5 +330,13 @@ public class Artist extends User implements Wrappeable, ContentCreator, Observab
             ans += album.getNoLikes();
         }
         return ans;
+    }
+
+    public WrapperArtist getWrapperArtist() {
+        return wrapperArtist;
+    }
+
+    public ArrayList<Album> getAlbums() {
+        return albums;
     }
 }

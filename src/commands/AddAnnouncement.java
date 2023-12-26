@@ -42,7 +42,7 @@ public final class AddAnnouncement extends Command {
         Host.Announcement newAnnouncement = new Host.Announcement(this.name, this.description);
         host.getAnnouncements().add(newAnnouncement);
 
-        main.Notification notification = new Notification("announcement", host);
+        main.Notification notification = new Notification("Announcement", host);
         host.notify(notification);
 
         this.message = this.getUsername() + " has successfully added new announcement.";

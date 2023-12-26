@@ -40,13 +40,14 @@ public final class Load extends Command {
         user.setRepeat(0);
         user.setIsSelected(false);
         user.setLoaded(true);
+        //System.out.println("bla");
         if (user.getLastSearch().getType().equals("song")) {
             user.setSelectedType("song");
             user.setTimeLoaded(this.getTimestamp());
             user.setPlaying(true);
             user.setSelectedIndexInList(1);
             user.setTimeRelativeToSong(0);
-            SongInput song = database.findSong(user.getLoadedSourceName());
+            SongInput song = database.findSong(user.getLoadedSourceName(), user.getLoadedSourceId());
             user.getWrapper().updateSong(song, 1, database, user);
             user.getSongHistory().add(song);
             return;

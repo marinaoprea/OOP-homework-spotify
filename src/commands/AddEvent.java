@@ -49,7 +49,7 @@ public final class AddEvent extends Command {
         this.message = this.getUsername() + " has added new event successfully.";
         artist.getEvents().add(event);
 
-        main.Notification notification = new Notification("event", artist);
+        main.Notification notification = new Notification("Event", artist);
         artist.notify(notification);
     }
 

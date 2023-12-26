@@ -5,6 +5,7 @@ import main.Wrappeable;
 import main.user.User;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public final class PodcastInput implements Wrappeable {
     private String name;
@@ -12,6 +13,26 @@ public final class PodcastInput implements Wrappeable {
     private ArrayList<EpisodeInput> episodes;
 
     public PodcastInput() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PodcastInput that = (PodcastInput) o;
+
+        if (!name.equals(that.name)) return false;
+        if (!Objects.equals(owner, that.owner)) return false;
+        return episodes.equals(that.episodes);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + episodes.hashCode();
+        return result;
     }
 
     @Override

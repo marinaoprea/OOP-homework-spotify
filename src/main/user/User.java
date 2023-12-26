@@ -207,7 +207,7 @@ public class User implements ObserveContentCreators {
         if (this.selectedIndex >= 1
                 && this.selectedIndex <= this.lastSearch.getResults().size()) {
             String songName = this.lastSearch.getResults().get(this.selectedIndex - 1);
-            return database.findSong(songName);
+            return database.findSong(songName, this.getLoadedSourceId());
         }
         return null;
     }
@@ -359,7 +359,7 @@ public class User implements ObserveContentCreators {
 
         if (this.playing) {
             remainedTime = remainedTime - (timestamp - timeLoaded);
-            if (remainedTime < 0) {
+            if (remainedTime <= 0) {
                 if (this.repeat == 0) { // no repeat
                     this.playing = false;
                     this.timeLoaded = 0;
@@ -887,6 +887,17 @@ public class User implements ObserveContentCreators {
             this.shuffledIndexes.add(i);
         }
         Collections.shuffle(this.shuffledIndexes, generator);
+    }
+
+    public int getLoadedSourceId() {
+        if (this.getLastSearch() == null) {
+            return 0;
+        }
+        if (this.getSelectedIndex() < 1
+                || this.getSelectedIndex() > this.getLastSearch().getResults().size()) {
+            return 0;
+        }
+        return this.getLastSearch().getResultsId().get(this.selectedIndex - 1);
     }
 
     /**

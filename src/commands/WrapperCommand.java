@@ -20,7 +20,8 @@ public class WrapperCommand extends Command{
     private List<Map.Entry<Wrappeable, Integer>> topArtists;
     private List<Map.Entry<String, Integer>> topGenres;
     private List<Map.Entry<Wrappeable, Integer>> topSongs;
-    private List<Map.Entry<Wrappeable, Integer>> topAlbums;
+    private List<Map.Entry<String, Integer>> topSongsArtist;
+    private List<Map.Entry<String, Integer>> topAlbums;
     private List<Map.Entry<Wrappeable, Integer>> topPodcasts;
     private String type;
     private List<String> topFans;
@@ -98,7 +99,7 @@ public class WrapperCommand extends Command{
             type = "user";
             user.simulate(this.getTimestamp(), database);
             Wrapper wrapper = user.getWrapper();
-            topAlbums = this.extractResults(wrapper.getWrapAlbum());
+            topAlbums = this.extractResultsGenre(wrapper.getWrapAlbum());
             topArtists = this.extractResults(wrapper.getWrapArtists());
             topGenres = this.extractResultsGenre(wrapper.getWrapGenre());
             topSongs = this.extractResults(wrapper.getWrapSong());
@@ -120,8 +121,20 @@ public class WrapperCommand extends Command{
                 }
             }*/
 
-            Artist artist = (Artist) user;
-            topAlbums = this.extractResults(artist.getWrapperArtist().getWrapAlbums());
+            Artist artist = database.findArtist(this.getUsername());
+
+           /* HashMap<String, Integer> songsByName = new HashMap<>();
+            Set<Map.Entry<Wrappeable, Integer>> entrySet = artist.getWrapperArtist().getWrapSongs().entrySet();
+            for (Map.Entry<Wrappeable, Integer> entry : entrySet) {
+                if (songsByName.containsKey(entry.getKey().extractName())) {
+                    Integer previousListens = songsByName.remove(entry.getKey().extractName());
+                    songsByName.put(entry.getKey().extractName(), previousListens + entry.getValue());
+                } else {
+                    songsByName.put(entry.getKey().extractName(), entry.getValue());
+                }
+            }*/
+
+            topAlbums = this.extractResultsGenre(artist.getWrapperArtist().getWrapAlbums());
             topSongs = this.extractResults(artist.getWrapperArtist().getWrapSongs());
             topFans = this.extractResultsFans(artist.getWrapperArtist().getTopFans());
             listeners = artist.getWrapperArtist().getTopFans().size();
@@ -134,7 +147,7 @@ public class WrapperCommand extends Command{
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode resultObject = mapper.createObjectNode();
 
-        if (this.message != null) {
+        if (this.message != null || this.type == null) {
             objectNode.put("message", this.message);
             return;
         }
@@ -160,8 +173,8 @@ public class WrapperCommand extends Command{
             resultObject.put("topGenres", genres);
 
             ObjectNode albums = mapper.createObjectNode();
-            for (Map.Entry<Wrappeable, Integer> entry : topAlbums) {
-                albums.put(entry.getKey().extractName(), entry.getValue());
+            for (Map.Entry<String, Integer> entry : topAlbums) {
+                albums.put(entry.getKey(), entry.getValue());
             }
             resultObject.put("topAlbums", albums);
 
@@ -169,7 +182,7 @@ public class WrapperCommand extends Command{
             for (Map.Entry<Wrappeable, Integer> entry : topPodcasts) {
                 podcasts.put(entry.getKey().extractName(), entry.getValue());
             }
-            resultObject.put("topPodcasts", podcasts);
+            resultObject.put("topEpisodes", podcasts);
 
             ObjectNode songs = mapper.createObjectNode();
             for (Map.Entry<Wrappeable, Integer> entry : topSongs) {
@@ -179,11 +192,17 @@ public class WrapperCommand extends Command{
         }
 
         if (type.equals("artist")) {
-            if (topAlbums.isEmpty() && topSongs.isEmpty() && topFans.isEmpty()) {
+            if (topFans.isEmpty() && topSongs.isEmpty() && topAlbums.isEmpty()) {
                 this.message = "No data to show for artist " + this.getUsername() + ".";
                 objectNode.put("message", this.message);
                 return;
             }
+
+            /*ObjectNode songs = mapper.createObjectNode();
+            for (Map.Entry<String, Integer> entry : topSongsArtist) {
+                songs.put(entry.getKey(), entry.getValue());
+            }
+            resultObject.put("topSongs", songs);*/
 
             ObjectNode songs = mapper.createObjectNode();
             for (Map.Entry<Wrappeable, Integer> entry : topSongs) {
@@ -192,8 +211,8 @@ public class WrapperCommand extends Command{
             resultObject.put("topSongs", songs);
 
             ObjectNode albums = mapper.createObjectNode();
-            for (Map.Entry<Wrappeable, Integer> entry : topAlbums) {
-                albums.put(entry.getKey().extractName(), entry.getValue());
+            for (Map.Entry<String, Integer> entry : topAlbums) {
+                albums.put(entry.getKey(), entry.getValue());
             }
             resultObject.put("topAlbums", albums);
 

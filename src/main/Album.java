@@ -4,22 +4,55 @@ import fileio.input.SongInput;
 import lombok.Getter;
 import main.user.Artist;
 import main.user.User;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public final class Album implements Wrappeable{
     @Getter
     private final String name;
-    private final int releaseYear;
+    private int releaseYear;
     @Getter
-    private final String description;
+    private String description;
     @Getter
-    private final Artist owner;
+    private Artist owner;
     @Getter
-    private final ArrayList<SongInput> songs;
+    private ArrayList<SongInput> songs;
 
     @Getter
     private int listens;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Album album = (Album) o;
+
+        if (releaseYear != album.releaseYear) return false;
+        if (listens != album.listens) return false;
+        if (!name.equals(album.name)) return false;
+        if (!Objects.equals(description, album.description)) return false;
+        if (!Objects.equals(owner, album.owner)) return false;
+        return Objects.equals(songs, album.songs);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + releaseYear;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (songs != null ? songs.hashCode() : 0);
+        result = 31 * result + listens;
+        return result;
+    }
+
+    public Album(final String name) {
+        this.name = name;
+        this.songs = new ArrayList<>();
+    }
 
     public Album(final String name, final int releaseYear, final String description,
                  final Artist owner, final ArrayList<SongInput> songs) {

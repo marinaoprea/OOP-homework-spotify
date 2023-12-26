@@ -58,7 +58,7 @@ public final class AddPodcast extends Command {
         host.getPodcasts().add(podcastInput);
         this.message = this.getUsername() + " has added new podcast successfully.";
 
-        main.Notification notification = new Notification("podcast", host);
+        main.Notification notification = new Notification("Podcast", host);
         host.notify(notification);
     }
 

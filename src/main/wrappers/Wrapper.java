@@ -19,7 +19,7 @@ public class Wrapper implements ObserverWrapper {
     @Getter
     private final HashMap<Wrappeable, Integer> wrapSong = new HashMap<>();
     @Getter
-    private final HashMap<Wrappeable, Integer> wrapAlbum = new HashMap<>();
+    private final HashMap<String, Integer> wrapAlbum = new HashMap<>();
     @Getter
     private final HashMap<Wrappeable, Integer> wrapPodcast = new HashMap<>();
     public Wrapper() {
@@ -28,8 +28,6 @@ public class Wrapper implements ObserverWrapper {
 
     @Override
     public void updateSong(final SongInput song, final int listens, final Database database, final User user) {
-        //song.setListens(song.getListens() + listens);
-
         updateGenre(song.getGenre(), listens);
 
         Artist artist = database.findArtist(song.getArtist());
@@ -40,9 +38,9 @@ public class Wrapper implements ObserverWrapper {
             artist.getRevenue().setWasListened(true);
         }
 
-        Album album = database.findAlbum(song.getAlbum());
+        String album = song.getAlbum();
         if (album != null) {
-            updateAlbums(album, listens);
+            this.updateAlbums(album, listens);
             if (artist != null) {
                 artist.getWrapperArtist().updateAlbums(album, listens);
             }
@@ -76,9 +74,7 @@ public class Wrapper implements ObserverWrapper {
     }
 
     @Override
-    public void updateAlbums(Album album, int listens) {
-        //album.setListens(album.getListens() + listens);
-
+    public void updateAlbums(String album, int listens) {
         if (!wrapAlbum.containsKey(album)) {
             wrapAlbum.put(album, listens);
             return;

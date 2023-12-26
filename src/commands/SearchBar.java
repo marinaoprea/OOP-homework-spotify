@@ -25,6 +25,8 @@ public class SearchBar extends Command {
 
     @Getter
     private final ArrayList<String> results = new ArrayList<String>();
+    @Getter
+    private final ArrayList<Integer> resultsId = new ArrayList<>();
 
     /**
      * constructor that constructs search bar command from input command
@@ -145,6 +147,7 @@ public class SearchBar extends Command {
         for (SongInput aux : database.getSongs()) {
             if (this.validateSong(aux)) {
                 this.results.add(aux.getName());
+                this.resultsId.add(aux.getId());
                 if (this.results.size() == Constants.NO_SEARCH_RESULTS) {
                     break;
                 }

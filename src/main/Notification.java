@@ -12,6 +12,6 @@ public final class Notification {
     private final String name;
     public Notification(final String content, final User user) {
         this.description = "New " + content + " from " + user.getUsername() + ".";
-        this.name = "New " + content.substring(0, 1).toUpperCase() + content.substring(1);
+        this.name = "New " + content;
     }
 }

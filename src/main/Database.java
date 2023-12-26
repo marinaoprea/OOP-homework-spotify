@@ -11,8 +11,12 @@ import main.user.User;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public final class Database {
+    @Getter
+    private int songId;
+
     @Getter
     private final ArrayList<Integer> noLikesPerSong = new ArrayList<Integer>();
     @Getter
@@ -48,6 +52,8 @@ public final class Database {
         }
 
         for (SongInput songInput : library.getSongs()) {
+            this.songId++;
+            songInput.setId(this.songId);
             if (!this.findArtistByName(songInput.getArtist())) {
                 Artist artist = new Artist(songInput.getArtist());
                 this.artists.add(artist);
@@ -109,9 +115,9 @@ public final class Database {
      * @param songName the name of the song
      * @return found song; null if nonexistent
      */
-    public SongInput findSong(final String songName) {
+    public SongInput findSong(final String songName, final Integer id) {
         for (SongInput song : this.songs) {
-            if (song.getName().equals(songName)) {
+            if (song.getName().equals(songName) && Objects.equals(song.getId(), id)) {
                 return song;
             }
         }
@@ -210,5 +216,9 @@ public final class Database {
 
     public ArrayList<Album> getAlbums() {
         return albums;
+    }
+
+    public void setSongId(int songId) {
+        this.songId = songId;
     }
 }
