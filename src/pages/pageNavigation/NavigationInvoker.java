@@ -26,8 +26,8 @@ public class NavigationInvoker {
         }
 
         Page previous = history.getLast();
+        undo.add(user.getCurrentPage());
         user.setCurrentPage(previous);
-        undo.add(previous);
         history.remove(previous);
         return "The user " + user.getUsername() + " has navigated successfully to the previous page.";
     }

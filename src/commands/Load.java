@@ -1,6 +1,8 @@
 package commands;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import fileio.input.EpisodeInput;
+import fileio.input.PodcastInput;
 import fileio.input.SongInput;
 import main.Album;
 import main.CommandInput;
@@ -72,7 +74,9 @@ public final class Load extends Command {
             user.setTimeLoaded(this.getTimestamp());
             String podcastName = user.getLastSearch().getResults().get(user.getSelectedIndex() - 1);
             user.restorePodcast(podcastName);
-            // wrapper
+            PodcastInput podcastInput = database.findPodcast(podcastName);
+            EpisodeInput episodeInput = podcastInput.getEpisodes().get(user.getSelectedIndexInList() - 1);
+            user.getWrapper().updatePodcasts(podcastInput, episodeInput, 1, database, user);
             return;
         }
         if (user.getLastSearch().getType().equals("album")) {

@@ -1,5 +1,6 @@
 package main.user;
 
+import fileio.input.EpisodeInput;
 import fileio.input.PodcastInput;
 import fileio.input.SongInput;
 import fileio.input.UserInput;
@@ -465,8 +466,9 @@ public class User implements ObserveContentCreators {
                     selectedIndexInList++;
                     while (selectedIndexInList <= podcast.getEpisodes().size()
                             && remainedTimeInEpisode < 0) {
-                        remainedTimeInEpisode +=
-                                podcast.getEpisodes().get(selectedIndexInList - 1).getDuration();
+                        EpisodeInput episodeInput = podcast.getEpisodes().get(selectedIndexInList - 1);
+                        remainedTimeInEpisode += episodeInput.getDuration();
+                        this.wrapper.updatePodcasts(podcast, episodeInput, 1, database, this);
                         selectedIndexInList++;
                     }
                     if (remainedTimeInEpisode < 0) { // podcast ended
@@ -485,8 +487,10 @@ public class User implements ObserveContentCreators {
                     return;
                 }
                 if (repeat == 1) { //repeat once
-                    remainedTimeInEpisode +=
-                            podcast.getEpisodes().get(selectedIndexInList - 1).getDuration();
+                    EpisodeInput episodeInput = podcast.getEpisodes().get(selectedIndexInList - 1);
+                    remainedTimeInEpisode += episodeInput.getDuration();
+                    this.wrapper.updatePodcasts(podcast, episodeInput, 1, database, this);
+
                     if (remainedTimeInEpisode > 0) {
                         timeRelativeToSong =
                                 podcast.getEpisodes().get(selectedIndexInList - 1).getDuration()
@@ -504,8 +508,11 @@ public class User implements ObserveContentCreators {
                     return;
                 }
                 // podcast episode repeated infinitely
-                timeRelativeToSong = (timestamp - timeLoaded)
-                        % podcast.getEpisodes().get(selectedIndexInList - 1).getDuration();
+                int aux = timeRelativeToSong;
+                EpisodeInput episodeInput = podcast.getEpisodes().get(selectedIndexInList - 1);
+                timeRelativeToSong = (timestamp - timeLoaded) % episodeInput.getDuration();
+                this.wrapper.updatePodcasts(podcast, episodeInput,
+                        1 + (timestamp - timeLoaded) / episodeInput.getDuration(), database, this);
                 timeLoaded = timestamp;
             }
             // podcast is on pause; nothing changes

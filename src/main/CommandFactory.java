@@ -61,6 +61,7 @@ public final class CommandFactory {
             case "previousPage" -> new PrevPage(commandInput);
             case "nextPage" -> new NextPage(commandInput);
             case "updateRecommendations" -> new UpdateRecommendations(commandInput);
+            case "loadRecommendations" -> new LoadRecommendations(commandInput);
             default -> new Command(commandInput);
         };
     }

@@ -206,8 +206,8 @@ public final class PagePrinter implements PageVisitor {
             ans.append(announcements.get(i).getName());
             ans.append(":\n\t");
             ans.append(announcements.get(i).getDescription());
-            ans.append("\n]");
         }
+        ans.append("]");
 
         return ans.toString();
     }

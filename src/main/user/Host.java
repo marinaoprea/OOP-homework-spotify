@@ -3,6 +3,7 @@ package main.user;
 import fileio.input.PodcastInput;
 import lombok.Getter;
 import main.Database;
+import main.wrappers.WrapperHost;
 import pages.HostPage;
 
 import main.Notification;
@@ -26,6 +27,8 @@ public class Host extends User implements ContentCreator, ObservableUser {
 
     @Getter
     private final ArrayList<User> subscribers = new ArrayList<>();
+    @Getter
+    private final WrapperHost wrapperHost = new WrapperHost();
 
     @Override
     public String getCreatorName() {

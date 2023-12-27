@@ -9,6 +9,7 @@ import main.CommandInput;
 import main.Database;
 import main.Wrappeable;
 import main.user.Artist;
+import main.user.Host;
 import main.user.User;
 import main.wrappers.Wrapper;
 import org.checkerframework.checker.units.qual.A;
@@ -141,6 +142,15 @@ public class WrapperCommand extends Command{
             topFans = this.extractResultsFans(artist.getWrapperArtist().getTopFans());
             listeners = artist.getWrapperArtist().getTopFans().size();
         }
+
+        if (database.findHostByName(this.getUsername())) {
+            type = "host";
+            database.simulateAllUsers(this.getTimestamp());
+
+            Host host = database.findHost(this.getUsername());
+            topPodcasts = this.extractResults(host.getWrapperHost().getWrapPodcasts());
+            listeners = host.getWrapperHost().getTopFans().size();
+        }
     }
 
     @Override
@@ -223,6 +233,22 @@ public class WrapperCommand extends Command{
                 fans.add(fan);
             }
             resultObject.put("topFans", fans);
+
+            resultObject.put("listeners", listeners);
+        }
+
+        if (type.equals("host")) {
+            if (topPodcasts.isEmpty()) {
+                this.message = "No data to show for host " + this.getUsername() + ".";
+                objectNode.put("message", this.message);
+                return;
+            }
+
+            ObjectNode podcasts = mapper.createObjectNode();
+            for (Map.Entry<Wrappeable, Integer> entry : topPodcasts) {
+                podcasts.put(entry.getKey().extractName(), entry.getValue());
+            }
+            resultObject.put("topEpisodes", podcasts);
 
             resultObject.put("listeners", listeners);
         }

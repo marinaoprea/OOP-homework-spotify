@@ -13,9 +13,7 @@ public class WrapperArtist implements ObserverWrapper {
     public WrapperArtist() {
 
     }
-
     private final HashMap<User, Integer> topFans = new HashMap<>();
-
     private final HashMap<Wrappeable, Integer> wrapSongs = new HashMap<>();
 
     //private final HashMap<Wrappeable, Integer> wrapAlbums = new HashMap<>();

@@ -1,11 +1,40 @@
 package fileio.input;
 
-public final class EpisodeInput {
+import main.Wrappeable;
+
+import java.util.Objects;
+
+public final class EpisodeInput implements Wrappeable {
     private String name;
     private Integer duration;
     private String description;
 
     public EpisodeInput() {
+    }
+
+    @Override
+    public String extractName() {
+        return this.name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EpisodeInput that = (EpisodeInput) o;
+
+        if (!name.equals(that.name)) return false;
+        if (!duration.equals(that.duration)) return false;
+        return Objects.equals(description, that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + duration.hashCode();
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        return result;
     }
 
     public String getName() {

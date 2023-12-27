@@ -1,6 +1,7 @@
 package main.wrappers;
 
 import commands.AddEvent;
+import fileio.input.EpisodeInput;
 import fileio.input.PodcastInput;
 import fileio.input.SongInput;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import main.Album;
 import main.Database;
 import main.Wrappeable;
 import main.user.Artist;
+import main.user.Host;
 import main.user.User;
 
 import java.util.HashMap;
@@ -90,12 +92,18 @@ public class Wrapper implements ObserverWrapper {
     }
 
     @Override
-    public void updatePodcasts(PodcastInput podcast, int listens) {
-        if (!wrapPodcast.containsKey(podcast)) {
-            wrapPodcast.put(podcast, listens);
+    public void updatePodcasts(final PodcastInput podcastInput, EpisodeInput episode, int listens, final Database database, final User user) {
+        Host host = database.findHost(podcastInput.getOwner());
+        if (host != null) {
+            host.getWrapperHost().updatePodcasts(podcastInput, episode, listens, database, user);
+            host.getWrapperHost().updateFans(user, listens);
+        }
+
+        if (!wrapPodcast.containsKey(episode)) {
+            wrapPodcast.put(episode, listens);
             return;
         }
-        Integer previousListens = wrapPodcast.remove(podcast);
-        wrapPodcast.put(podcast, previousListens + listens);
+        Integer previousListens = wrapPodcast.remove(episode);
+        wrapPodcast.put(episode, previousListens + listens);
     }
 }
