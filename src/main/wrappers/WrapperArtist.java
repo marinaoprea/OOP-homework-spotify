@@ -18,6 +18,8 @@ public class WrapperArtist implements ObserverWrapper {
 
     private final HashMap<Wrappeable, Integer> wrapSongs = new HashMap<>();
 
+    //private final HashMap<Wrappeable, Integer> wrapAlbums = new HashMap<>();
+    @Getter
     private final HashMap<String, Integer> wrapAlbums = new HashMap<>();
 
     @Override
@@ -56,9 +58,5 @@ public class WrapperArtist implements ObserverWrapper {
 
     public HashMap<Wrappeable, Integer> getWrapSongs() {
         return wrapSongs;
-    }
-
-    public HashMap<String, Integer> getWrapAlbums() {
-        return wrapAlbums;
     }
 }

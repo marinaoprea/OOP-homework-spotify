@@ -19,9 +19,10 @@ public final class Album implements Wrappeable{
     private Artist owner;
     @Getter
     private ArrayList<SongInput> songs;
-
     @Getter
     private int listens;
+    @Getter
+    private int id;
 
     @Override
     public boolean equals(Object o) {
@@ -162,5 +163,13 @@ public final class Album implements Wrappeable{
 
     public void setListens(int listens) {
         this.listens = listens;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setOwner(Artist owner) {
+        this.owner = owner;
     }
 }

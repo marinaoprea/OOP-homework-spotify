@@ -214,7 +214,7 @@ public class Status extends Command {
             }
             return;
         }
-        Album album = database.findAlbum(albumName);
+        Album album = database.findAlbum(albumName, user.getLoadedSourceId());
         int indexInList = user.getSelectedIndexInList();
         if (indexInList > 0 && indexInList <= album.getSongs().size()) {
             this.stats.setName(album.getSongs().get(indexInList - 1).getName());

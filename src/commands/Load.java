@@ -82,7 +82,7 @@ public final class Load extends Command {
             user.setTimeLoaded(this.getTimestamp());
             user.setSelectedIndexInList(1);
             user.setTimeRelativeToSong(0);
-            Album album = database.findAlbum(user.getLoadedSourceName());
+            Album album = database.findAlbum(user.getLoadedSourceName(), user.getLoadedSourceId());
             SongInput song = album.getSongs().get(0);
             user.getWrapper().updateSong(song, 1, database, user);
             user.getSongHistory().add(song);

@@ -45,7 +45,7 @@ public class Artist extends User implements Wrappeable, ContentCreator, Observab
         this.setUsername(username);
     }
 
-    @Override
+   /* @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -71,6 +71,16 @@ public class Artist extends User implements Wrappeable, ContentCreator, Observab
         result = 31 * result + events.hashCode();
         result = 31 * result + artistMerchList.hashCode();
         return result;
+    }*/
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 
     @Override

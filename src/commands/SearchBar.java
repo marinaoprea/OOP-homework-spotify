@@ -348,18 +348,11 @@ public class SearchBar extends Command {
      * @param database extension of input library
      */
     private void searchAlbum(final Database database) {
-        /*for (Album album: database.getAlbums()) {
-            if (validateAlbum(album)) {
-                this.results.add(album.getName());
-                if (this.results.size() == Constants.NO_SEARCH_RESULTS) {
-                    break;
-                }
-            }
-        }*/
         for (Artist artist : database.getArtists()) {
             for (Album album : artist.getAlbums()) {
                 if (validateAlbum(album)) {
                     this.results.add(album.getName());
+                    this.resultsId.add(album.getId());
                     if (this.results.size() == Constants.NO_SEARCH_RESULTS) {
                         break;
                     }

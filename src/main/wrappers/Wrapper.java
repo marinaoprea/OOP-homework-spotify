@@ -1,5 +1,6 @@
 package main.wrappers;
 
+import commands.AddEvent;
 import fileio.input.PodcastInput;
 import fileio.input.SongInput;
 import lombok.Getter;
@@ -18,6 +19,9 @@ public class Wrapper implements ObserverWrapper {
     private final HashMap<String, Integer> wrapGenre = new HashMap<>();
     @Getter
     private final HashMap<Wrappeable, Integer> wrapSong = new HashMap<>();
+    //@Getter
+    //private final HashMap<Wrappeable, Integer> wrapAlbum = new HashMap<>();
+
     @Getter
     private final HashMap<String, Integer> wrapAlbum = new HashMap<>();
     @Getter
@@ -31,6 +35,7 @@ public class Wrapper implements ObserverWrapper {
         updateGenre(song.getGenre(), listens);
 
         Artist artist = database.findArtist(song.getArtist());
+        //Artist artist = database.findArtistByNameAndAlbum(song.getArtist(), song.getAlbum());
         if (artist != null) {
             updateArtists(artist, listens);
             artist.getWrapperArtist().updateFans(user, listens);
@@ -39,6 +44,7 @@ public class Wrapper implements ObserverWrapper {
         }
 
         String album = song.getAlbum();
+        //Album album = database.findAlbumByNameAndArtist(song.getAlbum(), song.getArtist());
         if (album != null) {
             this.updateAlbums(album, listens);
             if (artist != null) {
@@ -74,7 +80,7 @@ public class Wrapper implements ObserverWrapper {
     }
 
     @Override
-    public void updateAlbums(String album, int listens) {
+    public void updateAlbums(final String album, int listens) {
         if (!wrapAlbum.containsKey(album)) {
             wrapAlbum.put(album, listens);
             return;

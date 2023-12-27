@@ -13,6 +13,7 @@ import main.user.User;
 import main.wrappers.Wrapper;
 import org.checkerframework.checker.units.qual.A;
 
+import java.lang.ref.WeakReference;
 import java.util.*;
 
 public class WrapperCommand extends Command{
@@ -21,6 +22,7 @@ public class WrapperCommand extends Command{
     private List<Map.Entry<String, Integer>> topGenres;
     private List<Map.Entry<Wrappeable, Integer>> topSongs;
     private List<Map.Entry<String, Integer>> topSongsArtist;
+    //private List<Map.Entry<Wrappeable, Integer>> topAlbums;
     private List<Map.Entry<String, Integer>> topAlbums;
     private List<Map.Entry<Wrappeable, Integer>> topPodcasts;
     private String type;

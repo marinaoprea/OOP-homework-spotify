@@ -73,7 +73,7 @@ public final class Like extends Command {
                         return;
                     }
 
-                    Album album = database.findAlbum(albumName);
+                    Album album = database.findAlbum(albumName, user.getLoadedSourceId());
                     if (album == null) {
                         return;
                     }

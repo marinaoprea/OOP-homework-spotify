@@ -54,6 +54,9 @@ public final class AddAlbum extends Command {
             return;
         }
         Album newAlbum = new Album(name, releaseYear, description, artist, songs);
+        int id = database.getAlbumId();
+        newAlbum.setId(id + 1);
+        database.setAlbumId(id + 1);
         for (SongInput song : songs) {
             database.getSongs().add(song);
 

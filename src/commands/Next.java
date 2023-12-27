@@ -183,7 +183,7 @@ public final class Next extends Command {
             return;
         }
         String albumName = user.getLastSearch().getResults().get(user.getSelectedIndex() - 1);
-        Album album = database.findAlbum(albumName);
+        Album album = database.findAlbum(albumName, user.getLoadedSourceId());
         if (album == null) {
             return;
         }

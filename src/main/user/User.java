@@ -84,6 +84,21 @@ public class User implements ObserveContentCreators {
     @Getter
     private final NavigationInvoker navigation = new NavigationInvoker();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return username.equals(user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return username.hashCode();
+    }
+
     /**
      * constructor
      */
@@ -222,7 +237,7 @@ public class User implements ObserveContentCreators {
         if (albumName.isEmpty()) {
             return null;
         }
-        Album album = database.findAlbum(albumName);
+        Album album = database.findAlbum(albumName, this.getLoadedSourceId());
         if (this.getSelectedIndexInList() >= 1
                 && this.selectedIndexInList <= album.getSongs().size()) {
             return album.getSongs().get(this.selectedIndexInList - 1);
@@ -659,7 +674,7 @@ public class User implements ObserveContentCreators {
     public void simulateAlbum(final int timestamp, final Database database) {
         if (selectedIndex > 0 && selectedIndex <= this.lastSearch.getResults().size()) {
             String albumName = this.lastSearch.getResults().get(selectedIndex - 1);
-            Album album = database.findAlbum(albumName);
+            Album album = database.findAlbum(albumName, this.getLoadedSourceId());
 
             if (album == null) {
                 return;
@@ -692,7 +707,7 @@ public class User implements ObserveContentCreators {
                             this.songHistory.add(album.getSongs().get(selectedIndexInList - 1));
                             selectedIndexInList++;
                         }
-                        if (remainedTimeInEpisode < 0) { // playlist ended
+                        if (remainedTimeInEpisode <= 0) { // playlist ended
                             selectedIndex = 0;
                             selectedIndexInList = 0;
                             playing = false;
@@ -876,7 +891,7 @@ public class User implements ObserveContentCreators {
         if (albumName.isEmpty()) {
             return;
         }
-        Album album = database.findAlbum(albumName);
+        Album album = database.findAlbum(albumName, this.getLoadedSourceId());
         if (this.shuffledIndexes == null) {
             this.shuffledIndexes = new ArrayList<Integer>();
         } else {

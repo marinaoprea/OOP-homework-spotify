@@ -18,6 +18,9 @@ public final class Database {
     private int songId;
 
     @Getter
+    private int albumId;
+
+    @Getter
     private final ArrayList<Integer> noLikesPerSong = new ArrayList<Integer>();
     @Getter
     private final ArrayList<User> users = new ArrayList<User>();
@@ -58,6 +61,20 @@ public final class Database {
                 Artist artist = new Artist(songInput.getArtist());
                 this.artists.add(artist);
             }
+
+            /*Album album = this.findAlbumByNameAndArtist(songInput.getAlbum(), songInput.getArtist());
+            if (album == null) {
+                Album newAlbum = new Album(songInput.getAlbum());
+                albums.add(newAlbum);
+                Artist artist = this.findArtist(songInput.getArtist());
+                artist.getAlbums().add(newAlbum);
+                newAlbum.setOwner(artist);
+                this.albumId++;
+                newAlbum.setId(this.albumId);
+                newAlbum.getSongs().add(songInput);
+            } else {
+                album.getSongs().add(songInput);
+            }*/
         }
     }
 
@@ -152,14 +169,32 @@ public final class Database {
         return null;
     }
 
+    public Artist findArtistByNameAndAlbum(final String artistName, final String albumName) {
+        for (Artist artist : artists) {
+            if (artist.getUsername().equals(artistName) && artist.getAlbums() != null && artist.checkAlbumByName(albumName)) {
+                return artist;
+            }
+        }
+        return null;
+    }
+
     /**
      * method searches album by name in global list of albums
      * @param albumName name of searched album
      * @return found album if exists; null otherwise
      */
-    public Album findAlbum(final String albumName) {
+    public Album findAlbum(final String albumName, final int id) {
         for (Album album: albums) {
-            if (album.getName().equals(albumName)) {
+            if (album.getName().equals(albumName) && album.getId() == id) {
+                return album;
+            }
+        }
+        return null;
+    }
+
+    public Album findAlbumByNameAndArtist(final String albumName, final String artistName) {
+        for (Album album: albums) {
+            if (album.getName().equals(albumName) && album.getOwner().getUsername().equals(artistName)) {
                 return album;
             }
         }
@@ -220,5 +255,9 @@ public final class Database {
 
     public void setSongId(int songId) {
         this.songId = songId;
+    }
+
+    public void setAlbumId(int albumId) {
+        this.albumId = albumId;
     }
 }

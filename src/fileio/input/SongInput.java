@@ -57,7 +57,7 @@ public final class SongInput implements Wrappeable {
         return result;
     }*/
 
-    @Override
+  /*  @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -70,6 +70,24 @@ public final class SongInput implements Wrappeable {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }*/
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SongInput songInput = (SongInput) o;
+
+        if (!name.equals(songInput.name)) return false;
+        return artist.equals(songInput.artist);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + artist.hashCode();
+        return result;
     }
 
     @Override
