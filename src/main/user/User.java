@@ -128,6 +128,27 @@ public class User implements ObserveContentCreators {
         this.currentPage = homePage;
     }
 
+    public Artist listenedArtist(Database database) {
+        if (this.selectedType.equals("host") || this.selectedType.equals("podcast") || this.selectedType.equals("playlist")) {
+            return null;
+        }
+        if (this.selectedType.equals("song")) {
+            SongInput songInput = database.findSong(this.getLoadedSourceName(), this.getLoadedSourceId());
+            if (songInput == null) {
+                return null;
+            }
+            return database.findArtist(songInput.getArtist());
+        }
+        if (this.selectedType.equals("album")) {
+            Album album = database.findAlbum(this.getLoadedSourceName(), this.getLoadedSourceId());
+            if (album == null) {
+                return null;
+            }
+            return database.findArtist(album.getOwner().getUsername());
+        }
+        return null;
+    }
+
     @Override
     public void update(Notification newNotification) {
         this.notifications.add(newNotification);

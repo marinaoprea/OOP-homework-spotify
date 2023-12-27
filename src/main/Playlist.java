@@ -5,7 +5,7 @@ import main.user.User;
 
 import java.util.ArrayList;
 
-public final class Playlist {
+public final class Playlist implements Recommendation {
     private User user;
     private String name;
     private boolean visibility; // 0 - public; 1 - private
@@ -27,6 +27,16 @@ public final class Playlist {
         this.visibility = visibility;
         this.playlistid = user.getPlaylistids() + 1;
         user.setPlaylistids(user.getPlaylistids() + 1);
+    }
+
+    @Override
+    public String getRecommendationName() {
+        return this.name;
+    }
+
+    @Override
+    public String getType() {
+        return "playlist";
     }
 
     /**

@@ -60,6 +60,7 @@ public final class CommandFactory {
             case "cancelPremium" -> new CancelPremium(commandInput);
             case "previousPage" -> new PrevPage(commandInput);
             case "nextPage" -> new NextPage(commandInput);
+            case "updateRecommendations" -> new UpdateRecommendations(commandInput);
             default -> new Command(commandInput);
         };
     }

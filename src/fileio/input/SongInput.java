@@ -1,12 +1,13 @@
 package fileio.input;
 
 import lombok.Getter;
+import main.Recommendation;
 import main.Wrappeable;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public final class SongInput implements Wrappeable {
+public final class SongInput implements Wrappeable, Recommendation {
     private String name;
     private Integer duration;
     private String album;
@@ -88,6 +89,16 @@ public final class SongInput implements Wrappeable {
         int result = name.hashCode();
         result = 31 * result + artist.hashCode();
         return result;
+    }
+
+    @Override
+    public String getRecommendationName() {
+        return this.name;
+    }
+
+    @Override
+    public String getType() {
+        return "song";
     }
 
     @Override

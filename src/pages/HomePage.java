@@ -2,12 +2,17 @@ package pages;
 
 import commands.Constants;
 import fileio.input.SongInput;
+import lombok.Getter;
 import main.Playlist;
+import main.Recommendation;
 import main.user.User;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public final class HomePage extends Page implements VisitablePage {
+    @Getter
+    private final LinkedList<Recommendation> recommendations = new LinkedList<>();
     public HomePage(final User owner) {
         super(owner);
     }
@@ -38,5 +43,13 @@ public final class HomePage extends Page implements VisitablePage {
         return this.getOwner().getFollowed().stream().sorted(
                 (o1, o2) -> o2.getAllLikes() - o1.getAllLikes())
                 .limit(Constants.NO_SEARCH_RESULTS).toList();
+    }
+
+    public List<Recommendation> generateSongRecommendationsFromUpdate() {
+        return this.recommendations.stream().filter(o1 -> o1.getType().equals("song")).toList();
+    }
+
+    public List<Recommendation> generatePlaylistRecommendationsFromUpdate() {
+        return this.recommendations.stream().filter(o1 -> o1.getType().equals("playlist")).toList();
     }
 }
