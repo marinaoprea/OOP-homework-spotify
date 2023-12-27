@@ -26,6 +26,10 @@ public class EndProgram extends Command {
             user.simulate(this.getTimestamp(), database);
             Monetization.calculateMonetization(user, database);
         }
+        for (Artist artist: database.getArtists()) {
+            Double songRevenue = Math.round(artist.getRevenue().getSongRevenue() * 100) / 100.0;
+            artist.getRevenue().setSongRevenue(songRevenue);
+        }
         List<Artist> sorted =
                 database.getArtists().stream().filter(artist -> artist.getRevenue().isWasListened()).
                         sorted(new Comparator<Artist>() {

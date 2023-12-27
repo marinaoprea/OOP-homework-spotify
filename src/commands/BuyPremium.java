@@ -26,27 +26,8 @@ public class BuyPremium extends Command {
         }
 
         user.simulate(this.getTimestamp(), database);
-        user.getSongHistory().clear();
+        user.getSongHistory().getSongMap().clear();
         user.setPremium(true);
-
-        if (user.getSelectedType().equals("song")) {
-            SongInput song = user.getSongFromUser(database);
-            if (song != null) {
-                user.getSongHistory().add(song);
-            }
-        }
-        if (user.getSelectedType().equals("playlist")) {
-            SongInput song = user.getSongFromUserInPlaylist(database);
-            if (song != null) {
-                user.getSongHistory().add(song);
-            }
-        }
-        if (user.getSelectedType().equals("album")) {
-            SongInput song = user.getSongFromUserInAlbum(database);
-            if (song != null) {
-                user.getSongHistory().add(song);
-            }
-        }
 
         this.message = this.getUsername() + " bought the subscription successfully.";
     }

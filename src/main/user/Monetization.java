@@ -9,18 +9,20 @@ import java.util.Map;
 
 public class Monetization {
     public static void calculateMonetization(User user, Database database) {
-        int totalNumberOfSongs = user.getSongHistory().size();
+        int totalNumberOfSongs = 0;
         HashMap<Artist, Integer> songsPerArtist = new HashMap<>();
-        for (SongInput songInput : user.getSongHistory()) {
+        for (Map.Entry<SongInput, Integer> entry : user.getSongHistory().getSongMap().entrySet()) {
+            SongInput songInput = entry.getKey();
             Artist artist = database.findArtist(songInput.getArtist());
             if (artist != null) {
                 if (songsPerArtist.containsKey(artist)) {
                     Integer previousListens = songsPerArtist.remove(artist);
-                    songsPerArtist.put(artist, previousListens + 1);
+                    songsPerArtist.put(artist, previousListens + entry.getValue());
                 } else {
-                    songsPerArtist.put(artist, 1);
+                    songsPerArtist.put(artist, entry.getValue());
                 }
             }
+            totalNumberOfSongs += entry.getValue();
         }
 
         if (user.isPremium()) {
@@ -30,9 +32,11 @@ public class Monetization {
                 Double previousRevenue = artist.getRevenue().getSongRevenue();
                 artist.getRevenue().setSongRevenue(previousRevenue + revenue);
 
-                Double revenuePerSong = revenue / entry.getValue();
-                for (SongInput songInput : user.getSongHistory()){
+                for (Map.Entry<SongInput, Integer> entry1 : user.getSongHistory().getSongMap().entrySet()){
+                    SongInput songInput = entry1.getKey();
                     if (songInput.getArtist().equals(artist.getUsername())) {
+                        // total revenue / total number of listens of artist * number of listens of current song
+                        Double revenuePerSong = revenue / entry.getValue() * entry1.getValue();
                         artist.getRevenue().updateSongRevenue(songInput, revenuePerSong);
                     }
                 }

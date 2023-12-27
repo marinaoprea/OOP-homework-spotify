@@ -4,10 +4,7 @@ import fileio.input.PodcastInput;
 import fileio.input.SongInput;
 import fileio.input.UserInput;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 import commands.SearchBar;
 import lombok.Getter;
@@ -78,7 +75,7 @@ public class User implements ObserveContentCreators {
     @Getter
     private final ArrayList<Artist.Merch> boughtMerch = new ArrayList<>();
     @Getter
-    private final HashSet<SongInput> songHistory = new HashSet<>();
+    private final History songHistory = new History();
     @Getter
     private boolean premium;
     @Getter
@@ -384,6 +381,8 @@ public class User implements ObserveContentCreators {
                 } else if (this.repeat == 1) { //repeat once
                     remainedTime += song.getDuration();
                     wrapper.updateSong(song, 1, database, this);
+                    songHistory.updateSong(song, 1, database, this);
+
                     if (remainedTime > 0) {
                         timeRelativeToSong = song.getDuration() - remainedTime;
                         timeLoaded = timestamp;
@@ -401,6 +400,8 @@ public class User implements ObserveContentCreators {
                             (timeRelativeToSong + timestamp - timeLoaded) % song.getDuration();
                     wrapper.updateSong(song, 1 +
                             (aux + timestamp - timeLoaded) / song.getDuration(), database, this);
+                    songHistory.updateSong(song, 1 + (aux + timestamp - timeLoaded) / song.getDuration()
+                            , database, this );
                     timeLoaded = timestamp;
                 }
             } else {
@@ -536,10 +537,10 @@ public class User implements ObserveContentCreators {
                         selectedIndexInList++;
                         while (selectedIndexInList <= playlist.getSongs().size()
                                 && remainedTimeInEpisode <= 0) {
-                            remainedTimeInEpisode +=
-                                    playlist.getSongs().get(selectedIndexInList - 1).getDuration();
-                            wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
-                            this.songHistory.add(playlist.getSongs().get(selectedIndexInList - 1));
+                            SongInput songInput = playlist.getSongs().get(selectedIndexInList - 1);
+                            remainedTimeInEpisode += songInput.getDuration();
+                            wrapper.updateSong(songInput, 1, database, this);
+                            this.songHistory.updateSong(songInput, 1, database, this);
                             selectedIndexInList++;
                         }
                         if (remainedTimeInEpisode <= 0) { // playlist ended
@@ -568,10 +569,10 @@ public class User implements ObserveContentCreators {
                             && remainedTimeInEpisode <= 0) {
                         selectedIndexInList =
                                 this.getShuffledIndexes().get(shuffleIndex - 1) + 1;
-                        remainedTimeInEpisode +=
-                                playlist.getSongs().get(selectedIndexInList - 1).getDuration();
-                        wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
-                        this.songHistory.add(playlist.getSongs().get(selectedIndexInList - 1));
+                        SongInput songInput = playlist.getSongs().get(selectedIndexInList - 1);
+                        remainedTimeInEpisode += songInput.getDuration();
+                        wrapper.updateSong(songInput, 1, database, this);
+                        this.songHistory.updateSong(songInput, 1, database, this);
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -602,10 +603,10 @@ public class User implements ObserveContentCreators {
                             if (selectedIndexInList > playlist.getSongs().size()) {
                                 selectedIndexInList = 1; // from the top
                             }
-                            remainedTimeInEpisode +=
-                                    playlist.getSongs().get(selectedIndexInList - 1).getDuration();
-                            wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
-                            this.songHistory.add(playlist.getSongs().get(selectedIndexInList - 1));
+                            SongInput songInput = playlist.getSongs().get(selectedIndexInList - 1);
+                            remainedTimeInEpisode += songInput.getDuration();
+                            wrapper.updateSong(songInput, 1, database, this);
+                            this.songHistory.updateSong(songInput, 1, database, this);
                             selectedIndexInList++;
                         }
 
@@ -627,10 +628,10 @@ public class User implements ObserveContentCreators {
                         }
                         selectedIndexInList =
                                 this.getShuffledIndexes().get(shuffleIndex - 1) + 1;
-                        remainedTimeInEpisode +=
-                                playlist.getSongs().get(selectedIndexInList - 1).getDuration();
-                        wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1), 1, database, this);
-                        this.songHistory.add(playlist.getSongs().get(selectedIndexInList - 1));
+                        SongInput songInput = playlist.getSongs().get(selectedIndexInList - 1);
+                        remainedTimeInEpisode += songInput.getDuration();
+                        wrapper.updateSong(songInput, 1, database, this);
+                        this.songHistory.updateSong(songInput, 1, database, this);
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -644,11 +645,13 @@ public class User implements ObserveContentCreators {
                 }
                 // playlist song infinitely
                 int aux = timeRelativeToSong;
+                SongInput songInput = playlist.getSongs().get(selectedIndexInList - 1);
                 timeRelativeToSong = (timeRelativeToSong + timestamp - timeLoaded)
-                        % playlist.getSongs().get(selectedIndexInList - 1).getDuration();
-                wrapper.updateSong(playlist.getSongs().get(selectedIndexInList - 1),
-                        (aux + timestamp - timeLoaded)
-                                / playlist.getSongs().get(selectedIndexInList - 1).getDuration(), database, this);
+                        % songInput.getDuration();
+                wrapper.updateSong(songInput, (aux + timestamp - timeLoaded)
+                                / songInput.getDuration(), database, this);
+                this.songHistory.updateSong(songInput, (aux + timestamp - timeLoaded)
+                        / songInput.getDuration(), database, this);
                 this.timeLoaded = timestamp;
             }
             // playlist is on pause; nothing changes
@@ -701,10 +704,10 @@ public class User implements ObserveContentCreators {
                         selectedIndexInList++;
                         while (selectedIndexInList <= album.getSongs().size()
                                 && remainedTimeInEpisode <= 0) {
-                            remainedTimeInEpisode +=
-                                    album.getSongs().get(selectedIndexInList - 1).getDuration();
-                            wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
-                            this.songHistory.add(album.getSongs().get(selectedIndexInList - 1));
+                            SongInput songInput = album.getSongs().get(selectedIndexInList - 1);
+                            remainedTimeInEpisode += songInput.getDuration();
+                            wrapper.updateSong(songInput, 1, database, this);
+                            this.songHistory.updateSong(songInput, 1, database, this);
                             selectedIndexInList++;
                         }
                         if (remainedTimeInEpisode <= 0) { // playlist ended
@@ -733,10 +736,10 @@ public class User implements ObserveContentCreators {
                             && remainedTimeInEpisode <= 0) {
                         selectedIndexInList =
                                 this.getShuffledIndexes().get(shuffleIndex - 1) + 1;
-                        remainedTimeInEpisode +=
-                                album.getSongs().get(selectedIndexInList - 1).getDuration();
-                        wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
-                        this.songHistory.add(album.getSongs().get(selectedIndexInList - 1));
+                        SongInput songInput = album.getSongs().get(selectedIndexInList - 1);
+                        remainedTimeInEpisode += songInput.getDuration();
+                        wrapper.updateSong(songInput, 1, database, this);
+                        this.songHistory.updateSong(songInput, 1, database, this);
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -767,10 +770,10 @@ public class User implements ObserveContentCreators {
                             if (selectedIndexInList > album.getSongs().size()) {
                                 selectedIndexInList = 1; // from the top
                             }
-                            remainedTimeInEpisode +=
-                                    album.getSongs().get(selectedIndexInList - 1).getDuration();
-                            wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
-                            this.songHistory.add(album.getSongs().get(selectedIndexInList - 1));
+                            SongInput songInput = album.getSongs().get(selectedIndexInList - 1);
+                            remainedTimeInEpisode += songInput.getDuration();
+                            wrapper.updateSong(songInput, 1, database, this);
+                            this.songHistory.updateSong(songInput, 1, database, this);
                             selectedIndexInList++;
                         }
 
@@ -792,10 +795,10 @@ public class User implements ObserveContentCreators {
                         }
                         selectedIndexInList =
                                 this.getShuffledIndexes().get(shuffleIndex - 1) + 1;
-                        remainedTimeInEpisode +=
-                                album.getSongs().get(selectedIndexInList - 1).getDuration();
-                        wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1), 1, database, this);
-                        this.songHistory.add(album.getSongs().get(selectedIndexInList - 1));
+                        SongInput songInput = album.getSongs().get(selectedIndexInList - 1);
+                        remainedTimeInEpisode += songInput.getDuration();
+                        wrapper.updateSong(songInput, 1, database, this);
+                        this.songHistory.updateSong(songInput, 1, database, this);
                         lastIndex = selectedIndexInList;
                         shuffleIndex++;
                     }
@@ -809,11 +812,13 @@ public class User implements ObserveContentCreators {
                 }
                 // playlist song infinitely
                 int aux = timeRelativeToSong;
+                SongInput songInput = album.getSongs().get(selectedIndexInList - 1);
                 timeRelativeToSong = (timeRelativeToSong + timestamp - timeLoaded)
-                        % album.getSongs().get(selectedIndexInList - 1).getDuration();
-                wrapper.updateSong(album.getSongs().get(selectedIndexInList - 1),
-                        (aux + timestamp - timeLoaded)
-                        / album.getSongs().get(selectedIndexInList - 1).getDuration(), database, this);
+                        % songInput.getDuration();
+                wrapper.updateSong(songInput, (aux + timestamp - timeLoaded)
+                        / songInput.getDuration(), database, this);
+                this.songHistory.updateSong(songInput, (aux + timestamp - timeLoaded)
+                        / songInput.getDuration(), database, this);
                 this.timeLoaded = timestamp;
             }
             // album is on pause; nothing changes

@@ -49,7 +49,7 @@ public final class Load extends Command {
             user.setTimeRelativeToSong(0);
             SongInput song = database.findSong(user.getLoadedSourceName(), user.getLoadedSourceId());
             user.getWrapper().updateSong(song, 1, database, user);
-            user.getSongHistory().add(song);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
         if (user.getLastSearch().getType().equals("playlist")) {
@@ -63,7 +63,7 @@ public final class Load extends Command {
             Playlist playlist = database.findPlaylistInDatabase(user.getLoadedSourceName());
             SongInput song = playlist.getSongs().get(0);
             user.getWrapper().updateSong(song, 1, database, user);
-            user.getSongHistory().add(song);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
         if (user.getLastSearch().getType().equals("podcast")) {
@@ -85,7 +85,7 @@ public final class Load extends Command {
             Album album = database.findAlbum(user.getLoadedSourceName(), user.getLoadedSourceId());
             SongInput song = album.getSongs().get(0);
             user.getWrapper().updateSong(song, 1, database, user);
-            user.getSongHistory().add(song);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
     }
