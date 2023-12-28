@@ -81,6 +81,18 @@ public class User implements ObserveContentCreators {
     private boolean premium;
     @Getter
     private final NavigationInvoker navigation = new NavigationInvoker();
+    @Getter
+    private boolean playAd;
+    @Getter
+    private int adPrice;
+
+    public void setAdPrice(int adPrice) {
+        this.adPrice = adPrice;
+    }
+
+    public void setPlayAd(boolean playAd) {
+        this.playAd = playAd;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -394,6 +406,19 @@ public class User implements ObserveContentCreators {
         if (this.playing) {
             remainedTime = remainedTime - (timestamp - timeLoaded);
             if (remainedTime <= 0) {
+                if (this.playAd) {
+                    remainedTime += database.getAd().getDuration();
+                    this.playAd = false;
+                    Monetization.calculateMonetization(this, database, adPrice);
+                    this.songHistory.getSongMap().clear();
+                    if (remainedTime > 0) {
+                        timeRelativeToSong = database.getAd().getDuration() - remainedTime;
+                        lastSearch.getResults().set(0, database.getAd().getName());
+                        lastSearch.getResultsId().set(0, database.getAd().getId());
+                        selectedIndex = 1;
+                        return;
+                    }
+                }
                 if (this.repeat == 0) { // no repeat
                     this.playing = false;
                     this.timeLoaded = 0;
@@ -562,6 +587,12 @@ public class User implements ObserveContentCreators {
                 }
                 if (repeat == 0) { // no repeat
                     if (!this.getShuffle()) {
+                        if (playAd) {
+                            remainedTimeInEpisode += database.getAd().getDuration();
+                            playAd = false;
+                            Monetization.calculateMonetization(this, database, adPrice);
+                            this.songHistory.getSongMap().clear();
+                        }
                         selectedIndexInList++;
                         while (selectedIndexInList <= playlist.getSongs().size()
                                 && remainedTimeInEpisode <= 0) {
@@ -729,6 +760,12 @@ public class User implements ObserveContentCreators {
                 }
                 if (repeat == 0) { // no repeat
                     if (!this.getShuffle()) {
+                        if (playAd) {
+                            remainedTimeInEpisode += database.getAd().getDuration();
+                            playAd = false;
+                            Monetization.calculateMonetization(this, database, adPrice);
+                            this.songHistory.getSongMap().clear();
+                        }
                         selectedIndexInList++;
                         while (selectedIndexInList <= album.getSongs().size()
                                 && remainedTimeInEpisode <= 0) {

@@ -24,7 +24,9 @@ public class EndProgram extends Command {
     public void execute(Database database) {
         for (User user : database.getUsers()) {
             user.simulate(this.getTimestamp(), database);
-            Monetization.calculateMonetization(user, database);
+            if (user.isPremium()) {
+                Monetization.calculateMonetization(user, database, Constants.PREMIUM_CREDIT);
+            }
         }
         for (Artist artist: database.getArtists()) {
             Double songRevenue = Math.round(artist.getRevenue().getSongRevenue() * 100) / 100.0;

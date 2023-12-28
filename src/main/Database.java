@@ -38,6 +38,8 @@ public final class Database {
     @Getter
     private final ArrayList<Host> hosts = new ArrayList<Host>();
 
+    @Getter
+    private SongInput ad;
     /**
      * constructor that constructs database from input library
      * @param library input library
@@ -60,6 +62,10 @@ public final class Database {
             if (!this.findArtistByName(songInput.getArtist())) {
                 Artist artist = new Artist(songInput.getArtist());
                 this.artists.add(artist);
+            }
+
+            if (songInput.getName().equals("Ad Break")) {
+                ad = songInput;
             }
 
             /*Album album = this.findAlbumByNameAndArtist(songInput.getAlbum(), songInput.getArtist());

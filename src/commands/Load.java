@@ -39,6 +39,7 @@ public final class Load extends Command {
         }
         this.message = "Playback loaded successfully.";
 
+        user.setPlayAd(false);
         user.setRepeat(0);
         user.setIsSelected(false);
         user.setLoaded(true);
