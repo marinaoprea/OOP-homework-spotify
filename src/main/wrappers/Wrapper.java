@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class Wrapper implements ObserverWrapper {
     @Getter
-    private final HashMap<Wrappeable, Integer> wrapArtists = new HashMap<>();
+    private final HashMap<String, Integer> wrapArtists = new HashMap<>();
     @Getter
     private final HashMap<String, Integer> wrapGenre = new HashMap<>();
     @Getter
@@ -39,7 +39,7 @@ public class Wrapper implements ObserverWrapper {
         Artist artist = database.findArtist(song.getArtist());
         //Artist artist = database.findArtistByNameAndAlbum(song.getArtist(), song.getAlbum());
         if (artist != null) {
-            updateArtists(artist, listens);
+            updateArtists(song.getArtist(), listens);
             artist.getWrapperArtist().updateFans(user, listens);
             artist.getWrapperArtist().updateSong(song, listens, database, user);
             artist.getRevenue().setWasListened(true);
@@ -72,7 +72,7 @@ public class Wrapper implements ObserverWrapper {
     }
 
     @Override
-    public void updateArtists(Artist artist, int listens) {
+    public void updateArtists(String artist, int listens) {
         if (!wrapArtists.containsKey(artist)) {
             wrapArtists.put(artist, listens);
             return;

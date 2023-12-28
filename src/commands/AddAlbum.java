@@ -43,8 +43,8 @@ public final class AddAlbum extends Command {
             this.message = this.getUsername() + " is not an artist.";
             return;
         }
-        //Artist artist = (Artist) user;
-        Artist artist = database.findArtist(this.getUsername());
+        Artist artist = (Artist) user;
+        //Artist artist = database.findArtist(this.getUsername());
         if (artist.checkAlbumByName(this.name)) {
             this.message = this.getUsername() + " has another album with the same name.";
             return;

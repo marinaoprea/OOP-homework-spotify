@@ -19,7 +19,7 @@ import java.util.*;
 
 public class WrapperCommand extends Command{
     private String message;
-    private List<Map.Entry<Wrappeable, Integer>> topArtists;
+    private List<Map.Entry<String, Integer>> topArtists;
     private List<Map.Entry<String, Integer>> topGenres;
     private List<Map.Entry<Wrappeable, Integer>> topSongs;
     private List<Map.Entry<String, Integer>> topSongsArtist;
@@ -103,7 +103,7 @@ public class WrapperCommand extends Command{
             user.simulate(this.getTimestamp(), database);
             Wrapper wrapper = user.getWrapper();
             topAlbums = this.extractResultsGenre(wrapper.getWrapAlbum());
-            topArtists = this.extractResults(wrapper.getWrapArtists());
+            topArtists = this.extractResultsGenre(wrapper.getWrapArtists());
             topGenres = this.extractResultsGenre(wrapper.getWrapGenre());
             topSongs = this.extractResults(wrapper.getWrapSong());
             topPodcasts = this.extractResults(wrapper.getWrapPodcast());
@@ -173,8 +173,8 @@ public class WrapperCommand extends Command{
             }
 
             ObjectNode artist = mapper.createObjectNode();
-            for (Map.Entry<Wrappeable, Integer> entry : topArtists) {
-                artist.put(entry.getKey().extractName(), entry.getValue());
+            for (Map.Entry<String , Integer> entry : topArtists) {
+                artist.put(entry.getKey(), entry.getValue());
             }
             resultObject.put("topArtists", artist);
 

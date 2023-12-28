@@ -358,6 +358,9 @@ public class SearchBar extends Command {
                     }
                 }
             }
+            if (this.results.size() == Constants.NO_SEARCH_RESULTS) {
+                break;
+            }
         }
         this.writeMessage();
     }

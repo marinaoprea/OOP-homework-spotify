@@ -42,6 +42,10 @@ public final class AddUser extends Command {
             return;
         }
         if (this.type.equals("artist")) {
+            Artist artist = database.findArtist(this.getUsername());
+            if (artist != null) {
+                database.getArtists().remove(artist);
+            }
             Artist newArtist = new Artist(this.getUsername(), this.age, this.city);
             database.getUsers().add(newArtist);
             database.getArtists().add(newArtist);
