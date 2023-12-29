@@ -45,7 +45,7 @@ public class UpdateRecommendations extends Command {
             user.simulate(this.getTimestamp(), database);
             Artist artist = user.listenedArtist(database);
             if (artist == null) {
-                this.message = "No new recommendations were found.";
+                this.message = "No new recommendations were found";
                 return;
             }
 
@@ -98,13 +98,13 @@ public class UpdateRecommendations extends Command {
         if (this.recommendationType.equals("random_song")) {
             user.simulate(this.getTimestamp(), database);
             if (!user.getSelectedType().equals("song")) {
-                this.message = "No new recommendations were found.";
+                this.message = "No new recommendations were found";
                 return;
             }
 
             SongInput songInput = database.findSong(user.getLoadedSourceName(), user.getLoadedSourceId());
             if (songInput == null || user.getTimeRelativeToSong() < 30) {
-                this.message = "No new recommendations were found.";
+                this.message = "No new recommendations were found";
                 return;
             }
 
@@ -148,7 +148,7 @@ public class UpdateRecommendations extends Command {
             }).toList();
 
             if (topGenres.isEmpty()) {
-                this.message = "No new recommendations were found.";
+                this.message = "No new recommendations were found";
                 return;
             }
 

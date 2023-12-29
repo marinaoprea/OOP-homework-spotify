@@ -27,7 +27,7 @@ public class Monetization {
 
         for (Map.Entry<Artist, Integer> entry : songsPerArtist.entrySet()) {
             Artist artist = entry.getKey();
-            Double revenue = entry.getValue() * price / totalNumberOfSongs;
+            Double revenue = (1.0 * entry.getValue()) * price / (1.0 * totalNumberOfSongs);
             Double previousRevenue = artist.getRevenue().getSongRevenue();
             artist.getRevenue().setSongRevenue(previousRevenue + revenue);
 
@@ -35,7 +35,7 @@ public class Monetization {
                 SongInput songInput = entry1.getKey();
                 if (songInput.getArtist().equals(artist.getUsername())) {
                     // total revenue / total number of listens of artist * number of listens of current song
-                    Double revenuePerSong = revenue / entry.getValue() * entry1.getValue();
+                    Double revenuePerSong = revenue / (1.0 * entry.getValue()) * (1.0 * entry1.getValue());
                     artist.getRevenue().updateSongRevenue(songInput, revenuePerSong);
                 }
             }

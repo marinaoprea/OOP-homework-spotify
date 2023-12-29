@@ -26,8 +26,12 @@ public class BuyPremium extends Command {
         }
 
         user.simulate(this.getTimestamp(), database);
+        // history before premium
+        user.getCopyHistory().copy(user.getSongHistory().getSongMap());
+
         user.getSongHistory().getSongMap().clear();
         user.setPremium(true);
+        user.setPlayAd(false);
 
         this.message = this.getUsername() + " bought the subscription successfully.";
     }

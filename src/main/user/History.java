@@ -6,6 +6,7 @@ import main.Database;
 import main.wrappers.ObserverWrapper;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class History implements ObserverWrapper {
     public History() {}
@@ -20,6 +21,12 @@ public class History implements ObserverWrapper {
         } else {
             Integer previousListens = this.songMap.remove(song);
             this.songMap.put(song, previousListens + listens);
+        }
+    }
+
+    public void copy(HashMap<SongInput, Integer> hashMap) {
+        for (Map.Entry<SongInput, Integer> entry : hashMap.entrySet()) {
+            songMap.put(entry.getKey(), entry.getValue());
         }
     }
 }

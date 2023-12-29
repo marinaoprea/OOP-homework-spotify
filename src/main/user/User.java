@@ -76,6 +76,8 @@ public class User implements ObserveContentCreators {
     @Getter
     private final ArrayList<Artist.Merch> boughtMerch = new ArrayList<>();
     @Getter
+    private final History copyHistory = new History();
+    @Getter
     private final History songHistory = new History();
     @Getter
     private boolean premium;
@@ -409,7 +411,7 @@ public class User implements ObserveContentCreators {
                 if (this.playAd) {
                     remainedTime += database.getAd().getDuration();
                     this.playAd = false;
-                    Monetization.calculateMonetization(this, database, adPrice);
+                    Monetization.calculateMonetization(this, database, 1.0 * adPrice);
                     this.songHistory.getSongMap().clear();
                     if (remainedTime > 0) {
                         timeRelativeToSong = database.getAd().getDuration() - remainedTime;
@@ -590,7 +592,7 @@ public class User implements ObserveContentCreators {
                         if (playAd) {
                             remainedTimeInEpisode += database.getAd().getDuration();
                             playAd = false;
-                            Monetization.calculateMonetization(this, database, adPrice);
+                            Monetization.calculateMonetization(this, database, 1.0 * adPrice);
                             this.songHistory.getSongMap().clear();
                         }
                         selectedIndexInList++;
@@ -763,7 +765,7 @@ public class User implements ObserveContentCreators {
                         if (playAd) {
                             remainedTimeInEpisode += database.getAd().getDuration();
                             playAd = false;
-                            Monetization.calculateMonetization(this, database, adPrice);
+                            Monetization.calculateMonetization(this, database, 1.0 * adPrice);
                             this.songHistory.getSongMap().clear();
                         }
                         selectedIndexInList++;

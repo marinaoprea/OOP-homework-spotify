@@ -289,7 +289,7 @@ public class SearchBar extends Command {
      */
     private void searchArtist(final Database database) {
         for (Artist artist : database.getArtists()) {
-            if (artist.getUsername().startsWith(this.filters.getName())) {
+            if (database.getUsers().contains(artist) && artist.getUsername().startsWith(this.filters.getName())) {
                 this.results.add(artist.getUsername());
                 if (this.results.size() == Constants.NO_SEARCH_RESULTS) {
                     break;

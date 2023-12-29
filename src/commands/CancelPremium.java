@@ -30,6 +30,9 @@ public class CancelPremium extends Command {
         Monetization.calculateMonetization(user, database, Constants.PREMIUM_CREDIT);
         user.setPremium(false);
         user.getSongHistory().getSongMap().clear();
+
+        user.getSongHistory().copy(user.getCopyHistory().getSongMap());
+        user.getCopyHistory().getSongMap().clear();
         this.message = this.getUsername() + " cancelled the subscription successfully.";
     }
 

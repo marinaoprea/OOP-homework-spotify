@@ -184,6 +184,12 @@ public class WrapperCommand extends Command{
             }
             resultObject.put("topGenres", genres);
 
+            ObjectNode songs = mapper.createObjectNode();
+            for (Map.Entry<Wrappeable, Integer> entry : topSongs) {
+                songs.put(entry.getKey().extractName(), entry.getValue());
+            }
+            resultObject.put("topSongs", songs);
+
             ObjectNode albums = mapper.createObjectNode();
             for (Map.Entry<String, Integer> entry : topAlbums) {
                 albums.put(entry.getKey(), entry.getValue());
@@ -195,12 +201,6 @@ public class WrapperCommand extends Command{
                 podcasts.put(entry.getKey().extractName(), entry.getValue());
             }
             resultObject.put("topEpisodes", podcasts);
-
-            ObjectNode songs = mapper.createObjectNode();
-            for (Map.Entry<Wrappeable, Integer> entry : topSongs) {
-                songs.put(entry.getKey().extractName(), entry.getValue());
-            }
-            resultObject.put("topSongs", songs);
         }
 
         if (type.equals("artist")) {
@@ -216,17 +216,17 @@ public class WrapperCommand extends Command{
             }
             resultObject.put("topSongs", songs);*/
 
-            ObjectNode songs = mapper.createObjectNode();
-            for (Map.Entry<Wrappeable, Integer> entry : topSongs) {
-                songs.put(entry.getKey().extractName(), entry.getValue());
-            }
-            resultObject.put("topSongs", songs);
-
             ObjectNode albums = mapper.createObjectNode();
             for (Map.Entry<String, Integer> entry : topAlbums) {
                 albums.put(entry.getKey(), entry.getValue());
             }
             resultObject.put("topAlbums", albums);
+
+            ObjectNode songs = mapper.createObjectNode();
+            for (Map.Entry<Wrappeable, Integer> entry : topSongs) {
+                songs.put(entry.getKey().extractName(), entry.getValue());
+            }
+            resultObject.put("topSongs", songs);
 
             ArrayNode fans = mapper.createArrayNode();
             for (String fan: this.topFans) {
