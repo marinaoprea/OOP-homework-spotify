@@ -141,6 +141,10 @@ public class WrapperCommand extends Command{
             topSongs = this.extractResults(artist.getWrapperArtist().getWrapSongs());
             topFans = this.extractResultsFans(artist.getWrapperArtist().getTopFans());
             listeners = artist.getWrapperArtist().getTopFans().size();
+
+            if (this.getUsername().equals("Madonna")) {
+                System.out.println("bla");
+            }
         }
 
         if (database.findHostByName(this.getUsername())) {

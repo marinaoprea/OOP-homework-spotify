@@ -48,7 +48,7 @@ public final class RemoveAlbum extends Command {
         this.message = this.getUsername() + " deleted the album successfully.";
         album.clearSongs(database);
         artist.getAlbums().remove(album);
-        database.getAlbums().remove(album);
+        database.removeAlbum(album);
     }
 
     @Override

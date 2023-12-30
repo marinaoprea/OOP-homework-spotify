@@ -83,6 +83,15 @@ public final class Album implements Wrappeable{
         return false;
     }
 
+    public boolean containsSongId(final int id) {
+        for (SongInput song: songs) {
+            if (song.getId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * method checks if album could be deleted;
      * method checks if any user is listening to the album;
@@ -96,12 +105,13 @@ public final class Album implements Wrappeable{
         for (User user: database.getUsers()) {
             user.simulate(timestamp, database);
             String source = user.getLoadedSourceName();
+            int id = user.getLoadedSourceId();
             if (user.getSelectedType().equals("album") && user.getTimeLoaded() != 0
-                    && source.equals(this.getName())) {
+                    && source.equals(this.getName()) && id == this.id) {
                 return false;
             }
             if (user.getSelectedType().equals("song") && user.getTimeLoaded() != 0
-                    && this.containsSongName(source)) {
+                    && this.containsSongName(source) && this.containsSongId(id)) {
                 return false;
             }
             if (user.getSelectedType().equals("playlist")) {
@@ -145,7 +155,7 @@ public final class Album implements Wrappeable{
                 user.getFavourites().getSongs().remove(song);
             }
             database.getNoLikesPerSong().remove(database.getSongs().indexOf(song));
-            database.getSongs().remove(song);
+            database.removeSong(song);
         }
     }
 

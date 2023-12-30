@@ -248,10 +248,10 @@ public class User implements ObserveContentCreators {
         if (this.lastSearch == null) {
             return null;
         }
-        if (this.selectedIndexInLibrary >= 1
+        /*if (this.selectedIndexInLibrary >= 1
                 && this.selectedIndexInLibrary <= database.getSongs().size()) {
             return database.getSongs().get(this.selectedIndexInLibrary - 1);
-        }
+        }*/
         if (this.selectedIndex >= 1
                 && this.selectedIndex <= this.lastSearch.getResults().size()) {
             String songName = this.lastSearch.getResults().get(this.selectedIndex - 1);
@@ -981,7 +981,7 @@ public class User implements ObserveContentCreators {
             return 0;
         }
         if (this.getSelectedIndex() < 1
-                || this.getSelectedIndex() > this.getLastSearch().getResults().size()) {
+                || this.getSelectedIndex() > this.getLastSearch().getResultsId().size()) {
             return 0;
         }
         return this.getLastSearch().getResultsId().get(this.selectedIndex - 1);

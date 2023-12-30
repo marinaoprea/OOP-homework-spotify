@@ -41,8 +41,14 @@ public class UpdateRecommendations extends Command {
             this.message = this.getUsername() + " is not a normal user.";
             return;
         }
+
+        user.simulate(this.getTimestamp(), database);
+        if (!user.isPlaying() || !user.getSelectedType().equals("song")) {
+            this.message = "No new recommendations were found";
+            return;
+        }
+
         if (this.recommendationType.equals("fans_playlist")) {
-            user.simulate(this.getTimestamp(), database);
             Artist artist = user.listenedArtist(database);
             if (artist == null) {
                 this.message = "No new recommendations were found";
@@ -89,6 +95,11 @@ public class UpdateRecommendations extends Command {
             newPlaylist.getSongs().addAll(new HashSet<>(sortedSongs));
             newPlaylist.setName(artist.getUsername() + " Fan Club recommendations");
 
+            if (newPlaylist.getSongs().isEmpty()) {
+                this.message = "No new recommendations were found";
+                return;
+            }
+
             user.getHomePage().getRecommendations().add(newPlaylist);
 
             this.message = "The recommendations for user " + this.getUsername() + " have been updated successfully.";
@@ -96,11 +107,6 @@ public class UpdateRecommendations extends Command {
         }
 
         if (this.recommendationType.equals("random_song")) {
-            user.simulate(this.getTimestamp(), database);
-            if (!user.getSelectedType().equals("song")) {
-                this.message = "No new recommendations were found";
-                return;
-            }
 
             SongInput songInput = database.findSong(user.getLoadedSourceName(), user.getLoadedSourceId());
             if (songInput == null || user.getTimeRelativeToSong() < 30) {
@@ -119,7 +125,6 @@ public class UpdateRecommendations extends Command {
         }
 
         if (this.recommendationType.equals("random_playlist")) {
-            user.simulate(this.getTimestamp(), database);
             HashSet<SongInput> songs = new HashSet<>();
             songs.addAll(user.getFavourites().getSongs());
             for (Playlist playlist : user.getMyPlaylists()) {

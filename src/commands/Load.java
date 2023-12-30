@@ -43,7 +43,6 @@ public final class Load extends Command {
         user.setRepeat(0);
         user.setIsSelected(false);
         user.setLoaded(true);
-        //System.out.println("bla");
         if (user.getLastSearch().getType().equals("song")) {
             user.setSelectedType("song");
             user.setTimeLoaded(this.getTimestamp());

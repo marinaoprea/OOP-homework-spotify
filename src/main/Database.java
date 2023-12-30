@@ -4,6 +4,7 @@ import fileio.input.LibraryInput;
 import fileio.input.PodcastInput;
 import fileio.input.SongInput;
 import fileio.input.UserInput;
+import javassist.bytecode.Descriptor;
 import lombok.Getter;
 import main.user.Artist;
 import main.user.Host;
@@ -11,6 +12,7 @@ import main.user.User;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 
 public final class Database {
@@ -131,6 +133,26 @@ public final class Database {
             }
         }
         return null;
+    }
+
+    public void removeSong(SongInput song) {
+        Iterator<SongInput> iterator = songs.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getId() == song.getId()) {
+                iterator.remove();
+                return;
+            }
+        }
+    }
+
+    public void removeAlbum(Album album) {
+        Iterator<Album> iterator = albums.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getId() == album.getId()) {
+                iterator.remove();
+                return;
+            }
+        }
     }
 
     /**
