@@ -1,24 +1,25 @@
-package commands;
+package commands.removals;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
 import main.CommandInput;
 import main.Database;
-import main.user.Host;
+import main.user.Artist;
 import main.user.User;
 
-public final class RemoveAnnouncement extends Command {
+public final class RemoveEvent extends Command {
     private String message;
     private final String name;
-    public RemoveAnnouncement(final CommandInput commandInput) {
+    public RemoveEvent(final CommandInput commandInput) {
         super(commandInput);
         this.name = commandInput.getName();
     }
 
     /**
      * method sets corresponding error messages;
-     * method checks if user exists, if user's a host, if user has an announcement with
+     * method checks if user exists, if user's an artist, if user has an event with
      * given name;
-     * if valid, announcement is removed from host's list
+     * if valid, event is removed from artist's list
      * @param database extended input library
      */
     @Override
@@ -28,18 +29,18 @@ public final class RemoveAnnouncement extends Command {
             this.message = "The username " + this.getUsername() + " doesn't exist.";
             return;
         }
-        if (!database.findHostByName(this.getUsername())) {
-            this.message = this.getUsername() + " is not a host.";
+        if (!database.findArtistByName(this.getUsername())) {
+            this.message = this.getUsername() + " is not an artist.";
             return;
         }
-        Host host = (Host) user;
-        if (!host.checkAnnouncement(this.name)) {
-            this.message = this.getUsername() + " has no announcement with the given name.";
+        Artist artist = (Artist) user;
+        Artist.Event event = artist.getEvent(this.name);
+        if (event == null) {
+            this.message = this.getUsername() + " has no event with the given name.";
             return;
         }
-        Host.Announcement newAnnouncement = host.findAnnouncement(this.name);
-        host.getAnnouncements().remove(newAnnouncement);
-        this.message = this.getUsername() + " has successfully deleted the announcement.";
+        artist.getEvents().remove(event);
+        this.message = this.getUsername() + " deleted the event successfully.";
     }
 
     @Override

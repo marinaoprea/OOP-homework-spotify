@@ -1,8 +1,9 @@
-package commands;
+package commands.show;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
 import fileio.input.SongInput;
 import main.CommandInput;
 import main.Database;

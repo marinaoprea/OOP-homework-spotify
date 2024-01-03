@@ -10,15 +10,21 @@ import main.user.User;
 
 import java.util.ArrayList;
 
-public class SeeMerch extends Command {
+public final class SeeMerch extends Command {
     private ArrayList<Artist.Merch> resultMerch;
     private String message;
 
-    public SeeMerch(CommandInput commandInput) {
+    public SeeMerch(final CommandInput commandInput) {
         super(commandInput);
     }
+
+    /**
+     * method sets corresponding error message;
+     * method sets result merch as users bought merch list
+     * @param database extended input library
+     */
     @Override
-    public void execute(Database database) {
+    public void execute(final Database database) {
         User user = database.findUserInDatabase(this.getUsername());
         if (user == null) {
             this.message = "The username " + this.getUsername() + " doesn't exist.";
@@ -28,8 +34,11 @@ public class SeeMerch extends Command {
         resultMerch = user.getBoughtMerch();
     }
 
+    /**
+     * @param objectNode created ObjectNode
+     */
     @Override
-    public void convertToObjectNode(ObjectNode objectNode) {
+    public void convertToObjectNode(final ObjectNode objectNode) {
         super.convertToObjectNode(objectNode);
 
         if (this.message != null) {

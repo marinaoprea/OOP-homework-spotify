@@ -6,15 +6,24 @@ import main.Database;
 import main.user.Monetization;
 import main.user.User;
 
-public class CancelPremium extends Command {
+public final class CancelPremium extends Command {
     private String message;
 
-    public CancelPremium(CommandInput commandInput) {
+    public CancelPremium(final CommandInput commandInput) {
         super(commandInput);
     }
 
+    /**
+     * method sets corresponding error messages;
+     * method pops saved song history before premium subscription; method clears saved song
+     * history;
+     * method resets premium flag for user and calls for monetization calculation for the
+     * ended premium subscription;
+     * user simulation is performed up until this point in order for statistics to be updated
+     * @param database extended input library
+     */
     @Override
-    public void execute(Database database) {
+    public void execute(final Database database) {
         User user = database.findUserInDatabase(this.getUsername());
         if (user == null) {
             this.message = "The username " + this.getUsername() + " doesn't exist.";
@@ -37,7 +46,7 @@ public class CancelPremium extends Command {
     }
 
     @Override
-    public void convertToObjectNode(ObjectNode objectNode) {
+    public void convertToObjectNode(final ObjectNode objectNode) {
         super.convertToObjectNode(objectNode);
         objectNode.put("message", message);
     }

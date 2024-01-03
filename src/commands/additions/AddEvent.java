@@ -1,6 +1,7 @@
-package commands;
+package commands.additions;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
 import main.Notification;
 import main.user.Artist;
 import main.CommandInput;
@@ -22,8 +23,9 @@ public final class AddEvent extends Command {
     /**
      * method prints corresponding error message;
      * method checks if user is an artist, if artist has not an event with the same name,
-     * if event has a valid date
-     * if valid, method adds new event in artist's event list
+     * if event has a valid date;
+     * if valid, method adds new event in artist's event list;
+     * artist internal structure has changed; thus method calls for notification method
      * @param database extended input library
      */
     @Override

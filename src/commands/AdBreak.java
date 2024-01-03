@@ -3,19 +3,25 @@ package commands;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import main.CommandInput;
 import main.Database;
-import main.user.Monetization;
 import main.user.User;
 
-public class AdBreak extends Command {
+public final class AdBreak extends Command {
     private String message;
-    private int price;
-    public AdBreak(CommandInput commandInput) {
+    private final int price;
+    public AdBreak(final CommandInput commandInput) {
         super(commandInput);
         this.price = commandInput.getPrice();
     }
 
+    /**
+     * method sets corresponding error messages;
+     * method sets user flag for ad playing; method sets user's price field for
+     * later ad monetization (when ad is simulated);
+     * simulation for user is performed up until this moment
+     * @param database extended input library
+     */
     @Override
-    public void execute(Database database) {
+    public void execute(final Database database) {
         User user = database.findUserInDatabase(this.getUsername());
         if (user == null) {
             this.message = "The username " + this.getUsername() + " doesn't exist.";
@@ -37,8 +43,11 @@ public class AdBreak extends Command {
         this.message = "Ad inserted successfully.";
     }
 
+    /**
+     * @param objectNode created ObjectNode
+     */
     @Override
-    public void convertToObjectNode(ObjectNode objectNode) {
+    public void convertToObjectNode(final ObjectNode objectNode) {
         super.convertToObjectNode(objectNode);
         objectNode.put("message", this.message);
     }

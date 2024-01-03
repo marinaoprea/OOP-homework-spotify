@@ -1,8 +1,10 @@
-package commands;
+package commands.statistics;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
+import commands.Constants;
 import main.Album;
 import main.CommandInput;
 import main.Database;

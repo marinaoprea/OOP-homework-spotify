@@ -1,6 +1,7 @@
-package commands;
+package commands.removals;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
 import main.CommandInput;
 import main.Database;
 import main.Album;

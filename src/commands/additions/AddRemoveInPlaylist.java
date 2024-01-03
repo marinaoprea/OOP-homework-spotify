@@ -1,6 +1,7 @@
-package commands;
+package commands.additions;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
 import fileio.input.SongInput;
 import main.CommandInput;
 import main.Database;
@@ -8,7 +9,7 @@ import main.Playlist;
 import main.user.User;
 
 public final class AddRemoveInPlaylist extends Command {
-    private int playlistID;
+    private final int playlistID;
     private String message;
     public AddRemoveInPlaylist(final CommandInput commandInput) {
         super(commandInput);

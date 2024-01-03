@@ -1,6 +1,7 @@
-package commands;
+package commands.additions;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
 import main.Notification;
 import main.user.Artist;
 import main.CommandInput;
@@ -22,7 +23,8 @@ public final class AddMerch extends Command {
     /**
      * method prints corresponding error message;
      * method checks if user is artist, if host has merchandise with the same name;
-     * if valid, method adds new merchandise in artist's list
+     * if valid, method adds new merchandise in artist's list;
+     * artist internal structure has changed; thus method calls for notification method
      * @param database extended input library
      */
     @Override

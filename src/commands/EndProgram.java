@@ -12,16 +12,24 @@ import main.user.User;
 import java.util.Comparator;
 import java.util.List;
 
-public class EndProgram extends Command {
+public final class EndProgram extends Command {
 
-    List<Artist> resultArtist;
+    private List<Artist> resultArtist;
 
-    public EndProgram(CommandInput commandInput) {
+    public EndProgram(final CommandInput commandInput) {
         super(commandInput);
     }
 
+    /**
+     * method simulates all users up until moment of program ending and calls for
+     * monetization updates;
+     * method truncates total revenue to 2 decimals
+     * method sorts artists depending on total revenue obtained; if equal, lexicographic sort
+     * is performed
+     * @param database extended input library
+     */
     @Override
-    public void execute(Database database) {
+    public void execute(final Database database) {
         for (User user : database.getUsers()) {
             user.simulate(this.getTimestamp(), database);
             if (user.isPremium()) {
@@ -54,8 +62,11 @@ public class EndProgram extends Command {
         resultArtist = sorted;
     }
 
+    /**
+     * @param objectNode created ObjectNode
+     */
     @Override
-    public void convertToObjectNode(ObjectNode objectNode) {
+    public void convertToObjectNode(final ObjectNode objectNode) {
         objectNode.put("command", this.getCommand());
         ObjectMapper mapper = new ObjectMapper();
 

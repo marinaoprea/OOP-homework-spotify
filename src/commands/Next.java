@@ -41,7 +41,8 @@ public final class Next extends Command {
             user.setPlaying(true);
             this.message = "Skipped to next track successfully. The current track is "
                     + song.getName() + ".";
-           // user.getWrapper().updateSong(song, 1, database);
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
         if (user.getRepeat() == 2) { // repeat infinitely
@@ -50,7 +51,8 @@ public final class Next extends Command {
             user.setPlaying(true);
             this.message = "Skipped to next track successfully. The current track is "
                     + song.getName() + ".";
-           // user.getWrapper().updateSong(song, 1, database);
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
         // no repeat; and stop
@@ -93,9 +95,11 @@ public final class Next extends Command {
                 user.setTimeRelativeToSong(0);
                 user.setTimeLoaded(this.getTimestamp());
                 user.setPlaying(true);
+                SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
                 this.message = "Skipped to next track successfully. The current track is "
-                        + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 return;
             }
 
@@ -105,9 +109,11 @@ public final class Next extends Command {
                 user.setTimeLoaded(this.getTimestamp());
                 user.setSelectedIndexInList(index);
                 user.setPlaying(true);
+                SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
                 this.message = "Skipped to next track successfully. The current track is "
-                        + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 return;
             }
 
@@ -117,9 +123,11 @@ public final class Next extends Command {
                 user.setTimeLoaded(this.getTimestamp());
                 user.setSelectedIndexInList(index);
                 user.setPlaying(true);
+                SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
                 this.message = "Skipped to next track successfully. The current track is "
-                        + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 return;
             }
 
@@ -138,8 +146,11 @@ public final class Next extends Command {
             user.setTimeRelativeToSong(0);
             user.setTimeLoaded(this.getTimestamp());
             user.setPlaying(true);
+            SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
             this.message = "Skipped to next track successfully. The current track is "
-                    + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
 
@@ -151,19 +162,24 @@ public final class Next extends Command {
             user.setTimeRelativeToSong(0);
             user.setTimeLoaded(this.getTimestamp());
             user.setSelectedIndexInList(user.getShuffledIndexes().get(indexShuffle - 1) + 1);
+            SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
             this.message = "Skipped to next track successfully. The current track is "
-                    + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
 
         if (user.getRepeat() == 1) { // repeat all
-            indexShuffle = 1;
             user.setPlaying(true);
             user.setTimeRelativeToSong(0);
             user.setTimeLoaded(this.getTimestamp());
             user.setSelectedIndexInList(user.getShuffledIndexes().get(0) + 1);
+            SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
             this.message = "Skipped to next track successfully. The current track is "
-                    + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
 
@@ -174,7 +190,6 @@ public final class Next extends Command {
         user.setPlaying(false);
         user.setTimeRelativeToSong(0);
         this.message = "Please load a source before skipping to the next track.";
-        return;
     }
 
     private void nextAlbum(final Database database, final User user) {
@@ -195,9 +210,11 @@ public final class Next extends Command {
                 user.setTimeRelativeToSong(0);
                 user.setTimeLoaded(this.getTimestamp());
                 user.setPlaying(true);
+                SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
                 this.message = "Skipped to next track successfully. The current track is "
-                        + album.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 return;
             }
 
@@ -207,9 +224,11 @@ public final class Next extends Command {
                 user.setTimeLoaded(this.getTimestamp());
                 user.setSelectedIndexInList(index);
                 user.setPlaying(true);
+                SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
                 this.message = "Skipped to next track successfully. The current track is "
-                        + album.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 return;
             }
 
@@ -219,9 +238,11 @@ public final class Next extends Command {
                 user.setTimeLoaded(this.getTimestamp());
                 user.setSelectedIndexInList(index);
                 user.setPlaying(true);
+                SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
                 this.message = "Skipped to next track successfully. The current track is "
-                        + album.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 return;
             }
 
@@ -240,8 +261,11 @@ public final class Next extends Command {
             user.setTimeRelativeToSong(0);
             user.setTimeLoaded(this.getTimestamp());
             user.setPlaying(true);
+            SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
             this.message = "Skipped to next track successfully. The current track is "
-                    + album.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
 
@@ -253,19 +277,24 @@ public final class Next extends Command {
             user.setTimeRelativeToSong(0);
             user.setTimeLoaded(this.getTimestamp());
             user.setSelectedIndexInList(user.getShuffledIndexes().get(indexShuffle - 1) + 1);
+            SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
             this.message = "Skipped to next track successfully. The current track is "
-                    + album.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
 
         if (user.getRepeat() == 1) { // repeat all
-            indexShuffle = 1;
             user.setPlaying(true);
             user.setTimeRelativeToSong(0);
             user.setTimeLoaded(this.getTimestamp());
             user.setSelectedIndexInList(user.getShuffledIndexes().get(0) + 1);
+            SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
             this.message = "Skipped to next track successfully. The current track is "
-                    + album.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
 
@@ -276,7 +305,6 @@ public final class Next extends Command {
         user.setPlaying(false);
         user.setTimeRelativeToSong(0);
         this.message = "Please load a source before skipping to the next track.";
-        return;
     }
 
 
@@ -351,6 +379,10 @@ public final class Next extends Command {
     @Override
     public void execute(final Database database) {
         User user = database.findUserInDatabase(this.getUsername());
+        if (user == null) {
+            this.message = "The username " + this.getUsername() + " doesn't exist.";
+            return;
+        }
         if (!user.isLoaded()) {
             this.message = "Please load a source before skipping to the next track.";
             return;
@@ -381,7 +413,6 @@ public final class Next extends Command {
                 user.updateShuffleIndexesAlbum(database);
             }
             this.nextAlbum(database, user);
-            return;
         }
     }
 

@@ -428,6 +428,13 @@ public class User implements ObserveContentCreators {
                     this.selectedIndex = 0;
                     this.timeRelativeToSong = 0;
                 } else if (this.repeat == 1) { //repeat once
+                    if (this.playAd) {
+                        remainedTime += database.getAd().getDuration();
+                        this.playAd = false;
+                        Monetization.calculateMonetization(this, database, 1.0 * adPrice);
+                        this.songHistory.getSongMap().clear();
+                    }
+
                     remainedTime += song.getDuration();
                     wrapper.updateSong(song, 1, database, this);
                     songHistory.updateSong(song, 1, database, this);
@@ -444,7 +451,14 @@ public class User implements ObserveContentCreators {
                         repeat = 0;
                     }
                 } else { //repeat infinite
-                    int aux = timeRelativeToSong;
+                    int substractAd = 0;
+                    if (this.playAd) {
+                        substractAd = database.getAd().getDuration();
+                        this.playAd = false;
+                        Monetization.calculateMonetization(this, database, 1.0 * adPrice);
+                        this.songHistory.getSongMap().clear();
+                    }
+                    int aux = timeRelativeToSong + substractAd;
                     timeRelativeToSong =
                             (timeRelativeToSong + timestamp - timeLoaded) % song.getDuration();
                     wrapper.updateSong(song, 1 +
@@ -587,14 +601,14 @@ public class User implements ObserveContentCreators {
                     timeLoaded = timestamp;
                     return;
                 }
+                if (playAd) {
+                    remainedTimeInEpisode += database.getAd().getDuration();
+                    playAd = false;
+                    Monetization.calculateMonetization(this, database, 1.0 * adPrice);
+                    this.songHistory.getSongMap().clear();
+                }
                 if (repeat == 0) { // no repeat
                     if (!this.getShuffle()) {
-                        if (playAd) {
-                            remainedTimeInEpisode += database.getAd().getDuration();
-                            playAd = false;
-                            Monetization.calculateMonetization(this, database, 1.0 * adPrice);
-                            this.songHistory.getSongMap().clear();
-                        }
                         selectedIndexInList++;
                         while (selectedIndexInList <= playlist.getSongs().size()
                                 && remainedTimeInEpisode <= 0) {
@@ -760,14 +774,14 @@ public class User implements ObserveContentCreators {
                     timeLoaded = timestamp;
                     return;
                 }
+                if (playAd) {
+                    remainedTimeInEpisode += database.getAd().getDuration();
+                    playAd = false;
+                    Monetization.calculateMonetization(this, database, 1.0 * adPrice);
+                    this.songHistory.getSongMap().clear();
+                }
                 if (repeat == 0) { // no repeat
                     if (!this.getShuffle()) {
-                        if (playAd) {
-                            remainedTimeInEpisode += database.getAd().getDuration();
-                            playAd = false;
-                            Monetization.calculateMonetization(this, database, 1.0 * adPrice);
-                            this.songHistory.getSongMap().clear();
-                        }
                         selectedIndexInList++;
                         while (selectedIndexInList <= album.getSongs().size()
                                 && remainedTimeInEpisode <= 0) {

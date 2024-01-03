@@ -7,30 +7,43 @@ import main.CommandInput;
 import main.Database;
 import main.Notification;
 import main.user.User;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
-public class GetNotifications extends Command {
+public final class GetNotifications extends Command {
 
     private ArrayList<Notification> notifications;
+    private String message;
     public GetNotifications(final CommandInput commandInput) {
         super(commandInput);
     }
 
+    /**
+     * method searches user in database and sets notification list as user's notification
+     * list
+     * @param database extended input library
+     */
     @Override
-    public void execute(Database database) {
+    public void execute(final Database database) {
         User user = database.findUserInDatabase(this.getUsername());
         if (user == null) {
+            this.message = "The username " + this.getUsername() + " doesn't exist.";
             return;
         }
         notifications = new ArrayList<>(user.getNotifications());
         user.getNotifications().clear();
     }
 
+    /**
+     * @param objectNode created ObjectNode
+     */
     @Override
-    public void convertToObjectNode(ObjectNode objectNode) {
+    public void convertToObjectNode(final ObjectNode objectNode) {
         super.convertToObjectNode(objectNode);
+        if (this.message != null) {
+            objectNode.put("message", this.message);
+            return;
+        }
 
         ObjectMapper mapper = new ObjectMapper();
         ArrayNode arrayNotifications = mapper.createArrayNode();

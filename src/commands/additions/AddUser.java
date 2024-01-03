@@ -1,6 +1,7 @@
-package commands;
+package commands.additions;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
 import main.CommandInput;
 import main.user.User;
 import main.user.Artist;

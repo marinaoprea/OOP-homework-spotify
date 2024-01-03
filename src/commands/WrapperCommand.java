@@ -3,8 +3,6 @@ package commands;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import fileio.input.SongInput;
-import main.Album;
 import main.CommandInput;
 import main.Database;
 import main.Wrappeable;
@@ -12,18 +10,13 @@ import main.user.Artist;
 import main.user.Host;
 import main.user.User;
 import main.wrappers.Wrapper;
-import org.checkerframework.checker.units.qual.A;
-
-import java.lang.ref.WeakReference;
 import java.util.*;
 
-public class WrapperCommand extends Command{
+public final class WrapperCommand extends Command{
     private String message;
     private List<Map.Entry<String, Integer>> topArtists;
     private List<Map.Entry<String, Integer>> topGenres;
     private List<Map.Entry<Wrappeable, Integer>> topSongs;
-    private List<Map.Entry<String, Integer>> topSongsArtist;
-    //private List<Map.Entry<Wrappeable, Integer>> topAlbums;
     private List<Map.Entry<String, Integer>> topAlbums;
     private List<Map.Entry<Wrappeable, Integer>> topPodcasts;
     private String type;
@@ -34,9 +27,14 @@ public class WrapperCommand extends Command{
         super(commandInput);
     }
 
+    /**
+     * method extracts top fans depending on number of listens from given hashmap
+     * @param hashMap hashmap of fans to number of listens
+     * @return list of fans' usernames limited to 5 results
+     */
     private List<String> extractResultsFans(final HashMap<User, Integer> hashMap) {
         List<Map.Entry<User, Integer>> sorted =
-                hashMap.entrySet().stream().sorted(new Comparator<Map.Entry<User, Integer>>() {
+                hashMap.entrySet().stream().sorted(new Comparator<>() {
                     @Override
                     public int compare(Map.Entry<User, Integer> o1, Map.Entry<User, Integer> o2) {
                         if (o1.getValue() > o2.getValue()) {
@@ -56,9 +54,14 @@ public class WrapperCommand extends Command{
         return answer;
     }
 
-    private List<Map.Entry<String, Integer>> extractResultsGenre(final HashMap<String, Integer> hashMap) {
+    /**
+     * method extracts results from hashmap
+     * @param hashMap hashmap of string to integer
+     * @return list of top results based on integer, limited to 5 results
+     */
+    private List<Map.Entry<String, Integer>> extractResultsString(final HashMap<String, Integer> hashMap) {
         List<Map.Entry<String, Integer>> sorted =
-                hashMap.entrySet().stream().sorted(new Comparator<Map.Entry<String, Integer>>() {
+                hashMap.entrySet().stream().sorted(new Comparator<>() {
                     @Override
                     public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
                         if (o1.getValue() > o2.getValue()) {
@@ -74,23 +77,32 @@ public class WrapperCommand extends Command{
         return sorted;
     }
 
+    /**
+     * method extracts top results depending on integer value from hashmap of
+     * wrappable object to number of listens
+     * @param hashMap input hashmap of wrappable object to number of listens
+     * @return list of top wrappable objects, limited to 5 results
+     */
     private List<Map.Entry<Wrappeable, Integer>> extractResults(final HashMap<Wrappeable, Integer> hashMap) {
         List<Map.Entry<Wrappeable, Integer>> sorted =
-                hashMap.entrySet().stream().sorted(new Comparator<Map.Entry<Wrappeable, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Wrappeable, Integer> o1, Map.Entry<Wrappeable, Integer> o2) {
-                if (o1.getValue() > o2.getValue()) {
-                    return -1;
-                }
-                if (o1.getValue() < o2.getValue()) {
-                    return 1;
-                }
-                return o1.getKey().extractName().compareTo(o2.getKey().extractName());
-            }
-        }).limit(Constants.NO_RESULTS_STATISTICS).toList();
+                hashMap.entrySet().stream().sorted((o1, o2) -> {
+                    if (o1.getValue() > o2.getValue()) {
+                        return -1;
+                    }
+                    if (o1.getValue() < o2.getValue()) {
+                        return 1;
+                    }
+                    return o1.getKey().extractName().compareTo(o2.getKey().extractName());
+                }).limit(Constants.NO_RESULTS_STATISTICS).toList();
 
         return sorted;
     }
+
+    /**
+     * method sets corresponding error message;
+     * method updates results lists depending on user's type
+     * @param database extended input library
+     */
     @Override
     public void execute(final Database database) {
         User user = database.findUserInDatabase(this.getUsername());
@@ -102,9 +114,9 @@ public class WrapperCommand extends Command{
             type = "user";
             user.simulate(this.getTimestamp(), database);
             Wrapper wrapper = user.getWrapper();
-            topAlbums = this.extractResultsGenre(wrapper.getWrapAlbum());
-            topArtists = this.extractResultsGenre(wrapper.getWrapArtists());
-            topGenres = this.extractResultsGenre(wrapper.getWrapGenre());
+            topAlbums = this.extractResultsString(wrapper.getWrapAlbum());
+            topArtists = this.extractResultsString(wrapper.getWrapArtists());
+            topGenres = this.extractResultsString(wrapper.getWrapGenre());
             topSongs = this.extractResults(wrapper.getWrapSong());
             topPodcasts = this.extractResults(wrapper.getWrapPodcast());
             return;
@@ -113,38 +125,12 @@ public class WrapperCommand extends Command{
             type = "artist";
             database.simulateAllUsers(this.getTimestamp());
 
-            /*HashMap<Wrappeable, Integer> albums = new HashMap<>();
-            HashMap<Wrappeable, Integer> songs = new HashMap<>();
-            Artist artist = (Artist) user;
-            for (Album album: artist.getAlbums()) {
-                albums.put(album, album.getListens());
-
-                for (SongInput song: album.getSongs()) {
-                    songs.put(song, song.getListens());
-                }
-            }*/
-
             Artist artist = database.findArtist(this.getUsername());
 
-           /* HashMap<String, Integer> songsByName = new HashMap<>();
-            Set<Map.Entry<Wrappeable, Integer>> entrySet = artist.getWrapperArtist().getWrapSongs().entrySet();
-            for (Map.Entry<Wrappeable, Integer> entry : entrySet) {
-                if (songsByName.containsKey(entry.getKey().extractName())) {
-                    Integer previousListens = songsByName.remove(entry.getKey().extractName());
-                    songsByName.put(entry.getKey().extractName(), previousListens + entry.getValue());
-                } else {
-                    songsByName.put(entry.getKey().extractName(), entry.getValue());
-                }
-            }*/
-
-            topAlbums = this.extractResultsGenre(artist.getWrapperArtist().getWrapAlbums());
+            topAlbums = this.extractResultsString(artist.getWrapperArtist().getWrapAlbums());
             topSongs = this.extractResults(artist.getWrapperArtist().getWrapSongs());
             topFans = this.extractResultsFans(artist.getWrapperArtist().getTopFans());
             listeners = artist.getWrapperArtist().getTopFans().size();
-
-            if (this.getUsername().equals("Madonna")) {
-                System.out.println("bla");
-            }
         }
 
         if (database.findHostByName(this.getUsername())) {
@@ -157,6 +143,9 @@ public class WrapperCommand extends Command{
         }
     }
 
+    /**
+     * @param objectNode created ObjectNode
+     */
     @Override
     public void convertToObjectNode(final ObjectNode objectNode) {
         super.convertToObjectNode(objectNode);
@@ -213,12 +202,6 @@ public class WrapperCommand extends Command{
                 objectNode.put("message", this.message);
                 return;
             }
-
-            /*ObjectNode songs = mapper.createObjectNode();
-            for (Map.Entry<String, Integer> entry : topSongsArtist) {
-                songs.put(entry.getKey(), entry.getValue());
-            }
-            resultObject.put("topSongs", songs);*/
 
             ObjectNode albums = mapper.createObjectNode();
             for (Map.Entry<String, Integer> entry : topAlbums) {

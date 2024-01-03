@@ -7,18 +7,24 @@ import main.user.Artist;
 import main.user.User;
 import pages.ArtistPage;
 
-public class BuyMerch extends Command {
+public final class BuyMerch extends Command {
 
-    private String name;
+    private final String name;
     private String message;
 
-    public BuyMerch(CommandInput commandInput) {
+    public BuyMerch(final CommandInput commandInput) {
         super(commandInput);
         this.name = commandInput.getName();
     }
 
+    /**
+     * method sets corresponding error messages;
+     * method adds bought merch in user's merch history and updates artist's merch revenue;
+     * method sets artist valid for final statistics as user has interacted with him
+     * @param database extended input library
+     */
     @Override
-    public void execute(Database database) {
+    public void execute(final Database database) {
        User user = database.findUserInDatabase(this.getUsername());
        if (user == null) {
            this.message = "The username " + this.getUsername() + " doesn't exist.";
@@ -43,8 +49,11 @@ public class BuyMerch extends Command {
        this.message = this.getUsername() + " has added new merch successfully.";
     }
 
+    /**
+     * @param objectNode created ObjectNode
+     */
     @Override
-    public void convertToObjectNode(ObjectNode objectNode) {
+    public void convertToObjectNode(final ObjectNode objectNode) {
         super.convertToObjectNode(objectNode);
         objectNode.put("message", this.message);
     }

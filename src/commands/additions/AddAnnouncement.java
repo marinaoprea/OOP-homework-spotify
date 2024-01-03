@@ -1,6 +1,7 @@
-package commands;
+package commands.additions;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
 import main.CommandInput;
 import main.Database;
 import main.Notification;
@@ -20,7 +21,8 @@ public final class AddAnnouncement extends Command {
     /**
      * method prints corresponding error message;
      * method checks if user is host, if host has not an announcement with the same name;
-     * if valid, method adds new announcements in host's announcement list
+     * if valid, method adds new announcements in host's announcement list;
+     * host internal structure has changed; thus method calls for notification method
      * @param database extended input library
      */
     @Override

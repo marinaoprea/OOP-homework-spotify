@@ -1,6 +1,7 @@
-package commands;
+package commands.additions;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
 import fileio.input.SongInput;
 import main.CommandInput;
 import main.Database;
@@ -29,7 +30,8 @@ public final class AddAlbum extends Command {
      * method sets corresponding error message;
      * method checks if user is artist, if he doesn't already have an album with
      * the same name and if album is valid (does not contain two songs with same name);
-     * method adds new album in artist's album list and in total albums list in database
+     * method adds new album in artist's album list and in total albums list in database;
+     * artist internal structure has changed; thus method calls for notification method
      * @param database extended input library
      */
     @Override
@@ -44,7 +46,6 @@ public final class AddAlbum extends Command {
             return;
         }
         Artist artist = (Artist) user;
-        //Artist artist = database.findArtist(this.getUsername());
         if (artist.checkAlbumByName(this.name)) {
             this.message = this.getUsername() + " has another album with the same name.";
             return;

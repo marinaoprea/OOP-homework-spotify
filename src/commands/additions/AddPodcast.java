@@ -1,6 +1,7 @@
-package commands;
+package commands.additions;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import commands.Command;
 import fileio.input.EpisodeInput;
 import fileio.input.PodcastInput;
 import main.CommandInput;
@@ -26,7 +27,8 @@ public final class AddPodcast extends Command {
      * method checks if user is host, if host has a podcast with the same name and
      * if podcast is valid (does not contain two episodes with the same name)
      * if valid, method adds new podcast in host's podcast list and in database in
-     * global list of podcasts
+     * global list of podcasts;
+     * host internal structure has changed; thus method calls for notification method
      * @param database extended input library
      */
     @Override

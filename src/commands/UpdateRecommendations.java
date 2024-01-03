@@ -10,14 +10,22 @@ import main.user.User;
 
 import java.util.*;
 
-public class UpdateRecommendations extends Command {
-    private String recommendationType;
+public final class UpdateRecommendations extends Command {
+    private final String recommendationType;
     private String message;
-    public UpdateRecommendations(CommandInput commandInput) {
+    public UpdateRecommendations(final CommandInput commandInput) {
         super(commandInput);
         this.recommendationType = commandInput.getRecommendationType();
     }
 
+    /**
+     * method filters all songs of a given genre and sorts them depending on the number of likes and
+     * lexicographically in case of equality; songs are later used as recommendations
+     * @param database extended input library
+     * @param limit number of requested songs from given genre
+     * @param genre genre from which we generate recommendations
+     * @return list of recommended songs from given genre
+     */
     private List<SongInput> getRecommendationByGenre(final Database database, final int limit, final String genre) {
         return database.getSongs().stream().filter(songInput -> songInput.getGenre().equals(genre)).sorted(new Comparator<SongInput>() {
             @Override
@@ -30,8 +38,14 @@ public class UpdateRecommendations extends Command {
         }).limit(limit).toList();
     }
 
+    /**
+     * method sets corresponding error messages;
+     * method performs recommendation creation depending on recommendation type;
+     * method add recommendation in user's recommendations list;
+     * @param database extended input library
+     */
     @Override
-    public void execute(Database database) {
+    public void execute(final Database database) {
         User user = database.findUserInDatabase(this.getUsername());
         if (user == null) {
             this.message = "The username " + this.getUsername() + " doesn't exist.";
@@ -179,8 +193,11 @@ public class UpdateRecommendations extends Command {
         }
     }
 
+    /**
+     * @param objectNode created ObjectNode
+     */
     @Override
-    public void convertToObjectNode(ObjectNode objectNode) {
+    public void convertToObjectNode(final ObjectNode objectNode) {
         super.convertToObjectNode(objectNode);
         objectNode.put("message", this.message);
     }

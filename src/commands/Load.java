@@ -90,7 +90,6 @@ public final class Load extends Command {
             SongInput song = album.getSongs().get(0);
             user.getWrapper().updateSong(song, 1, database, user);
             user.getSongHistory().updateSong(song, 1, database, user);
-            return;
         }
     }
 

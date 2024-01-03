@@ -43,6 +43,8 @@ public final class Prev extends Command {
             user.setTimeLoaded(this.getTimestamp());
             this.message = "Returned to the previous track successfully. The current track is "
                     + song.getName() + ".";
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
         if (user.getRepeat() == 1) { // repeat once
@@ -51,6 +53,8 @@ public final class Prev extends Command {
             user.setRepeat(0);
             this.message = "Returned to previous track successfully. The current track is "
                     + song.getName() + ".";
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
         if (user.getRepeat() == 2) { // repeat infinitely
@@ -58,6 +62,8 @@ public final class Prev extends Command {
             user.setTimeLoaded(this.getTimestamp());
             this.message = "Returned to previous track successfully. The current track is "
                     + song.getName() + ".";
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             return;
         }
 
@@ -65,6 +71,8 @@ public final class Prev extends Command {
         user.setTimeRelativeToSong(0);
         this.message = "Returned to previous track successfully. The current track is "
                 + song.getName() + ".";
+        user.getWrapper().updateSong(song, 1, database, user);
+        user.getSongHistory().updateSong(song, 1, database, user);
     }
 
     /**
@@ -93,8 +101,11 @@ public final class Prev extends Command {
         if (user.getTimeRelativeToSong() > 0) {
             user.setTimeRelativeToSong(0);
             user.setTimeLoaded(this.getTimestamp());
+            SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             this.message = "Returned to previous track successfully. The current track is "
-                    + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
             return;
         }
 
@@ -102,9 +113,11 @@ public final class Prev extends Command {
             if (user.getRepeat() == 2) { // repeat current song
                 user.setTimeRelativeToSong(0);
                 user.setTimeLoaded(this.getTimestamp());
+                SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 this.message = "Returned to previous track successfully. The current track is "
-                        + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
                 return;
             }
 
@@ -113,9 +126,11 @@ public final class Prev extends Command {
                 user.setTimeRelativeToSong(0);
                 user.setTimeLoaded(this.getTimestamp());
                 user.setSelectedIndexInList(index);
+                SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 this.message = "Returned to previous track successfully. The current track is "
-                        + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
                 return;
             }
 
@@ -124,9 +139,11 @@ public final class Prev extends Command {
                 user.setTimeRelativeToSong(0);
                 user.setTimeLoaded(this.getTimestamp());
                 user.setSelectedIndexInList(index);
+                SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 this.message = "Returned to previous track successfully. The current track is "
-                        + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
                 return;
             }
 
@@ -134,8 +151,11 @@ public final class Prev extends Command {
             user.setTimeLoaded(this.getTimestamp());
             user.setTimeRelativeToSong(0);
             user.setSelectedIndexInList(1);
+            SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             this.message = "Returned to previous track successfully. The current track is "
-                    + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
             return;
         }
 
@@ -146,8 +166,11 @@ public final class Prev extends Command {
             user.setTimeRelativeToSong(0);
             user.setTimeLoaded(this.getTimestamp());
             user.setSelectedIndexInList(user.getShuffledIndexes().get(indexShuffle - 1) + 1);
+            SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             this.message = "Returned to previous track successfully. The current track is "
-                    + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
             return;
         }
 
@@ -155,8 +178,11 @@ public final class Prev extends Command {
         user.setTimeRelativeToSong(0);
         user.setTimeLoaded(this.getTimestamp());
         user.setSelectedIndexInList(user.getShuffledIndexes().get(indexShuffle - 1) + 1);
+        SongInput song = playlist.getSongs().get(user.getSelectedIndexInList() - 1);
+        user.getWrapper().updateSong(song, 1, database, user);
+        user.getSongHistory().updateSong(song, 1, database, user);
         this.message = "Returned to previous track successfully. The current track is "
-                + playlist.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                + song.getName() + ".";
     }
 
     private void prevAlbum(final Database database, final User user) {
@@ -176,8 +202,11 @@ public final class Prev extends Command {
         if (user.getTimeRelativeToSong() > 0) {
             user.setTimeRelativeToSong(0);
             user.setTimeLoaded(this.getTimestamp());
+            SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             this.message = "Returned to previous track successfully. The current track is "
-                    + album.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
             return;
         }
 
@@ -185,9 +214,11 @@ public final class Prev extends Command {
             if (user.getRepeat() == 2) { // repeat current song
                 user.setTimeRelativeToSong(0);
                 user.setTimeLoaded(this.getTimestamp());
+                SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 this.message = "Returned to previous track successfully. The current track is "
-                        + album.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
                 return;
             }
 
@@ -196,9 +227,11 @@ public final class Prev extends Command {
                 user.setTimeRelativeToSong(0);
                 user.setTimeLoaded(this.getTimestamp());
                 user.setSelectedIndexInList(index);
+                SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 this.message = "Returned to previous track successfully. The current track is "
-                        + album.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
                 return;
             }
 
@@ -207,9 +240,11 @@ public final class Prev extends Command {
                 user.setTimeRelativeToSong(0);
                 user.setTimeLoaded(this.getTimestamp());
                 user.setSelectedIndexInList(index);
+                SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
+                user.getWrapper().updateSong(song, 1, database, user);
+                user.getSongHistory().updateSong(song, 1, database, user);
                 this.message = "Returned to previous track successfully. The current track is "
-                        + album.getSongs().get(user.getSelectedIndexInList() - 1).getName()
-                        + ".";
+                        + song.getName() + ".";
                 return;
             }
 
@@ -217,8 +252,11 @@ public final class Prev extends Command {
             user.setTimeLoaded(this.getTimestamp());
             user.setTimeRelativeToSong(0);
             user.setSelectedIndexInList(1);
+            SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             this.message = "Returned to previous track successfully. The current track is "
-                    + album.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
             return;
         }
 
@@ -229,8 +267,11 @@ public final class Prev extends Command {
             user.setTimeRelativeToSong(0);
             user.setTimeLoaded(this.getTimestamp());
             user.setSelectedIndexInList(user.getShuffledIndexes().get(indexShuffle - 1) + 1);
+            SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
+            user.getWrapper().updateSong(song, 1, database, user);
+            user.getSongHistory().updateSong(song, 1, database, user);
             this.message = "Returned to previous track successfully. The current track is "
-                    + album.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                    + song.getName() + ".";
             return;
         }
 
@@ -238,8 +279,11 @@ public final class Prev extends Command {
         user.setTimeRelativeToSong(0);
         user.setTimeLoaded(this.getTimestamp());
         user.setSelectedIndexInList(user.getShuffledIndexes().get(indexShuffle - 1) + 1);
+        SongInput song = album.getSongs().get(user.getSelectedIndexInList() - 1);
+        user.getWrapper().updateSong(song, 1, database, user);
+        user.getSongHistory().updateSong(song, 1, database, user);
         this.message = "Returned to previous track successfully. The current track is "
-                + album.getSongs().get(user.getSelectedIndexInList() - 1).getName() + ".";
+                + song.getName() + ".";
     }
 
 

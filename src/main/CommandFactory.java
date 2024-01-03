@@ -1,6 +1,13 @@
 package main;
 
 import commands.*;
+import commands.additions.*;
+import commands.removals.*;
+import commands.show.ShowAlbums;
+import commands.show.ShowPlaylists;
+import commands.show.ShowPodcasts;
+import commands.show.ShowPreferredSongs;
+import commands.statistics.*;
 
 public final class CommandFactory {
     /**

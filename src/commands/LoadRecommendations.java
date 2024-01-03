@@ -8,12 +8,17 @@ import main.Playlist;
 import main.Recommendation;
 import main.user.User;
 
-public class LoadRecommendations extends Command {
+public final class LoadRecommendations extends Command {
     private String message;
     public LoadRecommendations(final CommandInput commandInput) {
         super(commandInput);
     }
 
+    /**
+     * method sets corresponding error messages;
+     * method loads last added recommendation in user's recommendation list
+     * @param database extended input library
+     */
     @Override
     public void execute(final Database database) {
         User user = database.findUserInDatabase(this.getUsername());
@@ -51,7 +56,7 @@ public class LoadRecommendations extends Command {
             this.message = "Playback loaded successfully.";
             return;
         }
-       /* if (lastRecommendation.getType().equals("playlist")) {
+       if (lastRecommendation.getType().equals("playlist")) {
             user.setRepeat(0);
             user.setIsSelected(false);
             user.setLoaded(true);
@@ -69,9 +74,12 @@ public class LoadRecommendations extends Command {
             SongInput song = playlist.getSongs().get(0);
             user.getWrapper().updateSong(song, 1, database, user);
             user.getSongHistory().updateSong(song, 1, database, user);
-        }*/
+        }
     }
 
+    /**
+     * @param objectNode created ObjectNode
+     */
     @Override
     public void convertToObjectNode(final ObjectNode objectNode) {
         super.convertToObjectNode(objectNode);

@@ -8,15 +8,22 @@ import main.user.User;
 import pages.ArtistPage;
 import pages.HostPage;
 
-public class Subscribe extends Command {
+public final class Subscribe extends Command {
     private String message;
 
-    public Subscribe(CommandInput commandInput) {
+    public Subscribe(final CommandInput commandInput) {
         super(commandInput);
     }
 
+    /**
+     * method sets corresponding error messages;
+     * method checks if user is subscribed to the content creator; if so, unsubscribe is performed;
+     * otherwise new subscription is added in user's list and new subscriber is added in content creator's
+     * list
+     * @param database extended input library
+     */
     @Override
-    public void execute(Database database) {
+    public void execute(final Database database) {
         User user = database.findUserInDatabase(this.getUsername());
         if (user == null) {
             this.message = "The username " + this.getUsername() + " doesn't exist.";
@@ -41,8 +48,11 @@ public class Subscribe extends Command {
         }
     }
 
+    /**
+     * @param objectNode created ObjectNode
+     */
     @Override
-    public void convertToObjectNode(ObjectNode objectNode) {
+    public void convertToObjectNode(final ObjectNode objectNode) {
         super.convertToObjectNode(objectNode);
         objectNode.put("message", this.message);
     }
