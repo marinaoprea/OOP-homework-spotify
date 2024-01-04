@@ -8,9 +8,18 @@ import main.Playlist;
 import main.user.Artist;
 import main.user.User;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
 
 public final class UpdateRecommendations extends Command {
+    private static final int SECONDS_TO_HAVE_LISTENED = 30;
+    private static final int SONGS_FROM_FIRST_GENRE = 5;
+    private static final int SONGS_FROM_SECOND_GENRE = 3;
+    private static final int SONGS_FROM_THIRD_GENRE = 2;
     private final String recommendationType;
     private String message;
     public UpdateRecommendations(final CommandInput commandInput) {
@@ -19,22 +28,22 @@ public final class UpdateRecommendations extends Command {
     }
 
     /**
-     * method filters all songs of a given genre and sorts them depending on the number of likes and
-     * lexicographically in case of equality; songs are later used as recommendations
+     * method filters all songs of a given genre and sorts them depending on the number of likes
+     * and lexicographically in case of equality; songs are later used as recommendations
      * @param database extended input library
      * @param limit number of requested songs from given genre
      * @param genre genre from which we generate recommendations
      * @return list of recommended songs from given genre
      */
-    private List<SongInput> getRecommendationByGenre(final Database database, final int limit, final String genre) {
-        return database.getSongs().stream().filter(songInput -> songInput.getGenre().equals(genre)).sorted(new Comparator<SongInput>() {
-            @Override
-            public int compare(SongInput o1, SongInput o2) {
-                if (o1.getNoLikes() == o2.getNoLikes()) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-                return o2.getNoLikes() - o1.getNoLikes();
+    private List<SongInput> getRecommendationByGenre(final Database database,
+                                                     final int limit, final String genre) {
+        return database.getSongs().stream()
+                .filter(songInput -> songInput.getGenre().equals(genre))
+                .sorted((o1, o2) -> {
+            if (o1.getNoLikes() == o2.getNoLikes()) {
+                return o1.getName().compareTo(o2.getName());
             }
+            return o2.getNoLikes() - o1.getNoLikes();
         }).limit(limit).toList();
     }
 
@@ -69,41 +78,33 @@ public final class UpdateRecommendations extends Command {
                 return;
             }
 
-            List <Map.Entry<User, Integer>> topFans = artist.getWrapperArtist().getTopFans().entrySet().stream()
-                    .sorted(new Comparator<Map.Entry<User, Integer>>() {
-                @Override
-                public int compare(Map.Entry<User, Integer> o1, Map.Entry<User, Integer> o2) {
-                    if (o1.getValue() > o2.getValue()) {
-                        return -1;
-                    }
-                    if (o1.getValue() < o2.getValue()) {
-                        return 1;
-                    }
-                    return o1.getKey().getUsername().compareTo(o2.getKey().getUsername());
-                }
-            }).limit(Constants.NO_RESULTS_STATISTICS).toList();
+            List<Map.Entry<User, Integer>> topFans = artist.getWrapperArtist()
+                    .getTopFans().entrySet().stream()
+                    .sorted((o1, o2) -> {
+                        if (o1.getValue() > o2.getValue()) {
+                            return -1;
+                        }
+                        if (o1.getValue() < o2.getValue()) {
+                            return 1;
+                        }
+                        return o1.getKey().getUsername().compareTo(o2.getKey().getUsername());
+                    }).limit(Constants.NO_RESULTS_STATISTICS).toList();
 
-            List <SongInput> songs = new ArrayList<>();
+            List<SongInput> songs = new ArrayList<>();
             for (Map.Entry<User, Integer> entry: topFans) {
                 User user1 = entry.getKey();
-                songs.addAll(user1.getFavourites().getSongs().stream().sorted(new Comparator<SongInput>() {
-                    @Override
-                    public int compare(SongInput o1, SongInput o2) {
-                        if (o1.getNoLikes() == o2.getNoLikes()) {
-                            return o1.getName().compareTo(o2.getName());
-                        }
-                        return o2.getNoLikes() - o1.getNoLikes();
-                    }
-                }).toList());
-            }
-            List <SongInput> sortedSongs = songs.stream().sorted(new Comparator<SongInput>() {
-                @Override
-                public int compare(SongInput o1, SongInput o2) {
+                songs.addAll(user1.getFavourites().getSongs().stream().sorted((o1, o2) -> {
                     if (o1.getNoLikes() == o2.getNoLikes()) {
                         return o1.getName().compareTo(o2.getName());
                     }
                     return o2.getNoLikes() - o1.getNoLikes();
+                }).toList());
+            }
+            List<SongInput> sortedSongs = songs.stream().sorted((o1, o2) -> {
+                if (o1.getNoLikes() == o2.getNoLikes()) {
+                    return o1.getName().compareTo(o2.getName());
                 }
+                return o2.getNoLikes() - o1.getNoLikes();
             }).toList();
             Playlist newPlaylist = new Playlist();
             newPlaylist.getSongs().addAll(new HashSet<>(sortedSongs));
@@ -116,25 +117,30 @@ public final class UpdateRecommendations extends Command {
 
             user.getHomePage().getRecommendations().add(newPlaylist);
 
-            this.message = "The recommendations for user " + this.getUsername() + " have been updated successfully.";
+            this.message = "The recommendations for user " + this.getUsername()
+                    + " have been updated successfully.";
             return;
         }
 
         if (this.recommendationType.equals("random_song")) {
 
-            SongInput songInput = database.findSong(user.getLoadedSourceName(), user.getLoadedSourceId());
-            if (songInput == null || user.getTimeRelativeToSong() < 30) {
+            SongInput songInput =
+                    database.findSong(user.getLoadedSourceName(), user.getLoadedSourceId());
+            if (songInput == null || user.getTimeRelativeToSong() < SECONDS_TO_HAVE_LISTENED) {
                 this.message = "No new recommendations were found";
                 return;
             }
 
-            List <SongInput> sameGenre = database.getSongs().stream()
-                            .filter(songInput1 -> songInput1.getGenre().equals(songInput.getGenre())).toList();
+            List<SongInput> sameGenre =
+                    database.getSongs().stream()
+                            .filter(songInput1 -> songInput1.getGenre()
+                                    .equals(songInput.getGenre())).toList();
             Random generator = new Random(user.getTimeRelativeToSong());
             int index = generator.nextInt(sameGenre.size());
             SongInput recommended = sameGenre.get(index);
             user.getHomePage().getRecommendations().add(recommended);
-            this.message = "The recommendations for user " + this.getUsername() + " have been updated successfully.";
+            this.message = "The recommendations for user " + this.getUsername()
+                    + " have been updated successfully.";
             return;
         }
 
@@ -158,13 +164,9 @@ public final class UpdateRecommendations extends Command {
                 }
             }
 
-            List <Map.Entry<String, Integer>> topGenres =
-                    genres.entrySet().stream().sorted(new Comparator<Map.Entry<String, Integer>>() {
-                @Override
-                public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                    return o2.getValue() - o1.getValue();
-                }
-            }).toList();
+            List<Map.Entry<String, Integer>> topGenres =
+                    genres.entrySet().stream()
+                            .sorted((o1, o2) -> o2.getValue() - o1.getValue()).toList();
 
             if (topGenres.isEmpty()) {
                 this.message = "No new recommendations were found";
@@ -174,22 +176,26 @@ public final class UpdateRecommendations extends Command {
             Playlist playlist = new Playlist();
 
             String genre1 = topGenres.get(0).getKey();
-            playlist.getSongs().addAll(this.getRecommendationByGenre(database, 5, genre1));
+            playlist.getSongs().addAll(this.getRecommendationByGenre(database,
+                    SONGS_FROM_FIRST_GENRE, genre1));
 
             if (topGenres.size() > 1) {
                 String genre2 = topGenres.get(1).getKey();
-                playlist.getSongs().addAll(this.getRecommendationByGenre(database, 3, genre2));
+                playlist.getSongs().addAll(this.getRecommendationByGenre(database,
+                        SONGS_FROM_SECOND_GENRE, genre2));
             }
 
             if (topGenres.size() > 2) {
                 String genre3 = topGenres.get(2).getKey();
-                playlist.getSongs().addAll(this.getRecommendationByGenre(database, 2, genre3));
+                playlist.getSongs().addAll(this.getRecommendationByGenre(database,
+                        SONGS_FROM_THIRD_GENRE, genre3));
             }
 
             playlist.setName(this.getUsername() + "'s recommendations");
             user.getHomePage().getRecommendations().add(playlist);
 
-            this.message = "The recommendations for user " + this.getUsername() + " have been updated successfully.";
+            this.message = "The recommendations for user " + this.getUsername()
+                    + " have been updated successfully.";
         }
     }
 

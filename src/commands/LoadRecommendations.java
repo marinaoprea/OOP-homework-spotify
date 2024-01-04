@@ -46,7 +46,7 @@ public final class LoadRecommendations extends Command {
             user.setPlaying(true);
             user.setSelectedIndexInList(1);
             user.setTimeRelativeToSong(0);
-            SongInput song = (SongInput)lastRecommendation;
+            SongInput song = (SongInput) lastRecommendation;
             user.getWrapper().updateSong(song, 1, database, user);
             user.getSongHistory().updateSong(song, 1, database, user);
 
@@ -67,7 +67,7 @@ public final class LoadRecommendations extends Command {
             user.setShuffle(false);
             user.setTimeLoaded(this.getTimestamp());
 
-            Playlist playlist = (Playlist)lastRecommendation;
+            Playlist playlist = (Playlist) lastRecommendation;
             database.getGlobalPlaylists().add(playlist);
             user.getLastSearch().getResults().set(0, playlist.getName());
             user.setSelectedIndex(1);

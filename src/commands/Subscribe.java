@@ -18,8 +18,8 @@ public final class Subscribe extends Command {
     /**
      * method sets corresponding error messages;
      * method checks if user is subscribed to the content creator; if so, unsubscribe is performed;
-     * otherwise new subscription is added in user's list and new subscriber is added in content creator's
-     * list
+     * otherwise new subscription is added in user's list and new subscriber is added in content
+     * creator's list
      * @param database extended input library
      */
     @Override
@@ -33,7 +33,8 @@ public final class Subscribe extends Command {
             this.message = "You can subscribe only to artists and hosts.";
             return;
         }
-        if (!(user.getCurrentPage() instanceof ArtistPage) && !(user.getCurrentPage() instanceof HostPage)) {
+        if (!(user.getCurrentPage() instanceof ArtistPage)
+                && !(user.getCurrentPage() instanceof HostPage)) {
             this.message = "To subscribe you need to be on the page of an artist or host.";
             return;
         }
@@ -41,10 +42,12 @@ public final class Subscribe extends Command {
         ContentCreator contentCreator = (ContentCreator) user.getCurrentPage().getOwner();
         if (user.getSubscriptions().contains(contentCreator)) {
             contentCreator.unsubscribe(user);
-            this.message = this.getUsername() + " unsubscribed from " + contentCreator.getCreatorName() + " successfully.";
+            this.message = this.getUsername()
+                    + " unsubscribed from " + contentCreator.getCreatorName() + " successfully.";
         } else {
             contentCreator.subscribe(user);
-            this.message = this.getUsername() + " subscribed to " + contentCreator.getCreatorName() + " successfully.";
+            this.message = this.getUsername()
+                    + " subscribed to " + contentCreator.getCreatorName() + " successfully.";
         }
     }
 

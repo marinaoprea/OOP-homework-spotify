@@ -3,7 +3,6 @@ package main.user;
 import fileio.input.SongInput;
 import lombok.Getter;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,17 +46,14 @@ public final class Revenue {
         }
 
         List<Map.Entry<SongInput, Double>> sorted =
-                songProfits.entrySet().stream().sorted(new Comparator<>() {
-                    @Override
-                    public int compare(Map.Entry<SongInput, Double> o1, Map.Entry<SongInput, Double> o2) {
-                        if (o1.getValue() > o2.getValue()) {
-                            return -1;
-                        }
-                        if (o1.getValue() < o2.getValue()) {
-                            return 1;
-                        }
-                        return o1.getKey().getName().compareTo(o2.getKey().getName());
+                songProfits.entrySet().stream().sorted((o1, o2) -> {
+                    if (o1.getValue() > o2.getValue()) {
+                        return -1;
                     }
+                    if (o1.getValue() < o2.getValue()) {
+                        return 1;
+                    }
+                    return o1.getKey().getName().compareTo(o2.getKey().getName());
                 }).toList();
         return sorted.get(0).getKey();
     }

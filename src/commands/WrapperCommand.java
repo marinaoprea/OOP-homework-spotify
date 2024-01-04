@@ -10,9 +10,12 @@ import main.user.Artist;
 import main.user.Host;
 import main.user.User;
 import main.wrappers.Wrapper;
-import java.util.*;
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+import java.util.ArrayList;
 
-public final class WrapperCommand extends Command{
+public final class WrapperCommand extends Command {
     private String message;
     private List<Map.Entry<String, Integer>> topArtists;
     private List<Map.Entry<String, Integer>> topGenres;
@@ -34,17 +37,14 @@ public final class WrapperCommand extends Command{
      */
     private List<String> extractResultsFans(final HashMap<User, Integer> hashMap) {
         List<Map.Entry<User, Integer>> sorted =
-                hashMap.entrySet().stream().sorted(new Comparator<>() {
-                    @Override
-                    public int compare(Map.Entry<User, Integer> o1, Map.Entry<User, Integer> o2) {
-                        if (o1.getValue() > o2.getValue()) {
-                            return -1;
-                        }
-                        if (o1.getValue() < o2.getValue()) {
-                            return 1;
-                        }
-                        return o1.getKey().getUsername().compareTo(o2.getKey().getUsername());
+                hashMap.entrySet().stream().sorted((o1, o2) -> {
+                    if (o1.getValue() > o2.getValue()) {
+                        return -1;
                     }
+                    if (o1.getValue() < o2.getValue()) {
+                        return 1;
+                    }
+                    return o1.getKey().getUsername().compareTo(o2.getKey().getUsername());
                 }).limit(Constants.NO_RESULTS_STATISTICS).toList();
 
         List<String> answer = new ArrayList<>();
@@ -61,17 +61,14 @@ public final class WrapperCommand extends Command{
      */
     private List<Map.Entry<String, Integer>> extractResultsString(final HashMap<String, Integer> hashMap) {
         List<Map.Entry<String, Integer>> sorted =
-                hashMap.entrySet().stream().sorted(new Comparator<>() {
-                    @Override
-                    public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                        if (o1.getValue() > o2.getValue()) {
-                            return -1;
-                        }
-                        if (o1.getValue() < o2.getValue()) {
-                            return 1;
-                        }
-                        return o1.getKey().compareTo(o2.getKey());
+                hashMap.entrySet().stream().sorted((o1, o2) -> {
+                    if (o1.getValue() > o2.getValue()) {
+                        return -1;
                     }
+                    if (o1.getValue() < o2.getValue()) {
+                        return 1;
+                    }
+                    return o1.getKey().compareTo(o2.getKey());
                 }).limit(Constants.NO_RESULTS_STATISTICS).toList();
 
         return sorted;
@@ -158,15 +155,15 @@ public final class WrapperCommand extends Command{
         }
 
         if (type.equals("user")) {
-            if (topAlbums.isEmpty() && topArtists.isEmpty() && topGenres.isEmpty() && topSongs.isEmpty()
-                    && topPodcasts.isEmpty()) {
+            if (topAlbums.isEmpty() && topArtists.isEmpty()
+                    && topGenres.isEmpty() && topSongs.isEmpty() && topPodcasts.isEmpty()) {
                 this.message = "No data to show for user " + this.getUsername() + ".";
                 objectNode.put("message", this.message);
                 return;
             }
 
             ObjectNode artist = mapper.createObjectNode();
-            for (Map.Entry<String , Integer> entry : topArtists) {
+            for (Map.Entry<String, Integer> entry : topArtists) {
                 artist.put(entry.getKey(), entry.getValue());
             }
             resultObject.put("topArtists", artist);

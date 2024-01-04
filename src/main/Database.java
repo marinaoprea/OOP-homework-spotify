@@ -264,11 +264,11 @@ public final class Database {
         return albums;
     }
 
-    public void setSongId(int songId) {
+    public void setSongId(final int songId) {
         this.songId = songId;
     }
 
-    public void setAlbumId(int albumId) {
+    public void setAlbumId(final int albumId) {
         this.albumId = albumId;
     }
 }

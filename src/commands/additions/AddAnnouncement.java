@@ -38,7 +38,8 @@ public final class AddAnnouncement extends Command {
         }
         Host host = (Host) user;
         if (host.checkAnnouncement(this.name)) {
-            this.message = this.getUsername() + " has already added an announcement with this name.";
+            this.message = this.getUsername()
+                    + " has already added an announcement with this name.";
             return;
         }
         Host.Announcement newAnnouncement = new Host.Announcement(this.name, this.description);

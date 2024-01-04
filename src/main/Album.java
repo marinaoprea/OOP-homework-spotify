@@ -49,12 +49,12 @@ public final class Album {
 
     /**
      * method checks if album contains song with given id
-     * @param id id of searched song
+     * @param songId id of searched song
      * @return true if album contains song; false otherwise
      */
-    public boolean containsSongId(final int id) {
+    public boolean containsSongId(final int songId) {
         for (SongInput song: songs) {
-            if (song.getId() == id) {
+            if (song.getId() == songId) {
                 return true;
             }
         }
@@ -74,13 +74,13 @@ public final class Album {
         for (User user: database.getUsers()) {
             user.simulate(timestamp, database);
             String source = user.getLoadedSourceName();
-            int id = user.getLoadedSourceId();
+            int songId = user.getLoadedSourceId();
             if (user.getSelectedType().equals("album") && user.getTimeLoaded() != 0
-                    && source.equals(this.getName()) && id == this.id) {
+                    && source.equals(this.getName()) && songId == this.id) {
                 return false;
             }
             if (user.getSelectedType().equals("song") && user.getTimeLoaded() != 0
-                    && this.containsSongName(source) && this.containsSongId(id)) {
+                    && this.containsSongName(source) && this.containsSongId(songId)) {
                 return false;
             }
             if (user.getSelectedType().equals("playlist")) {
@@ -140,11 +140,11 @@ public final class Album {
         return ans;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
-    public void setOwner(Artist owner) {
+    public void setOwner(final Artist owner) {
         this.owner = owner;
     }
 }

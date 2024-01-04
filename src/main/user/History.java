@@ -24,7 +24,8 @@ public final class History implements ObserverWrapper {
      * @param user user that has listened song
      */
     @Override
-    public void updateSong(SongInput song, int listens, Database database, User user) {
+    public void updateSong(final SongInput song, final int listens,
+                           final Database database, final User user) {
         if (!this.songMap.containsKey(song)) {
             this.songMap.put(song, listens);
         } else {
@@ -39,7 +40,7 @@ public final class History implements ObserverWrapper {
      * for ads to be later properly monetized after subscription cancellation
      * @param hashMap hashmap to be copied
      */
-    public void copy(HashMap<SongInput, Integer> hashMap) {
+    public void copy(final HashMap<SongInput, Integer> hashMap) {
         songMap.putAll(hashMap);
     }
 }

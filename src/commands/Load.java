@@ -49,7 +49,8 @@ public final class Load extends Command {
             user.setPlaying(true);
             user.setSelectedIndexInList(1);
             user.setTimeRelativeToSong(0);
-            SongInput song = database.findSong(user.getLoadedSourceName(), user.getLoadedSourceId());
+            SongInput song =
+                    database.findSong(user.getLoadedSourceName(), user.getLoadedSourceId());
             user.getWrapper().updateSong(song, 1, database, user);
             user.getSongHistory().updateSong(song, 1, database, user);
             return;
@@ -72,10 +73,11 @@ public final class Load extends Command {
             user.setSelectedType("podcast");
             user.setPlaying(true);
             user.setTimeLoaded(this.getTimestamp());
-            String podcastName = user.getLastSearch().getResults().get(user.getSelectedIndex() - 1);
+            String podcastName = user.getLoadedSourceName();
             user.restorePodcast(podcastName);
             PodcastInput podcastInput = database.findPodcast(podcastName);
-            EpisodeInput episodeInput = podcastInput.getEpisodes().get(user.getSelectedIndexInList() - 1);
+            EpisodeInput episodeInput =
+                    podcastInput.getEpisodes().get(user.getSelectedIndexInList() - 1);
             user.getWrapper().updatePodcasts(podcastInput, episodeInput, 1, database, user);
             return;
         }

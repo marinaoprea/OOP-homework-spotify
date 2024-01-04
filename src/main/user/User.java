@@ -94,8 +94,12 @@ public class User implements ObserveContentCreators {
      */
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         User user = (User) o;
 
@@ -155,7 +159,8 @@ public class User implements ObserveContentCreators {
             return null;
         }
         if (this.selectedType.equals("song")) {
-            SongInput songInput = database.findSong(this.getLoadedSourceName(), this.getLoadedSourceId());
+            SongInput songInput =
+                    database.findSong(this.getLoadedSourceName(), this.getLoadedSourceId());
             if (songInput == null) {
                 return null;
             }
@@ -177,7 +182,7 @@ public class User implements ObserveContentCreators {
      * @param newNotification new notification to be added
      */
     @Override
-    public void update(Notification newNotification) {
+    public void update(final Notification newNotification) {
         this.notifications.add(newNotification);
     }
 
@@ -479,10 +484,11 @@ public class User implements ObserveContentCreators {
                     int aux = timeRelativeToSong + substractAd;
                     timeRelativeToSong =
                             (timeRelativeToSong + timestamp - timeLoaded) % song.getDuration();
-                    wrapper.updateSong(song, 1 +
-                            (aux + timestamp - timeLoaded) / song.getDuration(), database, this);
-                    songHistory.updateSong(song, 1 + (aux + timestamp - timeLoaded) / song.getDuration()
-                            , database, this );
+                    wrapper.updateSong(song, 1
+                            + (aux + timestamp - timeLoaded) / song.getDuration(), database, this);
+                    songHistory.updateSong(song,
+                            1 + (aux + timestamp - timeLoaded) / song.getDuration(),
+                            database, this);
                     timeLoaded = timestamp;
                 }
             } else {
@@ -526,7 +532,8 @@ public class User implements ObserveContentCreators {
                     selectedIndexInList++;
                     while (selectedIndexInList <= podcast.getEpisodes().size()
                             && remainedTimeInEpisode < 0) {
-                        EpisodeInput episodeInput = podcast.getEpisodes().get(selectedIndexInList - 1);
+                        EpisodeInput episodeInput =
+                                podcast.getEpisodes().get(selectedIndexInList - 1);
                         remainedTimeInEpisode += episodeInput.getDuration();
                         this.wrapper.updatePodcasts(podcast, episodeInput, 1, database, this);
                         selectedIndexInList++;
@@ -1225,14 +1232,14 @@ public class User implements ObserveContentCreators {
      * setter for ad price
      * @param adPrice new ad price value
      */
-    public void setAdPrice(int adPrice) {
+    public void setAdPrice(final int adPrice) {
         this.adPrice = adPrice;
     }
     /**
      * setter for play ad flag
      * @param playAd new play ad flag value
      */
-    public void setPlayAd(boolean playAd) {
+    public void setPlayAd(final boolean playAd) {
         this.playAd = playAd;
     }
 }

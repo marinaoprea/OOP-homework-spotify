@@ -3,5 +3,9 @@ package main.user;
 import main.Notification;
 
 public interface ObservableUser {
-    void notify(final Notification newNotification);
+    /**
+     * method notifies all subscribers that new notification was added
+     * @param newNotification new notification added
+     */
+    void notify(Notification newNotification);
 }

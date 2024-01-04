@@ -5,6 +5,7 @@ import main.Wrappeable;
 import java.util.Objects;
 
 public final class EpisodeInput implements Wrappeable {
+    private static final int HASH_CODE_CONSTANT = 31;
     private String name;
     private Integer duration;
     private String description;
@@ -27,13 +28,21 @@ public final class EpisodeInput implements Wrappeable {
      */
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         EpisodeInput that = (EpisodeInput) o;
 
-        if (!name.equals(that.name)) return false;
-        if (!duration.equals(that.duration)) return false;
+        if (!name.equals(that.name)) {
+            return false;
+        }
+        if (!duration.equals(that.duration)) {
+            return false;
+        }
         return Objects.equals(description, that.description);
     }
 
@@ -44,8 +53,8 @@ public final class EpisodeInput implements Wrappeable {
     @Override
     public int hashCode() {
         int result = name.hashCode();
-        result = 31 * result + duration.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = HASH_CODE_CONSTANT * result + duration.hashCode();
+        result = HASH_CODE_CONSTANT * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 

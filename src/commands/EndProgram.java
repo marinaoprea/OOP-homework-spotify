@@ -8,8 +8,6 @@ import main.Database;
 import main.user.Artist;
 import main.user.Monetization;
 import main.user.User;
-
-import java.util.Comparator;
 import java.util.List;
 
 public final class EndProgram extends Command {
@@ -41,19 +39,19 @@ public final class EndProgram extends Command {
             artist.getRevenue().setSongRevenue(songRevenue);
         }
         List<Artist> sorted =
-                database.getArtists().stream().filter(artist -> artist.getRevenue().isWasListened()).
-                        sorted(new Comparator<Artist>() {
-            @Override
-            public int compare(Artist o1, Artist o2) {
-                if (o1.getRevenue().getTotalRevenue() > o2.getRevenue().getTotalRevenue()) {
-                    return -1;
-                }
-                if (o1.getRevenue().getTotalRevenue() < o2.getRevenue().getTotalRevenue()) {
-                    return 1;
-                }
-                return o1.getUsername().compareTo(o2.getUsername());
-            }
-        }).toList();
+                database.getArtists().stream()
+                        .filter(artist -> artist.getRevenue().isWasListened()).
+                        sorted((o1, o2) -> {
+                            if (o1.getRevenue().getTotalRevenue()
+                                    > o2.getRevenue().getTotalRevenue()) {
+                                return -1;
+                            }
+                            if (o1.getRevenue().getTotalRevenue()
+                                    < o2.getRevenue().getTotalRevenue()) {
+                                return 1;
+                            }
+                            return o1.getUsername().compareTo(o2.getUsername());
+                        }).toList();
         int ranking = 0;
         for (Artist artist: sorted) {
             ranking++;

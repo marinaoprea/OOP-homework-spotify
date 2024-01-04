@@ -5,9 +5,9 @@ import main.Recommendation;
 import main.Wrappeable;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public final class SongInput implements Wrappeable, Recommendation {
+    private static final int HASH_CODE_CONSTANT = 31;
     private String name;
     private Integer duration;
     private String album;
@@ -27,12 +27,18 @@ public final class SongInput implements Wrappeable, Recommendation {
      */
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         SongInput songInput = (SongInput) o;
 
-        if (!name.equals(songInput.name)) return false;
+        if (!name.equals(songInput.name)) {
+            return false;
+        }
         return artist.equals(songInput.artist);
     }
 
@@ -43,7 +49,7 @@ public final class SongInput implements Wrappeable, Recommendation {
     @Override
     public int hashCode() {
         int result = name.hashCode();
-        result = 31 * result + artist.hashCode();
+        result = HASH_CODE_CONSTANT * result + artist.hashCode();
         return result;
     }
 
@@ -149,7 +155,7 @@ public final class SongInput implements Wrappeable, Recommendation {
         this.artist = artist;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 }

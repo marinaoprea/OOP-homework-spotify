@@ -17,7 +17,8 @@ public final class Monetization {
      * @param database extended input library; used for getting list of artists
      * @param price price to be devided between artists
      */
-    public static void calculateMonetization(final User user, final Database database, final double price) {
+    public static void calculateMonetization(final User user,
+                                             final Database database, final double price) {
         int totalNumberOfSongs = 0;
         HashMap<Artist, Integer> songsPerArtist = new HashMap<>();
         for (Map.Entry<SongInput, Integer> entry : user.getSongHistory().getSongMap().entrySet()) {
@@ -40,11 +41,14 @@ public final class Monetization {
             Double previousRevenue = artist.getRevenue().getSongRevenue();
             artist.getRevenue().setSongRevenue(previousRevenue + revenue);
 
-            for (Map.Entry<SongInput, Integer> entry1 : user.getSongHistory().getSongMap().entrySet()){
+            for (Map.Entry<SongInput, Integer> entry1
+                    : user.getSongHistory().getSongMap().entrySet()) {
                 SongInput songInput = entry1.getKey();
                 if (songInput.getArtist().equals(artist.getUsername())) {
-                    // total revenue / total number of listens of artist * number of listens of current song
-                    Double revenuePerSong = revenue / (1.0 * entry.getValue()) * (1.0 * entry1.getValue());
+                    // total revenue / total number of listens of artist
+                    // * number of listens of current song
+                    Double revenuePerSong =
+                            revenue / (1.0 * entry.getValue()) * (1.0 * entry1.getValue());
                     artist.getRevenue().updateSongRevenue(songInput, revenuePerSong);
                 }
             }

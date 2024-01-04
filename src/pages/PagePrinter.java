@@ -49,7 +49,8 @@ public final class PagePrinter implements PageVisitor {
         ans.append("]");
 
         ans.append("\n\nSong recommendations:\n\t[");
-        List<Recommendation> songRecommendations = homePage.generateSongRecommendationsFromUpdate();
+        List<Recommendation> songRecommendations =
+                homePage.generateSongRecommendationsFromUpdate();
         for (i = 0; i < songRecommendations.size() - 1; i++) {
             ans.append(songRecommendations.get(i).getRecommendationName());
             ans.append(", ");
@@ -60,7 +61,8 @@ public final class PagePrinter implements PageVisitor {
         ans.append("]");
 
         ans.append("\n\nPlaylists recommendations:\n\t[");
-        List<Recommendation> playlistRecommendations = homePage.generatePlaylistRecommendationsFromUpdate();
+        List<Recommendation> playlistRecommendations =
+                homePage.generatePlaylistRecommendationsFromUpdate();
         for (i = 0; i + 1 < playlistRecommendations.size(); i++) {
             ans.append(playlistRecommendations.get(i).getRecommendationName());
             ans.append(", ");

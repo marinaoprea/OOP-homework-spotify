@@ -45,10 +45,16 @@ public final class HomePage extends Page implements VisitablePage {
                 .limit(Constants.NO_SEARCH_RESULTS).toList();
     }
 
+    /**
+     * returns list of recommendations that are songs
+     */
     public List<Recommendation> generateSongRecommendationsFromUpdate() {
         return this.recommendations.stream().filter(o1 -> o1.getType().equals("song")).toList();
     }
 
+    /**
+     * returns list of recommendations that are playlist
+     */
     public List<Recommendation> generatePlaylistRecommendationsFromUpdate() {
         return this.recommendations.stream().filter(o1 -> o1.getType().equals("playlist")).toList();
     }

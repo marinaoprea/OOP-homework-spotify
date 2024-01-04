@@ -1,13 +1,11 @@
 package fileio.input;
 
 import main.Database;
-import main.Wrappeable;
 import main.user.User;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
-public final class PodcastInput{
+public final class PodcastInput {
     private String name;
     private String owner;
     private ArrayList<EpisodeInput> episodes;

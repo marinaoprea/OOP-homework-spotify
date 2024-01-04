@@ -5,7 +5,6 @@ import lombok.Getter;
 import main.Album;
 import main.Database;
 import main.Playlist;
-import main.Wrappeable;
 import main.wrappers.WrapperArtist;
 import pages.ArtistPage;
 
@@ -16,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Artist extends User implements ContentCreator, ObservableUser {
+public final class Artist extends User implements ContentCreator, ObservableUser {
     @Getter
     private final ArtistPage artistPage = new ArtistPage(this);
 
@@ -240,6 +239,11 @@ public class Artist extends User implements ContentCreator, ObservableUser {
         return false;
     }
 
+    /**
+     * method searches merch by name in artist's merch list
+     * @param merchName name of searched merch
+     * @return merch with searched name; null if non-existent
+     */
     public Artist.Merch findMerch(final String merchName) {
         for (Merch merch : artistMerchList) {
             if (merch.name.equals(merchName)) {

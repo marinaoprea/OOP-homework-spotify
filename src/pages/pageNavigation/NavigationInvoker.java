@@ -33,12 +33,12 @@ public final class NavigationInvoker {
     /**
      * method performs undo in page navigation;
      * method firstly checks if there are any pages to go back to;
-     * method sets user's current page to last page in history, removes page from navigation history
-     * and adds page to undo history
+     * method sets user's current page to last page in history, removes page from navigation
+     * history and adds page to undo history
      * @param user user that performed undo
      * @return completion message
      */
-    public String undo(User user) {
+    public String undo(final User user) {
         if (this.history.isEmpty()) {
             return "There are no pages left to go back.";
         }
@@ -47,7 +47,8 @@ public final class NavigationInvoker {
         undo.add(user.getCurrentPage());
         user.setCurrentPage(previous);
         history.remove(previous);
-        return "The user " + user.getUsername() + " has navigated successfully to the previous page.";
+        return "The user " + user.getUsername()
+                + " has navigated successfully to the previous page.";
     }
 
     /**
@@ -58,7 +59,7 @@ public final class NavigationInvoker {
      * @param user user that performed redo
      * @return completion method
      */
-    public String redo(User user) {
+    public String redo(final User user) {
         if (this.undo.isEmpty()) {
             return "There are no pages left to go forward.";
         }

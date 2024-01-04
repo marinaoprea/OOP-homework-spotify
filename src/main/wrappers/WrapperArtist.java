@@ -40,7 +40,8 @@ public final class WrapperArtist implements ObserverWrapper {
      * @param user listener
      */
     @Override
-    public void updateSong(final SongInput song, final int listens, final Database database, final User user) {
+    public void updateSong(final SongInput song, final int listens,
+                           final Database database, final User user) {
         if (!wrapSongs.containsKey(song)) {
             wrapSongs.put(song, listens);
             return;
@@ -56,7 +57,7 @@ public final class WrapperArtist implements ObserverWrapper {
      * @param listens number of listens to be added
      */
     @Override
-    public void updateAlbums(final String album,final int listens) {
+    public void updateAlbums(final String album, final int listens) {
         if (!wrapAlbums.containsKey(album)) {
             wrapAlbums.put(album, listens);
             return;

@@ -170,7 +170,8 @@ public class SearchBar extends Command {
      */
     private boolean validatePodcastByName(final PodcastInput podcast) {
         return (this.filters.getName() == null
-                || podcast.getName().toLowerCase().indexOf(this.filters.getName().toLowerCase()) == 0);
+                || podcast.getName().toLowerCase()
+                .indexOf(this.filters.getName().toLowerCase()) == 0);
     }
 
     /**
@@ -289,7 +290,8 @@ public class SearchBar extends Command {
      */
     private void searchArtist(final Database database) {
         for (Artist artist : database.getArtists()) {
-            if (database.getUsers().contains(artist) && artist.getUsername().startsWith(this.filters.getName())) {
+            if (database.getUsers().contains(artist)
+                    && artist.getUsername().startsWith(this.filters.getName())) {
                 this.results.add(artist.getUsername());
                 if (this.results.size() == Constants.NO_SEARCH_RESULTS) {
                     break;
