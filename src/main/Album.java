@@ -4,12 +4,10 @@ import fileio.input.SongInput;
 import lombok.Getter;
 import main.user.Artist;
 import main.user.User;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
-public final class Album implements Wrappeable{
+public final class Album {
     @Getter
     private final String name;
     private int releaseYear;
@@ -20,36 +18,7 @@ public final class Album implements Wrappeable{
     @Getter
     private ArrayList<SongInput> songs;
     @Getter
-    private int listens;
-    @Getter
     private int id;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Album album = (Album) o;
-
-        if (releaseYear != album.releaseYear) return false;
-        if (listens != album.listens) return false;
-        if (!name.equals(album.name)) return false;
-        if (!Objects.equals(description, album.description)) return false;
-        if (!Objects.equals(owner, album.owner)) return false;
-        return Objects.equals(songs, album.songs);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + releaseYear;
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
-        result = 31 * result + (songs != null ? songs.hashCode() : 0);
-        result = 31 * result + listens;
-        return result;
-    }
-
     public Album(final String name) {
         this.name = name;
         this.songs = new ArrayList<>();
@@ -62,11 +31,6 @@ public final class Album implements Wrappeable{
         this.releaseYear = releaseYear;
         this.description = description;
         this.owner = owner;
-    }
-
-    @Override
-    public String extractName() {
-        return this.name;
     }
 
     /**
@@ -83,6 +47,11 @@ public final class Album implements Wrappeable{
         return false;
     }
 
+    /**
+     * method checks if album contains song with given id
+     * @param id id of searched song
+     * @return true if album contains song; false otherwise
+     */
     public boolean containsSongId(final int id) {
         for (SongInput song: songs) {
             if (song.getId() == id) {
@@ -169,10 +138,6 @@ public final class Album implements Wrappeable{
             ans += song.getNoLikes();
         }
         return ans;
-    }
-
-    public void setListens(int listens) {
-        this.listens = listens;
     }
 
     public void setId(int id) {

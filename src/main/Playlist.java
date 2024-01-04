@@ -29,11 +29,19 @@ public final class Playlist implements Recommendation {
         user.setPlaylistids(user.getPlaylistids() + 1);
     }
 
+    /**
+     * implemented method for recommendation interface
+     * @return name of recommendation
+     */
     @Override
     public String getRecommendationName() {
         return this.name;
     }
 
+    /**
+     * implemented method for recommendation interface
+     * @return type of recommendation
+     */
     @Override
     public String getType() {
         return "playlist";

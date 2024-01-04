@@ -22,7 +22,7 @@ public final class SongInput implements Wrappeable, Recommendation {
     private int id;
 
     /**
-     * equals method overrode for hashmaps used in wrapped command;
+     * overriden equals method for hashmaps used in wrapped command;
      * only song name and artist are taken into consideration
      */
     @Override
@@ -37,7 +37,7 @@ public final class SongInput implements Wrappeable, Recommendation {
     }
 
     /**
-     * hashcode method overrode for wrapped hashmaps;
+     * overriden hashcode method overrode for wrapped hashmaps;
      * only name and artist are taken into consideration
      */
     @Override

@@ -6,8 +6,15 @@ import main.user.Host;
 import main.user.User;
 
 public class ChangeHost implements ChangePage {
+    /**
+     * method returns corresponding messages;
+     * method gets listened host and changes user's page to host's page
+     * @param database extended input library
+     * @param user user to change page
+     * @return completion message
+     */
     @Override
-    public String execute(Database database, User user) {
+    public String execute(final Database database, final User user) {
         if (user.getSelectedType().equals("artist") || user.getSelectedType().equals("song")
                 || user.getSelectedType().equals("playlist")) {
             return user.getUsername() + " is trying to access a non-existent page.";

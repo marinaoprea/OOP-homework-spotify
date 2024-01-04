@@ -4,12 +4,10 @@ import fileio.input.LibraryInput;
 import fileio.input.PodcastInput;
 import fileio.input.SongInput;
 import fileio.input.UserInput;
-import javassist.bytecode.Descriptor;
 import lombok.Getter;
 import main.user.Artist;
 import main.user.Host;
 import main.user.User;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -69,20 +67,6 @@ public final class Database {
             if (songInput.getName().equals("Ad Break")) {
                 ad = songInput;
             }
-
-            /*Album album = this.findAlbumByNameAndArtist(songInput.getAlbum(), songInput.getArtist());
-            if (album == null) {
-                Album newAlbum = new Album(songInput.getAlbum());
-                albums.add(newAlbum);
-                Artist artist = this.findArtist(songInput.getArtist());
-                artist.getAlbums().add(newAlbum);
-                newAlbum.setOwner(artist);
-                this.albumId++;
-                newAlbum.setId(this.albumId);
-                newAlbum.getSongs().add(songInput);
-            } else {
-                album.getSongs().add(songInput);
-            }*/
         }
     }
 
@@ -135,7 +119,12 @@ public final class Database {
         return null;
     }
 
-    public void removeSong(SongInput song) {
+    /**
+     * method removes song from song list; method uses iterator because equals method
+     * was overridden for songs
+     * @param song song to be removed
+     */
+    public void removeSong(final SongInput song) {
         Iterator<SongInput> iterator = songs.iterator();
         while (iterator.hasNext()) {
             if (iterator.next().getId() == song.getId()) {
@@ -145,7 +134,11 @@ public final class Database {
         }
     }
 
-    public void removeAlbum(Album album) {
+    /**
+     * method removes album from album collection
+     * @param album album to be removed
+     */
+    public void removeAlbum(final Album album) {
         Iterator<Album> iterator = albums.iterator();
         while (iterator.hasNext()) {
             if (iterator.next().getId() == album.getId()) {
@@ -158,6 +151,7 @@ public final class Database {
     /**
      * method finds song in database based on song name
      * @param songName the name of the song
+     * @param id id of searched song; used in case of name collision
      * @return found song; null if nonexistent
      */
     public SongInput findSong(final String songName, final Integer id) {
@@ -197,32 +191,16 @@ public final class Database {
         return null;
     }
 
-    public Artist findArtistByNameAndAlbum(final String artistName, final String albumName) {
-        for (Artist artist : artists) {
-            if (artist.getUsername().equals(artistName) && artist.getAlbums() != null && artist.checkAlbumByName(albumName)) {
-                return artist;
-            }
-        }
-        return null;
-    }
 
     /**
      * method searches album by name in global list of albums
      * @param albumName name of searched album
+     * @param id id of searched album; used in case of name collision
      * @return found album if exists; null otherwise
      */
     public Album findAlbum(final String albumName, final int id) {
         for (Album album: albums) {
             if (album.getName().equals(albumName) && album.getId() == id) {
-                return album;
-            }
-        }
-        return null;
-    }
-
-    public Album findAlbumByNameAndArtist(final String albumName, final String artistName) {
-        for (Album album: albums) {
-            if (album.getName().equals(albumName) && album.getOwner().getUsername().equals(artistName)) {
                 return album;
             }
         }
@@ -271,6 +249,11 @@ public final class Database {
         return false;
     }
 
+    /**
+     * method simulates all users up until given moment;
+     * method used for later usage of updated statistics
+     * @param timestamp moment up until simulation is performed
+     */
     public void simulateAllUsers(final int timestamp) {
         for (User user : users) {
             user.simulate(timestamp, this);

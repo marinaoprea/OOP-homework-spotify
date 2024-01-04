@@ -3,8 +3,6 @@ package main;
 import lombok.Getter;
 import main.user.User;
 
-import java.util.Locale;
-
 public final class Notification {
     @Getter
     private final String description;

@@ -4,7 +4,6 @@ import fileio.input.EpisodeInput;
 import fileio.input.PodcastInput;
 import fileio.input.SongInput;
 import lombok.Getter;
-import main.Album;
 import main.Database;
 import main.Wrappeable;
 import main.user.Artist;
@@ -13,16 +12,13 @@ import main.user.User;
 
 import java.util.HashMap;
 
-public class Wrapper implements ObserverWrapper {
+public final class Wrapper implements ObserverWrapper {
     @Getter
     private final HashMap<String, Integer> wrapArtists = new HashMap<>();
     @Getter
     private final HashMap<String, Integer> wrapGenre = new HashMap<>();
     @Getter
     private final HashMap<Wrappeable, Integer> wrapSong = new HashMap<>();
-    //@Getter
-    //private final HashMap<Wrappeable, Integer> wrapAlbum = new HashMap<>();
-
     @Getter
     private final HashMap<String, Integer> wrapAlbum = new HashMap<>();
     @Getter
@@ -31,12 +27,20 @@ public class Wrapper implements ObserverWrapper {
 
     }
 
+    /**
+     * method updates statistics for listened song;
+     * method calls for genre, artist and album statistics updates
+     * @param song listened song
+     * @param listens number of listens to be added
+     * @param database extended input library
+     * @param user listener
+     */
     @Override
-    public void updateSong(final SongInput song, final int listens, final Database database, final User user) {
+    public void updateSong(final SongInput song, final int listens, final Database database,
+                           final User user) {
         updateGenre(song.getGenre(), listens);
 
         Artist artist = database.findArtist(song.getArtist());
-        //Artist artist = database.findArtistByNameAndAlbum(song.getArtist(), song.getAlbum());
         if (artist != null) {
             updateArtists(song.getArtist(), listens);
             artist.getWrapperArtist().updateFans(user, listens);
@@ -45,7 +49,6 @@ public class Wrapper implements ObserverWrapper {
         }
 
         String album = song.getAlbum();
-        //Album album = database.findAlbumByNameAndArtist(song.getAlbum(), song.getArtist());
         if (album != null) {
             this.updateAlbums(album, listens);
             if (artist != null) {
@@ -60,8 +63,14 @@ public class Wrapper implements ObserverWrapper {
         wrapSong.put(song, previousListens + listens);
     }
 
+
+    /**
+     * method updates genre statistics
+     * @param genre genre to be updated
+     * @param listens number of listens to be added
+     */
     @Override
-    public void updateGenre(String genre, int listens) {
+    public void updateGenre(final String genre, final int listens) {
         if (!wrapGenre.containsKey(genre)) {
             wrapGenre.put(genre, listens);
             return;
@@ -70,8 +79,13 @@ public class Wrapper implements ObserverWrapper {
         wrapGenre.put(genre, previousListens + listens);
     }
 
+    /**
+     * method updates artist statistics
+     * @param artist artist to be updated
+     * @param listens number of listens to be added
+     */
     @Override
-    public void updateArtists(String artist, int listens) {
+    public void updateArtists(final String artist, final int listens) {
         if (!wrapArtists.containsKey(artist)) {
             wrapArtists.put(artist, listens);
             return;
@@ -80,8 +94,14 @@ public class Wrapper implements ObserverWrapper {
         wrapArtists.put(artist, previousListens + listens);
     }
 
+
+    /**
+     * method that updates album statistics
+     * @param album album to be updated
+     * @param listens number of listens to be added
+     */
     @Override
-    public void updateAlbums(final String album, int listens) {
+    public void updateAlbums(final String album, final int listens) {
         if (!wrapAlbum.containsKey(album)) {
             wrapAlbum.put(album, listens);
             return;
@@ -90,8 +110,19 @@ public class Wrapper implements ObserverWrapper {
         wrapAlbum.put(album, previousListens + listens);
     }
 
+
+    /**
+     * method updates podcast statistics;
+     * method calls for update of host's statistics
+     * @param podcastInput podcast to be updated; used for host identification
+     * @param episode episode that has been listens
+     * @param listens number of listens to be added
+     * @param database extended input library
+     * @param user listener
+     */
     @Override
-    public void updatePodcasts(final PodcastInput podcastInput, EpisodeInput episode, int listens, final Database database, final User user) {
+    public void updatePodcasts(final PodcastInput podcastInput, final EpisodeInput episode,
+                               final int listens, final Database database, final User user) {
         Host host = database.findHost(podcastInput.getOwner());
         if (host != null) {
             host.getWrapperHost().updatePodcasts(podcastInput, episode, listens, database, user);

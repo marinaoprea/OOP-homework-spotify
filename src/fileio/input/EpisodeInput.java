@@ -22,7 +22,7 @@ public final class EpisodeInput implements Wrappeable {
     }
 
     /**
-     * equals method overrode for usage in hashmap;
+     * overriden equals method for usage in hashmap;
      * all fields taken into consideration
      */
     @Override
@@ -38,7 +38,7 @@ public final class EpisodeInput implements Wrappeable {
     }
 
     /**
-     * hashcode method overrode for usage in hashmap;
+     * overriden hashcode method for usage in hashmap;
      * all fields taken into consideration
      */
     @Override

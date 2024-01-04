@@ -9,7 +9,7 @@ import main.user.User;
 
 import java.util.HashMap;
 
-public class WrapperHost implements ObserverWrapper {
+public final class WrapperHost implements ObserverWrapper {
     public WrapperHost() {
 
     }
@@ -18,8 +18,18 @@ public class WrapperHost implements ObserverWrapper {
     @Getter
     private final HashMap<Wrappeable, Integer> wrapPodcasts = new HashMap<>();
 
+    /**
+     * method updates podcast statistics;
+     * method calls for update of host's statistics
+     * @param podcastInput podcast to be updated
+     * @param episode episode that has been listens
+     * @param listens number of listens to be added
+     * @param database extended input library
+     * @param user listener
+     */
     @Override
-    public void updatePodcasts(final PodcastInput podcastInput, final EpisodeInput episode, final int listens, final Database database, final User user) {
+    public void updatePodcasts(final PodcastInput podcastInput, final EpisodeInput episode,
+                               final int listens, final Database database, final User user) {
         if (!wrapPodcasts.containsKey(episode)) {
             wrapPodcasts.put(episode, listens);
             return;
@@ -28,6 +38,11 @@ public class WrapperHost implements ObserverWrapper {
         wrapPodcasts.put(episode, previousListens + listens);
     }
 
+    /**
+     * method updates fans statistic
+     * @param user fan to be updated in statistics
+     * @param listens number of listens to be added
+     */
     @Override
     public void updateFans(final User user, final int listens) {
         if (!topFans.containsKey(user)) {

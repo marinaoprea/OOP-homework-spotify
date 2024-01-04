@@ -23,7 +23,7 @@ public final class PrevPage extends Command {
             this.message = "The username " + this.getUsername() + " doesn't exist.";
             return;
         }
-        this.message = user.getNavigation().undo(database, user);
+        this.message = user.getNavigation().undo(user);
     }
 
     /**

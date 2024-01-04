@@ -24,7 +24,7 @@ public final class NextPage extends Command {
             return;
         }
 
-        this.message = user.getNavigation().redo(database, user);
+        this.message = user.getNavigation().redo(user);
     }
 
     /**
