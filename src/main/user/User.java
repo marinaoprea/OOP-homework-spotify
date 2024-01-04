@@ -88,16 +88,12 @@ public class User implements ObserveContentCreators {
     @Getter
     private int adPrice;
 
-    public void setAdPrice(int adPrice) {
-        this.adPrice = adPrice;
-    }
-
-    public void setPlayAd(boolean playAd) {
-        this.playAd = playAd;
-    }
-
+    /**
+     * equals method overrode for hashmaps in wrapped;
+     * only username taken into consideration
+     */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -106,6 +102,10 @@ public class User implements ObserveContentCreators {
         return username.equals(user.username);
     }
 
+    /**
+     * hashcode method overrode for hashmaps in wrapped;
+     * only username taken into consideration
+     */
     @Override
     public int hashCode() {
         return username.hashCode();
@@ -143,8 +143,15 @@ public class User implements ObserveContentCreators {
         this.currentPage = homePage;
     }
 
-    public Artist listenedArtist(Database database) {
-        if (this.selectedType.equals("host") || this.selectedType.equals("podcast") || this.selectedType.equals("playlist")) {
+    /**
+     * method returns listened artist by user;
+     * method checks if user listens song or album and returns artist from listened source
+     * @param database extended input library
+     * @return listened artist if existent; null otherwise
+     */
+    public Artist listenedArtist(final Database database) {
+        if (this.selectedType.equals("host") || this.selectedType.equals("podcast")
+                || this.selectedType.equals("playlist")) {
             return null;
         }
         if (this.selectedType.equals("song")) {
@@ -164,6 +171,11 @@ public class User implements ObserveContentCreators {
         return null;
     }
 
+    /**
+     * method implemented for ObserveContentCreator interface;
+     * method adds new notification in user's notification list
+     * @param newNotification new notification to be added
+     */
     @Override
     public void update(Notification newNotification) {
         this.notifications.add(newNotification);
@@ -248,10 +260,6 @@ public class User implements ObserveContentCreators {
         if (this.lastSearch == null) {
             return null;
         }
-        /*if (this.selectedIndexInLibrary >= 1
-                && this.selectedIndexInLibrary <= database.getSongs().size()) {
-            return database.getSongs().get(this.selectedIndexInLibrary - 1);
-        }*/
         if (this.selectedIndex >= 1
                 && this.selectedIndex <= this.lastSearch.getResults().size()) {
             String songName = this.lastSearch.getResults().get(this.selectedIndex - 1);
@@ -278,6 +286,11 @@ public class User implements ObserveContentCreators {
         return null;
     }
 
+    /**
+     * method gets loaded song contained in loaded playlist
+     * @param database extended input library
+     * @return listened song if existent; null otherwise
+     */
     public SongInput getSongFromUserInPlaylist(final Database database) {
         String playlistName = this.getLoadedSourceName();
         if (playlistName.isEmpty()) {
@@ -318,6 +331,9 @@ public class User implements ObserveContentCreators {
         return null;
     }
 
+    /**
+     * inner class that contains information about listened podcast
+     */
     public static class SavedHistory {
         private int selectedIndexInList;
         private int timeRelativeToSong;
@@ -392,7 +408,9 @@ public class User implements ObserveContentCreators {
      * if "Repeat Once", song is simulated one more time; if remaining time is still negative,
      * it means user had gotten on pause and we set it accordingly;
      * if "Repeat Infinite", we simulate the song playing infinitely and update cursor
-     * corresponding to this timestamp and set the time of the update to current timestamp
+     * corresponding to this timestamp and set the time of the update to current timestamp;
+     * method updates user's song history and wrapped statistics
+     * method inserts ad if necessary and calls for monetization calculation
      * @param timestamp timestamp up to which we simulate
      * @param database extended input library
      */
@@ -483,7 +501,8 @@ public class User implements ObserveContentCreators {
      * if "Repeat Once", we simulate the current episode being played once more and if not
      * sufficient we set user on pause;
      * if "Repeat Infinitely" we simulate current episode being played continuously and update
-     * the cursor and update time accordingly
+     * the cursor and update time accordingly;
+     * method updates user's wrapped statistics
      * @param timestamp up to which we simulate
      * @param database extended input library
      */
@@ -572,7 +591,9 @@ public class User implements ObserveContentCreators {
      * if "Repeat All" we simulate the playlist being played from the top and update current
      * song accordingly;
      * if shuffle is deactivated we consider the order the songs were introduced into the
-     * playlist; otherwise we take into consideration the array of shuffled indexes
+     * playlist; otherwise we take into consideration the array of shuffled indexes;
+     * method updates user's song history and wrapped statistics
+     * method inserts ad if necessary and calls for monetization calculation
      * @param timestamp up to which we simulate
      * @param database extended input library
      */
@@ -745,7 +766,9 @@ public class User implements ObserveContentCreators {
      * if "Repeat All" we simulate the album being played from the top and update current
      * song accordingly;
      * if shuffle is deactivated we consider the order the songs were introduced into the
-     * album; otherwise we take into consideration the array of shuffled indexes
+     * album; otherwise we take into consideration the array of shuffled indexes;
+     * method updates user's song history and wrapped statistics;
+     * method inserts ad if necessary and calls for monetization calculation
      * @param timestamp up to which we simulate
      * @param database extended input library
      */
@@ -990,6 +1013,12 @@ public class User implements ObserveContentCreators {
         Collections.shuffle(this.shuffledIndexes, generator);
     }
 
+    /**
+     * method returns loaded source's id getting it from last selection; method is used in
+     * case loaded source is a song or an album; method is used to properly identify loaded
+     * source in case of name collision
+     * @return id of loaded source if existent; 0 otherwise
+     */
     public int getLoadedSourceId() {
         if (this.getLastSearch() == null) {
             return 0;
@@ -1185,8 +1214,25 @@ public class User implements ObserveContentCreators {
     public void setConnectionStatus(final boolean connectionStatus) {
         this.connectionStatus = connectionStatus;
     }
-
+    /**
+     * setter for premium flag
+     * @param premium new premium flag value
+     */
     public void setPremium(final boolean premium) {
         this.premium = premium;
+    }
+    /**
+     * setter for ad price
+     * @param adPrice new ad price value
+     */
+    public void setAdPrice(int adPrice) {
+        this.adPrice = adPrice;
+    }
+    /**
+     * setter for play ad flag
+     * @param playAd new play ad flag value
+     */
+    public void setPlayAd(boolean playAd) {
+        this.playAd = playAd;
     }
 }

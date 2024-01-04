@@ -1,5 +1,6 @@
 package main.user;
 
+
 public interface ContentCreator {
     String getCreatorName();
     void subscribe(User user);

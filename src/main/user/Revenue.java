@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Revenue {
+public final class Revenue {
     @Getter
     private Double songRevenue;
     @Getter
@@ -25,31 +25,48 @@ public class Revenue {
         merchRevenue = 0.0;
     }
 
+    /**
+     * cumulated revenue
+     * @return song revenue + merch revenue
+     */
     public Double getTotalRevenue() {
         return songRevenue + merchRevenue;
     }
 
+
+    /**
+     * method gets most profitable song of artist; that is the song which has brought most song
+     * revenue;
+     * method sorts listened songs of artist depending on brought revenue and lexicographically
+     * in case of equality
+     * @return most profitable song
+     */
     public SongInput getMostProfitableSong() {
         if (songProfits.isEmpty()) {
             return null;
         }
 
         List<Map.Entry<SongInput, Double>> sorted =
-                songProfits.entrySet().stream().sorted(new Comparator<Map.Entry<SongInput, Double>>() {
-            @Override
-            public int compare(Map.Entry<SongInput, Double> o1, Map.Entry<SongInput, Double> o2) {
-                if (o1.getValue() > o2.getValue()) {
-                    return -1;
-                }
-                if (o1.getValue() < o2.getValue()) {
-                    return 1;
-                }
-                return o1.getKey().getName().compareTo(o2.getKey().getName());
-            }
-        }).toList();
+                songProfits.entrySet().stream().sorted(new Comparator<>() {
+                    @Override
+                    public int compare(Map.Entry<SongInput, Double> o1, Map.Entry<SongInput, Double> o2) {
+                        if (o1.getValue() > o2.getValue()) {
+                            return -1;
+                        }
+                        if (o1.getValue() < o2.getValue()) {
+                            return 1;
+                        }
+                        return o1.getKey().getName().compareTo(o2.getKey().getName());
+                    }
+                }).toList();
         return sorted.get(0).getKey();
     }
 
+    /**
+     * method updated song revenue for listened song
+     * @param songInput song which provided new revenue
+     * @param revenue provided revenue
+     */
     public void updateSongRevenue(final SongInput songInput, final Double revenue) {
         if (this.songProfits.containsKey(songInput)) {
             Double previousRevenue = songProfits.remove(songInput);

@@ -12,13 +12,21 @@ public final class EpisodeInput implements Wrappeable {
     public EpisodeInput() {
     }
 
+    /**
+     * implemented method for Wrappeable interface
+     * @return name of the Wrappeable for later wrapped command
+     */
     @Override
     public String extractName() {
         return this.name;
     }
 
+    /**
+     * equals method overrode for usage in hashmap;
+     * all fields taken into consideration
+     */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -29,6 +37,10 @@ public final class EpisodeInput implements Wrappeable {
         return Objects.equals(description, that.description);
     }
 
+    /**
+     * hashcode method overrode for usage in hashmap;
+     * all fields taken into consideration
+     */
     @Override
     public int hashCode() {
         int result = name.hashCode();

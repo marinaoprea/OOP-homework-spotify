@@ -1,14 +1,23 @@
 package main.user;
 
-import commands.Constants;
 import fileio.input.SongInput;
 import main.Database;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Monetization {
-    public static void calculateMonetization(User user, Database database, double price) {
+public final class Monetization {
+
+    /**
+     * method calculates monetization for artists from user's history of listened songs;
+     * method updates artists' revenue;
+     * method filters songs depending on artist; then divides the price between artists
+     * depending on their number of listens
+     * @param user user from whom history we get updates
+     * @param database extended input library; used for getting list of artists
+     * @param price price to be devided between artists
+     */
+    public static void calculateMonetization(final User user, final Database database, final double price) {
         int totalNumberOfSongs = 0;
         HashMap<Artist, Integer> songsPerArtist = new HashMap<>();
         for (Map.Entry<SongInput, Integer> entry : user.getSongHistory().getSongMap().entrySet()) {

@@ -30,25 +30,47 @@ public class Host extends User implements ContentCreator, ObservableUser {
     @Getter
     private final WrapperHost wrapperHost = new WrapperHost();
 
+    /**
+     * method implemented for Content Creator interface
+     * @return name of content creator
+     */
     @Override
     public String getCreatorName() {
         return this.getUsername();
     }
 
+    /**
+     * method implemented for Content Creator interface;
+     * method adds new user in content creator's subscribers list;
+     * method add content creator in user's subscription list
+     * @param user new subscriber
+     */
     @Override
-    public void subscribe(User user) {
+    public void subscribe(final User user) {
         this.subscribers.add(user);
         user.getSubscriptions().add(this);
     }
 
+    /**
+     * method implemented for Content Creator interface;
+     * method removes user from content creator's subscribers list;
+     * method removes content creator from user's subscription list
+     * @param user subscriber to be removed
+     */
     @Override
-    public void unsubscribe(User user) {
+    public void unsubscribe(final User user) {
         this.subscribers.remove(user);
         user.getSubscriptions().remove(this);
     }
 
+
+    /**
+     * method implemented for Observable Creator interface;
+     * method notifies all observers (subscribers) that a new notification has been added
+     * @param newNotification the new notification to be received
+     */
     @Override
-    public void notify(Notification newNotification) {
+    public void notify(final Notification newNotification) {
         for (User user: this.subscribers) {
             user.update(newNotification);
         }

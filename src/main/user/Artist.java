@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Artist extends User implements Wrappeable, ContentCreator, ObservableUser {
+public class Artist extends User implements ContentCreator, ObservableUser {
     @Getter
     private final ArtistPage artistPage = new ArtistPage(this);
 
@@ -40,76 +40,62 @@ public class Artist extends User implements Wrappeable, ContentCreator, Observab
         super(username, age, city);
     }
 
+    /**
+     * overloaded constructor;
+     * used for introducing artists from input library into statistics
+     * @param username username of new artist
+     */
     public Artist(final String username) {
         super();
         this.setUsername(username);
     }
 
-   /* @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Artist artist = (Artist) o;
-
-        if (!artistPage.equals(artist.artistPage)) return false;
-        if (!albums.equals(artist.albums)) return false;
-        if (!wrapperArtist.equals(artist.wrapperArtist)) return false;
-        if (!subscribers.equals(artist.subscribers)) return false;
-        if (!revenue.equals(artist.revenue)) return false;
-        if (!events.equals(artist.events)) return false;
-        return artistMerchList.equals(artist.artistMerchList);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = artistPage.hashCode();
-       // result = 31 * result + albums.hashCode();
-        result = 31 * result + wrapperArtist.hashCode();
-        result = 31 * result + subscribers.hashCode();
-        result = 31 * result + revenue.hashCode();
-        result = 31 * result + events.hashCode();
-        result = 31 * result + artistMerchList.hashCode();
-        return result;
-    }*/
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-
+    /**
+     * method implemented for Content Creator interface
+     * @return name of content creator
+     */
     @Override
     public String getCreatorName() {
         return this.getUsername();
     }
 
+
+    /**
+     * method implemented for Content Creator interface;
+     * method adds new user in content creator's subscribers list;
+     * method add content creator in user's subscription list
+     * @param user new subscriber
+     */
     @Override
-    public void subscribe(User user) {
+    public void subscribe(final User user) {
         this.subscribers.add(user);
         user.getSubscriptions().add(this);
     }
 
+
+    /**
+     * method implemented for Content Creator interface;
+     * method removes user from content creator's subscribers list;
+     * method removes content creator from user's subscription list
+     * @param user subscriber to be removed
+     */
     @Override
-    public void unsubscribe(User user) {
+    public void unsubscribe(final User user) {
         this.subscribers.remove(user);
         user.getSubscriptions().remove(this);
     }
 
+    /**
+     * method implemented for Observable Creator interface;
+     * method notifies all observers (subscribers) that a new notification has been added
+     * @param newNotification the new notification to be received
+     */
     @Override
-    public void notify(Notification newNotification) {
+    public void notify(final Notification newNotification) {
         for (User user: this.subscribers) {
             user.update(newNotification);
         }
-    }
-
-    @Override
-    public String extractName() {
-        return this.getUsername();
     }
 
     /**

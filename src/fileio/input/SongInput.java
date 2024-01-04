@@ -17,64 +17,16 @@ public final class SongInput implements Wrappeable, Recommendation {
     private Integer releaseYear;
     private String artist;
     private int noLikes;
-    private int listens;
 
     @Getter
     private int id;
 
-    /*@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SongInput songInput = (SongInput) o;
-
-        if (noLikes != songInput.noLikes) return false;
-        if (listens != songInput.listens) return false;
-        if (id != songInput.id) return false;
-        if (!name.equals(songInput.name)) return false;
-        if (!duration.equals(songInput.duration)) return false;
-        if (!album.equals(songInput.album)) return false;
-        if (!tags.equals(songInput.tags)) return false;
-        if (!lyrics.equals(songInput.lyrics)) return false;
-        if (!genre.equals(songInput.genre)) return false;
-        if (!releaseYear.equals(songInput.releaseYear)) return false;
-        return artist.equals(songInput.artist);
-    }
-
+    /**
+     * equals method overrode for hashmaps used in wrapped command;
+     * only song name and artist are taken into consideration
+     */
     @Override
-    public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + duration.hashCode();
-        result = 31 * result + album.hashCode();
-        result = 31 * result + tags.hashCode();
-        result = 31 * result + lyrics.hashCode();
-        result = 31 * result + genre.hashCode();
-        result = 31 * result + releaseYear.hashCode();
-        result = 31 * result + artist.hashCode();
-        result = 31 * result + noLikes;
-        result = 31 * result + listens;
-        result = 31 * result + id;
-        return result;
-    }*/
-
-  /*  @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SongInput songInput = (SongInput) o;
-
-        return name.equals(songInput.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }*/
-
-    @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -84,6 +36,10 @@ public final class SongInput implements Wrappeable, Recommendation {
         return artist.equals(songInput.artist);
     }
 
+    /**
+     * hashcode method overrode for wrapped hashmaps;
+     * only name and artist are taken into consideration
+     */
     @Override
     public int hashCode() {
         int result = name.hashCode();
@@ -91,27 +47,31 @@ public final class SongInput implements Wrappeable, Recommendation {
         return result;
     }
 
+    /**
+     * method implemented for Recommendation interface
+     * @return name of recommendation
+     */
     @Override
     public String getRecommendationName() {
         return this.name;
     }
 
+    /**
+     * method implemented for Recommendation interface
+     * @return type of recommendation
+     */
     @Override
     public String getType() {
         return "song";
     }
 
+    /**
+     * method implemented for Wrappeable interface
+     * @return name of the Wrappeable
+     */
     @Override
     public String extractName() {
         return this.name;
-    }
-
-    public int getListens() {
-        return listens;
-    }
-
-    public void setListens(final int listens) {
-        this.listens = listens;
     }
 
     public int getNoLikes() {
