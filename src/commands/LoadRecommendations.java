@@ -50,9 +50,9 @@ public final class LoadRecommendations extends Command {
             user.getWrapper().updateSong(song, 1, database, user);
             user.getSongHistory().updateSong(song, 1, database, user);
 
-            user.getLastSearch().getResults().set(0, song.getName());
-            user.getLastSearch().getResultsId().set(0, song.getId());
-            user.setSelectedIndex(1);
+            user.getLastSearch().getResults().add(song.getName());
+            user.getLastSearch().getResultsId().add(song.getId());
+            user.setSelectedIndex(user.getLastSearch().getResults().size());
             this.message = "Playback loaded successfully.";
             return;
         }
@@ -69,8 +69,8 @@ public final class LoadRecommendations extends Command {
 
             Playlist playlist = (Playlist) lastRecommendation;
             database.getGlobalPlaylists().add(playlist);
-            user.getLastSearch().getResults().set(0, playlist.getName());
-            user.setSelectedIndex(1);
+            user.getLastSearch().getResults().add(playlist.getName());
+            user.setSelectedIndex(user.getLastSearch().getResults().size());
             SongInput song = playlist.getSongs().get(0);
             user.getWrapper().updateSong(song, 1, database, user);
             user.getSongHistory().updateSong(song, 1, database, user);
